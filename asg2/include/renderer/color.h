@@ -15,3 +15,5 @@ const Color BLACK = {0, 0, 0};
 const Color WHITE = {255, 255, 255};
 
 }  // namespace Colors
+
+enum Fill { NONE, SOLID };

@@ -15,7 +15,11 @@ const int HEIGHT = 480;
 int main(void) {
   Window w(WIDTH, HEIGHT);
 
-  Container root(0, 0, WIDTH, HEIGHT,
-                 {new Circle(320, 240, 100, {new Circle(100, 100, 25, {})})});
+  auto c1 = CircleBuilder(320, 240, 30)
+                .setFillMode(Fill::SOLID)
+                .setFillColor(Colors::RED)
+                .build();
+
+  Container root(0, 0, WIDTH, HEIGHT, {c1});
   w.loop(root);
 }
