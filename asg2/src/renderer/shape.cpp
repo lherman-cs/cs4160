@@ -1,6 +1,7 @@
 #include "renderer/shape.h"
 
-Shape::Shape(int x, int y, int w, int h, const std::vector<Shape *> &children)
+Shape::Shape(int x, int y, int w, int h,
+             const std::vector<const Shape *> &children)
     : x(x), y(y), w(w), h(h), children(children) {}
 
 Shape::~Shape() {

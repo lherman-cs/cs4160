@@ -31,9 +31,8 @@ void Circle::draw(const Renderer &renderer) const {
 }
 
 /** Builder's codes */
-CircleBuilder &CircleBuilder::setChildren(
-    const std::vector<Shape *> &children) {
-  this->children = children;
+CircleBuilder &CircleBuilder::add(const Shape *child) {
+  this->children.push_back(child);
   return *this;
 }
 

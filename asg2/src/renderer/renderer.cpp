@@ -22,6 +22,13 @@ void Renderer::drawRect(int x, int y, int w, int h) const {
   SDL_RenderDrawRect(renderer, &rect);
 }
 
+void Renderer::fillRect(int x, int y, int w, int h) const {
+  SDL_Rect rect = {this->x + y, this->y + y, w, h};
+
+  // TODO! error handler
+  SDL_RenderFillRect(renderer, &rect);
+}
+
 void Renderer::setDrawColor(Color c, uint8_t a) const {
   SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, a);
 }

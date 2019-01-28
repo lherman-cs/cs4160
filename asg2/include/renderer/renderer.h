@@ -9,6 +9,7 @@ class Renderer {
   void drawPoint(int x, int y) const;
   void drawLine(int x1, int y1, int x2, int y2) const;
   void drawRect(int x, int y, int w, int h) const;
+  void fillRect(int x, int y, int w, int h) const;
   void setDrawColor(Color c, uint8_t a) const;
 
  private:

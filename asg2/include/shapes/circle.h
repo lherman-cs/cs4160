@@ -8,7 +8,7 @@ class Circle;
 class CircleBuilder {
  public:
   CircleBuilder(int cx, int cy, int r) : cx(cx), cy(cy), r(r) {}
-  CircleBuilder &setChildren(const std::vector<Shape *> &children);
+  CircleBuilder &add(const Shape *child);
   CircleBuilder &setBorderColor(const Color &c);
   CircleBuilder &setFillColor(const Color &c);
   CircleBuilder &setFillMode(const Fill &fillMode);
@@ -16,7 +16,7 @@ class CircleBuilder {
 
  private:
   const int cx, cy, r;
-  std::vector<Shape *> children;
+  std::vector<const Shape *> children;
   Color borderColor = Colors::BLACK;
   Color fillColor = Colors::WHITE;
   Fill fillMode = Fill::NONE;
