@@ -1,11 +1,14 @@
+#pragma once
+
+#include <SDL2/SDL.h>
 #include <string>
-#include <SDL.h>
 
 class FrameGenerator {
-public:
+ public:
   FrameGenerator(SDL_Renderer*, SDL_Window*, int, int, const std::string&);
   void makeFrame();
-private:
+
+ private:
   SDL_Renderer* const renderer;
   SDL_Window* const window;
   const int WIDTH;

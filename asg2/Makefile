@@ -6,7 +6,7 @@ OBJ_DIR = $(PROJECT_DIR)/obj
 EXEC = asg2
 
 # Be sure to use g++ to get effc++ warnings
-CXX = g++
+CXX = clang++
 
 # SDL2 specifics
 # Warnings frequently signal eventual errors:
@@ -23,8 +23,8 @@ export PORJECT_DIR CXX CXXFLAGS OBJ_DIR
 $(EXEC): $(MODULES_OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $(MODULES_OBJS) $(MAIN_OBJS) $(LDFLAGS)
 	
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%/build.mk
-	$(MAKE) -C $(dir $<) -f $<
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%/unity.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	rm $(MODULES_OBJS)
