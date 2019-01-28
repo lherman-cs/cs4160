@@ -26,6 +26,10 @@ $(EXEC): $(MODULES_OBJS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%/unity.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# this rule is to clean up a specific module obj
+clean-%: $(OBJ_DIR)/%.o
+	$(RM) $<
+
 clean:
-	rm $(MODULES_OBJS)
-	rm $(EXEC)
+	$(RM) $(MODULES_OBJS)
+	$(RM) $(EXEC)
