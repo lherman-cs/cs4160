@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include "renderer/color.h"
 
 class Renderer {
  public:
@@ -8,7 +9,7 @@ class Renderer {
   void drawPoint(int x, int y) const;
   void drawLine(int x1, int y1, int x2, int y2) const;
   void drawRect(int x, int y, int w, int h) const;
-  void setDrawColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a) const;
+  void setDrawColor(Color c, uint8_t a) const;
 
  private:
   SDL_Renderer *renderer;

@@ -1,4 +1,5 @@
 #include "renderer/renderer.h"
+#include "renderer/color.h"
 
 Renderer::Renderer(SDL_Renderer *renderer, int x, int y, int w, int h)
     : renderer(renderer), x(x), y(y), w(w), h(h) {}
@@ -21,6 +22,6 @@ void Renderer::drawRect(int x, int y, int w, int h) const {
   SDL_RenderDrawRect(renderer, &rect);
 }
 
-void Renderer::setDrawColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a) const {
-  SDL_SetRenderDrawColor(renderer, r, g, b, a);
+void Renderer::setDrawColor(Color c, uint8_t a) const {
+  SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, a);
 }
