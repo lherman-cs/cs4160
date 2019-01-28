@@ -4,6 +4,7 @@
 #include "frameGen/frameGenerator.h"
 #include "shapes/circle.h"
 #include "shapes/container.h"
+#include "shapes/line.h"
 #include "shapes/rect.h"
 #include "window/window.h"
 
@@ -26,12 +27,14 @@ int main(void) {
                 .setBorderColor(Colors::WHITE)
                 .build();
 
+  auto line = LineBuilder(0, 0, 640, 480).setFillColor(Colors::GOPHER).build();
+
   auto paper = RectBuilder(50, 50, 400, 200)
                    .setFillColor(Colors::WHITE)
                    .add(c1)
                    .add(c2)
                    .build();
 
-  Container root(0, 0, WIDTH, HEIGHT, {paper});
+  Container root(0, 0, WIDTH, HEIGHT, {line, paper});
   w.loop(root);
 }
