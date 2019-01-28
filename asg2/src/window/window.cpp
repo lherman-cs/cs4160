@@ -1,4 +1,8 @@
 #include "window/window.h"
+#include <SDL2/SDL_ttf.h>
+#include "frameGen/frameGenerator.h"
+
+#include <string>
 
 Window::Window(int width, int height) : width(width), height(height) {
   SDL_Init(SDL_INIT_VIDEO);
@@ -40,4 +44,34 @@ void Window::draw(const Shape& root, int x, int y) {
     child->draw(_renderer);
     draw(*child, x + child->x, y + child->y);
   }
+}
+
+void Window::save(const Shape& root, const std::string title,
+                  const std::string name) {
+  root.draw(Renderer(renderer, root.x, root.y, root.w, root.h));
+  draw(root, root.x, root.y);
+  sign(title);
+
+  SDL_RenderPresent(renderer);
+  FrameGenerator frameGen(renderer, window, width, height, name);
+  frameGen.makeFrame();
+}
+
+void Window::sign(const std::string title) {
+  TTF_Init();
+  TTF_Font* font = TTF_OpenFont("fonts/arial.ttf", 24);
+  if (font == NULL) {
+    throw std::string("error: font not found");
+  }
+  SDL_Color textColor = {0xff, 0, 0, 0};
+  SDL_Surface* surface = TTF_RenderText_Solid(font, title.c_str(), textColor);
+  SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+  int textWidth = surface->w;
+  int textHeight = surface->h;
+  SDL_FreeSurface(surface);
+  SDL_Rect dst = {20, height - 40, textWidth, textHeight};
+
+  SDL_RenderCopy(renderer, texture, NULL, &dst);
+  SDL_DestroyTexture(texture);
 }
