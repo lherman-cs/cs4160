@@ -31,7 +31,7 @@ void Circle::draw(const Renderer &renderer) const {
 }
 
 /** Builder's codes */
-CircleBuilder &CircleBuilder::add(const Shape *child) {
+CircleBuilder &CircleBuilder::add(std::shared_ptr<const Shape> child) {
   this->children.push_back(child);
   return *this;
 }
@@ -51,4 +51,6 @@ CircleBuilder &CircleBuilder::setFillMode(const Fill &fillMode) {
   return *this;
 }
 
-Circle *CircleBuilder::build() { return new Circle(*this); }
+std::shared_ptr<const Circle> CircleBuilder::build() {
+  return std::make_shared<const Circle>(*this);
+}

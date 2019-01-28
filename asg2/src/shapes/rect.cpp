@@ -1,6 +1,6 @@
 #include "shapes/rect.h"
 
-RectBuilder &RectBuilder::add(const Shape *child) {
+RectBuilder &RectBuilder::add(std::shared_ptr<const Shape> child) {
   this->children.push_back(child);
   return *this;
 }
@@ -20,7 +20,9 @@ RectBuilder &RectBuilder::setFillMode(const Fill &fillMode) {
   return *this;
 }
 
-Rect *RectBuilder::build() { return new Rect(*this); }
+std::shared_ptr<const Rect> RectBuilder::build() {
+  return std::make_shared<const Rect>(*this);
+}
 
 /** Rect shape implementation */
 Rect::Rect(const RectBuilder &b)

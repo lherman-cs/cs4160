@@ -8,15 +8,15 @@ class Rect;
 class RectBuilder {
  public:
   RectBuilder(int x, int y, int w, int h) : x(x), y(y), w(w), h(h) {}
-  RectBuilder &add(const Shape *child);
+  RectBuilder &add(std::shared_ptr<const Shape> child);
   RectBuilder &setBorderColor(const Color &c);
   RectBuilder &setFillColor(const Color &c);
   RectBuilder &setFillMode(const Fill &fillMode);
-  Rect *build();
+  std::shared_ptr<const Rect> build();
 
  private:
   const int x, y, w, h;
-  std::vector<const Shape *> children;
+  std::vector<std::shared_ptr<const Shape>> children;
   Color borderColor = Colors::BLACK;
   Color fillColor = Colors::GOPHER;
   Fill fillMode = Fill::SOLID;
