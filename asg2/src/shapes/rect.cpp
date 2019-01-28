@@ -29,8 +29,10 @@ Rect::Rect(const RectBuilder &b)
 void Rect::draw(const Renderer &renderer) const {
   switch (b.fillMode) {
     case Fill::SOLID:
+      renderer.setDrawColor(b.fillColor, 255);
       renderer.fillRect(b.x, b.y, b.w, b.h);
     case Fill::NONE:
+      renderer.setDrawColor(b.borderColor, 255);
       renderer.drawRect(b.x, b.y, b.w, b.h);
       break;
   }

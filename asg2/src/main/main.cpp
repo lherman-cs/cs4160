@@ -26,7 +26,11 @@ int main(void) {
                 .setBorderColor(Colors::WHITE)
                 .build();
 
-  auto paper = RectBuilder(50, 50, 400, 200).add(c1).add(c2).build();
+  auto paper = RectBuilder(50, 50, 400, 200)
+                   .setFillColor(Colors::WHITE)
+                   .add(c1)
+                   .add(c2)
+                   .build();
 
   Container root(0, 0, WIDTH, HEIGHT, {paper});
   w.loop(root);
