@@ -4,6 +4,7 @@
 #include "frameGen/frameGenerator.h"
 #include "shapes/circle.h"
 #include "shapes/container.h"
+#include "shapes/ellipse.h"
 #include "shapes/line.h"
 #include "shapes/rect.h"
 #include "shapes/triangle.h"
@@ -37,8 +38,10 @@ int main(void) {
   //                  .add(c2)
   //                  .build();
 
-  auto tri = TriangleBuilder(0, 400, 200, 0, 400, 200).build();
+  // auto tri = TriangleBuilder(0, 400, 0, 0, 400, 200).build();
+  auto el =
+      EllipseBuilder(200, 200, 50, 80).setBorderColor(Colors::RED).build();
 
-  Container root(0, 0, WIDTH, HEIGHT, {tri});
+  Container root(0, 0, WIDTH, HEIGHT, {el});
   w.loop(root);
 }
