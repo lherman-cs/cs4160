@@ -1,8 +1,17 @@
 #include "shapes/container.h"
 
-Container::Container(int x, int y, int w, int h,
-                     const std::vector<std::shared_ptr<const Shape>> &children)
-    : Shape(x, y, w, h, children) {}
+/** Builder's codes */
+ContainerBuilder &ContainerBuilder::add(std::shared_ptr<const Shape> child) {
+  this->children.push_back(child);
+  return *this;
+}
+
+std::shared_ptr<const Container> ContainerBuilder::build() {
+  return std::make_shared<const Container>(*this);
+}
+
+Container::Container(const ContainerBuilder &b)
+    : Shape(b.x, b.y, b.w, b.h, b.children) {}
 
 void Container::draw(const Renderer &renderer) const {
   // do nothing

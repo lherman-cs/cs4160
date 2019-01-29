@@ -19,29 +19,9 @@ const int HEIGHT = 400;
 int main(void) {
   Window w(WIDTH, HEIGHT);
 
-  // auto c2 = CircleBuilder(100, 100, 80)
-  //               .setFillMode(Fill::SOLID)
-  //               .setFillColor(Colors::WHITE)
-  //               .build();
-
-  // auto c1 = CircleBuilder(400 - 100, 100, 80)
-  //               .setFillMode(Fill::NONE)
-  //               .setBorderColor(Colors::WHITE)
-  //               .build();
-
-  // auto line = LineBuilder(0, 0, 640,
-  // 480).setFillColor(Colors::GOPHER).build();
-
-  // auto paper = RectBuilder(50, 50, 400, 200)
-  //                  .setFillColor(Colors::WHITE)
-  //                  .add(c1)
-  //                  .add(c2)
-  //                  .build();
-
-  // auto tri = TriangleBuilder(0, 400, 0, 0, 400, 200).build();
   auto el =
       EllipseBuilder(200, 200, 50, 80).setBorderColor(Colors::RED).build();
 
-  Container root(0, 0, WIDTH, HEIGHT, {el});
+  auto root = ContainerBuilder(0, 0, WIDTH, HEIGHT).add(el).build();
   w.loop(root);
 }

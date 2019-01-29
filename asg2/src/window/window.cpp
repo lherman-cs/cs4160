@@ -15,12 +15,12 @@ Window::~Window() {
   SDL_Quit();
 }
 
-void Window::loop(const Shape& root) {
+void Window::loop(std::shared_ptr<const Shape> root) {
   SDL_Event event;
   const Uint8* keystate;
 
-  root.draw(Renderer(renderer, root.x, root.y, root.w, root.h));
-  draw(root, root.x, root.y);
+  root->draw(Renderer(renderer, root->x, root->y, root->w, root->h));
+  draw(root, root->x, root->y);
   SDL_RenderPresent(renderer);
 
   while (true) {
@@ -36,20 +36,20 @@ void Window::loop(const Shape& root) {
   }
 }
 
-void Window::draw(const Shape& root, int x, int y) {
-  Renderer _renderer(renderer, x, y, root.w, root.h);
+void Window::draw(std::shared_ptr<const Shape> root, int x, int y) {
+  Renderer _renderer(renderer, x, y, root->w, root->h);
 
   // maybe check out of bound bounding boxes here
-  for (const auto& child : root.children) {
+  for (const auto child : root->children) {
     child->draw(_renderer);
-    draw(*child, x + child->x, y + child->y);
+    draw(child, x + child->x, y + child->y);
   }
 }
 
-void Window::save(const Shape& root, const std::string title,
+void Window::save(std::shared_ptr<const Shape> root, const std::string title,
                   const std::string name) {
-  root.draw(Renderer(renderer, root.x, root.y, root.w, root.h));
-  draw(root, root.x, root.y);
+  root->draw(Renderer(renderer, root->x, root->y, root->w, root->h));
+  draw(root, root->x, root->y);
   sign(title);
 
   SDL_RenderPresent(renderer);
