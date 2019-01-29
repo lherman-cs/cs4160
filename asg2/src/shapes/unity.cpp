@@ -2,3 +2,4 @@
 #include "container.cpp"
 #include "line.cpp"
 #include "rect.cpp"
+#include "triangle.cpp"
