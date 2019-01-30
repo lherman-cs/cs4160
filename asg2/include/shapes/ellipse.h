@@ -7,7 +7,7 @@ class Ellipse;
 
 class EllipseBuilder {
  public:
-  EllipseBuilder(int cx, int cy, int w, int h) : cx(cx), cy(cy), w(w), h(h) {}
+  EllipseBuilder(int x, int y, int w, int h) : x(x), y(y), w(w), h(h) {}
   EllipseBuilder &add(std::shared_ptr<const Shape> child);
   EllipseBuilder &setBorderColor(const Color &c);
   EllipseBuilder &setFillColor(const Color &c);
@@ -15,7 +15,7 @@ class EllipseBuilder {
   std::shared_ptr<const Ellipse> build();
 
  private:
-  const int cx, cy, w, h;
+  const int x, y, w, h;
   std::vector<std::shared_ptr<const Shape>> children;
   Color borderColor = Colors::BLACK;
   Color fillColor = Colors::WHITE;

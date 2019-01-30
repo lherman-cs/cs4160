@@ -19,6 +19,9 @@ void Window::loop(std::shared_ptr<const Shape> root) {
   SDL_Event event;
   const Uint8* keystate;
 
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  SDL_RenderClear(renderer);
+
   root->draw(Renderer(renderer, root->x, root->y, root->w, root->h));
   draw(root, root->x, root->y);
   SDL_RenderPresent(renderer);

@@ -14,7 +14,8 @@ const Color BLUE = {0, 0, 255};
 const Color BLACK = {0, 0, 0};
 const Color WHITE = {255, 255, 255};
 const Color GOPHER = {106, 214, 227};
+const Color GOPHER_MOUSTACHE = {244, 210, 164};
 
 }  // namespace Colors
 
-enum Fill { NONE, SOLID };
+enum Fill { NONE, SOLID, SOLID_OUTLINED };

@@ -78,21 +78,27 @@ void fillLower(const Renderer &renderer, const int points[3][2]) {
 }
 
 void Triangle::draw(const Renderer &renderer) const {
-  switch (b.fillMode) {
-    case Fill::SOLID: {
-      renderer.setDrawColor(b.fillColor, 255);
-      int points[3][2] = {{b.y1, b.x1}, {b.y2, b.x2}, {b.y3, b.x3}};
-      auto ptr = (std::pair<int, int> *)points;
-      std::sort(ptr, ptr + 3);
-      std::swap(points[0][0], points[0][1]);
-      std::swap(points[1][0], points[1][1]);
-      std::swap(points[2][0], points[2][1]);
+  auto fill = [&] {
+    renderer.setDrawColor(b.fillColor, 255);
+    int points[3][2] = {{b.y1, b.x1}, {b.y2, b.x2}, {b.y3, b.x3}};
+    auto ptr = (std::pair<int, int> *)points;
+    std::sort(ptr, ptr + 3);
+    std::swap(points[0][0], points[0][1]);
+    std::swap(points[1][0], points[1][1]);
+    std::swap(points[2][0], points[2][1]);
 
-      fillUpper(renderer, points);
-      fillLower(renderer, points);
-      break;
-    }
+    fillUpper(renderer, points);
+    fillLower(renderer, points);
+  };
+
+  switch (b.fillMode) {
     case Fill::NONE:
+      break;
+    case Fill::SOLID:
+      fill();
+      break;
+    case Fill::SOLID_OUTLINED:
+      fill();
       break;
   }
 }

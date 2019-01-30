@@ -7,7 +7,7 @@ class Circle;
 
 class CircleBuilder {
  public:
-  CircleBuilder(int cx, int cy, int r) : cx(cx), cy(cy), r(r) {}
+  CircleBuilder(int x, int y, int r) : x(x), y(y), r(r) {}
   CircleBuilder &add(std::shared_ptr<const Shape> child);
   CircleBuilder &setBorderColor(const Color &c);
   CircleBuilder &setFillColor(const Color &c);
@@ -15,7 +15,7 @@ class CircleBuilder {
   std::shared_ptr<const Circle> build();
 
  private:
-  const int cx, cy, r;
+  const int x, y, r;
   std::vector<std::shared_ptr<const Shape>> children;
   Color borderColor = Colors::BLACK;
   Color fillColor = Colors::WHITE;
