@@ -7,8 +7,8 @@
 class Window {
  public:
   Window(int width, int height, const std::string title);
-  Window(const Window &other) = delete;           // maybe?
-  Window &operator=(const Window &rhs) = delete;  // maybe?
+  Window(const Window &other);
+  Window &operator=(const Window &rhs);
   ~Window();
   void loop(std::shared_ptr<const Shape> root);
   void save(std::shared_ptr<const Shape> root, const std::string name);
@@ -16,8 +16,8 @@ class Window {
  private:
   SDL_Renderer *renderer;
   SDL_Window *window;
-  const int width, height;
-  const std::string title;
+  int width, height;
+  std::string title;
 
   void draw(std::shared_ptr<const Shape> root, int x, int y);
 };

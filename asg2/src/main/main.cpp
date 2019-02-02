@@ -5,14 +5,11 @@
 #include "main/gopher.h"
 #include "window/window.h"
 
-const std::string TITLE = "Ian Burch's Bullseyes";
-const std::string NAME = "malloy";
-
 const int WIDTH = 800;
 const int HEIGHT = 600;
 
 int main(void) {
-  Window w(WIDTH, HEIGHT, "Gophers!!!");
+  Window w(WIDTH, HEIGHT, "Lukas Herman's Marching Gophers");
 
   auto gophers = ContainerBuilder(0, 0, WIDTH, HEIGHT);
 
@@ -37,5 +34,5 @@ int main(void) {
 
   gophers.add(buildGopher(400, 100, 700));
   // w.loop(gophers.build());
-  w.save(gophers.build(), "Lukas Herman");
+  w.save(gophers.build(), "lukash");
 }

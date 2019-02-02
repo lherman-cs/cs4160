@@ -8,14 +8,6 @@
 #define mw 100.5
 #define mh 136.03
 
-std::shared_ptr<const Shape> buildEye(int x, int y, int r) {
-  auto eye1 = CircleBuilder(x, y, r)
-                  .setFillMode(Fill::SOLID_OUTLINED)
-                  .setFillColor(Colors::WHITE)
-                  .build();
-  return eye1;
-}
-
 std::shared_ptr<const Container> buildGopher(int x, int y, int h) {
   int w = h * mw / mh;
 
