@@ -4,9 +4,13 @@
 
 #include <string>
 
-Window::Window(int width, int height) : width(width), height(height) {
+Window::Window(int width, int height, const std::string title)
+    : width(width), height(height), title(title) {
   SDL_Init(SDL_INIT_VIDEO);
-  SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer);
+  window =
+      SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
+                       SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 }
 
 Window::~Window() {
@@ -49,18 +53,13 @@ void Window::draw(std::shared_ptr<const Shape> root, int x, int y) {
   }
 }
 
-void Window::save(std::shared_ptr<const Shape> root, const std::string title,
-                  const std::string name) {
+void Window::save(std::shared_ptr<const Shape> root, const std::string name) {
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  SDL_RenderClear(renderer);
+
   root->draw(Renderer(renderer, root->x, root->y, root->w, root->h));
   draw(root, root->x, root->y);
-  sign(title);
 
-  SDL_RenderPresent(renderer);
-  FrameGenerator frameGen(renderer, window, width, height, name);
-  frameGen.makeFrame();
-}
-
-void Window::sign(const std::string title) {
   TTF_Init();
   TTF_Font* font = TTF_OpenFont("fonts/arial.ttf", 24);
   if (font == NULL) {
@@ -77,4 +76,8 @@ void Window::sign(const std::string title) {
 
   SDL_RenderCopy(renderer, texture, NULL, &dst);
   SDL_DestroyTexture(texture);
+
+  SDL_RenderPresent(renderer);
+  FrameGenerator frameGen(renderer, window, width, height, name);
+  frameGen.makeFrame();
 }

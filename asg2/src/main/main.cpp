@@ -12,7 +12,7 @@ const int WIDTH = 800;
 const int HEIGHT = 600;
 
 int main(void) {
-  Window w(WIDTH, HEIGHT);
+  Window w(WIDTH, HEIGHT, "Gophers!!!");
 
   auto gophers = ContainerBuilder(0, 0, WIDTH, HEIGHT);
 
@@ -21,7 +21,7 @@ int main(void) {
   int start = 0;
   int offset = 0;
 
-  for (int y = 150; y <= 500; y += 50) {
+  for (int y = 200; y <= 500; y += 50) {
     for (int n = start; n < nGophers; n++) {
       gophers.add(buildGopher(offset + n * 75, y, gopherHeight));
     }
@@ -36,6 +36,6 @@ int main(void) {
   }
 
   gophers.add(buildGopher(400, 100, 700));
-
-  w.loop(gophers.build());
+  // w.loop(gophers.build());
+  w.save(gophers.build(), "Lukas Herman");
 }
