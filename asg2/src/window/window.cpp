@@ -102,8 +102,10 @@ void Window::save(std::shared_ptr<const Shape> root, const std::string name) {
 
   SDL_RenderCopy(renderer, texture, NULL, &dst);
   SDL_DestroyTexture(texture);
+  TTF_CloseFont(font);
 
   SDL_RenderPresent(renderer);
   FrameGenerator frameGen(renderer, window, width, height, name);
   frameGen.makeFrame();
+  TTF_Quit();
 }

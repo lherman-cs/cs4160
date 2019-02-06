@@ -30,6 +30,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%/unity.cpp
 clean-%: $(OBJ_DIR)/%.o
 	$(RM) $<
 
+archive: clean
+	tar -zcf asg2.tar.gz *
+
 clean:
 	$(RM) $(MODULES_OBJS)
 	$(RM) $(EXEC)
