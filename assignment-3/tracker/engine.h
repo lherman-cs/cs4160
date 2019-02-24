@@ -23,6 +23,8 @@ class Engine {
 
   SDL_Renderer* const renderer;
   World world;
+  World cloud1;
+  World cloud2;
   Viewport& viewport;
 
   Drawable* star;

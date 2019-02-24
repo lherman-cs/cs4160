@@ -22,6 +22,8 @@ Engine::Engine()
       clock(Clock::getInstance()),
       renderer(rc.getRenderer()),
       world("back", Gamedata::getInstance().getXmlInt("back/factor")),
+      cloud1("cloud1", Gamedata::getInstance().getXmlInt("cloud1/factor")),
+      cloud2("cloud2", Gamedata::getInstance().getXmlInt("cloud2/factor")),
       viewport(Viewport::getInstance()),
       star(new Sprite("YellowStar")),
       spinningStar(new MultiSprite("SpinningStar")),
@@ -34,7 +36,8 @@ Engine::Engine()
 
 void Engine::draw() const {
   world.draw();
-  // io.writeText("Lukas Herman", 30, 30);
+  cloud1.draw();
+  cloud2.draw();
 
   star->draw();
   spinningStar->draw();
@@ -47,6 +50,8 @@ void Engine::update(Uint32 ticks) {
   star->update(ticks);
   spinningStar->update(ticks);
   world.update();
+  cloud1.update();
+  cloud2.update();
   viewport.update();  // always update viewport last
 }
 

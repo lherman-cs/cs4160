@@ -24,9 +24,21 @@
 
 <back>
   <file>assets/bigstarrysky.png</file>
-  <factor>1</factor>
+  <factor>2</factor>
   <transparency>false</transparency>
 </back>
+
+<cloud1>
+  <file>assets/cloud1.png</file>
+  <factor>4</factor>
+  <transparency>true</transparency>
+</cloud1>
+
+<cloud2>
+  <file>assets/cloud2.png</file>
+  <factor>1</factor>
+  <transparency>true</transparency>
+</cloud2>
 
 <font name="font">
   <file>fonts/arial.ttf</file>
