@@ -34,6 +34,7 @@ Engine::Engine()
 
 void Engine::draw() const {
   world.draw();
+  // io.writeText("Lukas Herman", 30, 30);
 
   star->draw();
   spinningStar->draw();
