@@ -1,0 +1,16 @@
+
+Meyer's Item #11 in Modern:
+  clock
+  engine
+  frameGenerator
+  gameData
+  imageFactory
+  IoMod
+  ParseXML
+  viewport
+  world
+  sprite
+
+Rule of zero and Rule of Three:
+  Sprite
+  MultiSprite

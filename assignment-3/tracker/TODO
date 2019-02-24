@@ -1,0 +1,3 @@
+
+Fix Drawable so that the conversion constructor accepts a scale
+factor!

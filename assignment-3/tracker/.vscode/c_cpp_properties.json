@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/SDL2"
+            ],
+            "defines": [],
+            "compilerPath": "/bin/clang",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
