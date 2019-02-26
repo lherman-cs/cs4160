@@ -9,10 +9,10 @@
 #include "gameData.h"
 #include "multisprite.h"
 #include "sprite.h"
+#include "twoWayMultisprite.h"
 
 Engine::~Engine() {
-  delete star;
-  delete spinningStar;
+  for (auto &sprite : sprites) delete sprite;
   std::cout << "Terminating program" << std::endl;
 }
 
@@ -25,12 +25,14 @@ Engine::Engine()
       cloud1("cloud1", Gamedata::getInstance().getXmlInt("cloud1/factor")),
       cloud2("cloud2", Gamedata::getInstance().getXmlInt("cloud2/factor")),
       viewport(Viewport::getInstance()),
-      star(new Sprite("YellowStar")),
-      spinningStar(new MultiSprite("SpinningStar")),
       currentSprite(0),
       makeVideo(false) {
-  star->setScale(1.5);
-  Viewport::getInstance().setObjectToTrack(star);
+  const auto pacman = new TwoWayMultiSprite("Pacman");
+  pacman->setScale(2);
+  sprites.emplace_back(new Sprite("YellowStar"));
+  sprites.emplace_back(new MultiSprite("SpinningStar"));
+  sprites.emplace_back(pacman);
+  Viewport::getInstance().setObjectToTrack(pacman);
   std::cout << "Loading complete" << std::endl;
 }
 
@@ -39,16 +41,15 @@ void Engine::draw() const {
   cloud1.draw();
   cloud2.draw();
 
-  star->draw();
-  spinningStar->draw();
+  for (const auto &sprite : sprites) sprite->draw();
 
   viewport.draw();
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
-  star->update(ticks);
-  spinningStar->update(ticks);
+  for (const auto &sprite : sprites) sprite->update(ticks);
+
   world.update();
   cloud1.update();
   cloud2.update();
@@ -57,17 +58,13 @@ void Engine::update(Uint32 ticks) {
 
 void Engine::switchSprite() {
   ++currentSprite;
-  currentSprite = currentSprite % 2;
-  if (currentSprite) {
-    Viewport::getInstance().setObjectToTrack(spinningStar);
-  } else {
-    Viewport::getInstance().setObjectToTrack(star);
-  }
+  currentSprite = currentSprite % sprites.size();
+  Viewport::getInstance().setObjectToTrack(sprites[currentSprite]);
 }
 
 void Engine::play() {
   SDL_Event event;
-  const Uint8* keystate;
+  const Uint8 *keystate;
   bool done = false;
   Uint32 ticks = clock.getElapsedTicks();
   FrameGenerator frameGen;

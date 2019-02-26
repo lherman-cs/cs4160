@@ -10,14 +10,15 @@ void MultiSprite::advanceFrame(Uint32 ticks) {
   }
 }
 
-MultiSprite::MultiSprite(const std::string& name)
+MultiSprite::MultiSprite(const std::string& name,
+                         const std::string& imagePrefix)
     : Drawable(
           name,
           Vector2f(Gamedata::getInstance().getXmlInt(name + "/startLoc/x"),
                    Gamedata::getInstance().getXmlInt(name + "/startLoc/y")),
           Vector2f(Gamedata::getInstance().getXmlInt(name + "/speedX"),
                    Gamedata::getInstance().getXmlInt(name + "/speedY"))),
-      images(ImageFactory::getInstance().getImages(name)),
+      images(ImageFactory::getInstance().getImages(name + imagePrefix)),
 
       currentFrame(0),
       numberOfFrames(Gamedata::getInstance().getXmlInt(name + "/frames")),

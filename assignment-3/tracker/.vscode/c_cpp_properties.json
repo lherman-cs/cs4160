@@ -1,10 +1,11 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "unix",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/SDL2"
+                "/usr/include/SDL2",
+                "/usr/local/include/SDL2"
             ],
             "defines": [],
             "compilerPath": "/bin/clang",

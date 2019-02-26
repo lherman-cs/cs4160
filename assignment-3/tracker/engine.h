@@ -27,8 +27,7 @@ class Engine {
   World cloud2;
   Viewport& viewport;
 
-  Drawable* star;
-  Drawable* spinningStar;
+  std::vector<Drawable*> sprites;
   int currentSprite;
 
   bool makeVideo;

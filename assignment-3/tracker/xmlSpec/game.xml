@@ -9,7 +9,7 @@
 <period>17</period>
 
 <maxFrames>300</maxFrames>
-<username>malloy</username>
+<username>lukash</username>
 
 <view>
   <width>854</width>
@@ -66,5 +66,27 @@
   <speedY>300</speedY>
   <transparency>false</transparency>
 </YellowStar>
+
+<Pacman>
+  <left>
+    <file>assets/pacman-left.png</file>
+    <transparency>false</transparency> 
+    <!-- these frames are for creating sprite sheet -->
+    <frames>4</frames>
+   </left>
+  <right>
+    <file>assets/pacman-right.png</file>
+    <transparency>false</transparency> 
+    <!-- these frames are for creating sprite sheet -->
+    <frames>4</frames>
+  </right>
+
+  <!-- these frames are being used for rendering the sprite -->
+  <frames>4</frames>
+  <frameInterval>200</frameInterval>
+  <startLoc x="0" y="0"/>
+  <speedX>300</speedX>
+  <speedY>300</speedY>
+</Pacman>
 
 </GameData>
