@@ -21,25 +21,37 @@ Engine::Engine()
       io(IoMod::getInstance()),
       clock(Clock::getInstance()),
       renderer(rc.getRenderer()),
-      world("back", Gamedata::getInstance().getXmlInt("back/factor")),
-      cloud1("cloud1", Gamedata::getInstance().getXmlInt("cloud1/factor")),
-      cloud2("cloud2", Gamedata::getInstance().getXmlInt("cloud2/factor")),
+      background("background",
+                 Gamedata::getInstance().getXmlInt("background/factor")),
+      waitress("waitress",
+               Gamedata::getInstance().getXmlInt("waitress/factor")),
+      hangingLightBulb("hangingLightBulb", Gamedata::getInstance().getXmlInt(
+                                               "hangingLightBulb/factor")),
       viewport(Viewport::getInstance()),
       currentSprite(0),
       makeVideo(false) {
   const auto pacman = new TwoWayMultiSprite("Pacman");
   pacman->setScale(2);
-  sprites.emplace_back(new Sprite("YellowStar"));
-  sprites.emplace_back(new MultiSprite("SpinningStar"));
+
+  auto i = 1;
+  auto id = "Ramens/ramen-" + std::to_string(i);
+  while (Gamedata::getInstance().checkTag(id + "/file")) {
+    const auto ramen = new MultiSprite(id);
+    ramen->setScale(1.5);
+    sprites.emplace_back(ramen);
+    i++;
+    id = "Ramens/ramen-" + std::to_string(i);
+  }
+
   sprites.emplace_back(pacman);
   Viewport::getInstance().setObjectToTrack(pacman);
   std::cout << "Loading complete" << std::endl;
 }
 
 void Engine::draw() const {
-  world.draw();
-  cloud1.draw();
-  cloud2.draw();
+  background.draw();
+  waitress.draw();
+  hangingLightBulb.draw();
 
   for (const auto &sprite : sprites) sprite->draw();
 
@@ -50,9 +62,9 @@ void Engine::draw() const {
 void Engine::update(Uint32 ticks) {
   for (const auto &sprite : sprites) sprite->update(ticks);
 
-  world.update();
-  cloud1.update();
-  cloud2.update();
+  background.update();
+  waitress.update();
+  hangingLightBulb.update();
   viewport.update();  // always update viewport last
 }
 

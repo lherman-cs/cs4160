@@ -22,9 +22,9 @@ class Engine {
   Clock& clock;
 
   SDL_Renderer* const renderer;
-  World world;
-  World cloud1;
-  World cloud2;
+  World background;
+  World waitress;
+  World hangingLightBulb;
   Viewport& viewport;
 
   std::vector<Drawable*> sprites;
