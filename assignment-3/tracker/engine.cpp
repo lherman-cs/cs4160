@@ -28,6 +28,7 @@ Engine::Engine()
       hangingLightBulb("hangingLightBulb", Gamedata::getInstance().getXmlInt(
                                                "hangingLightBulb/factor")),
       viewport(Viewport::getInstance()),
+      sprites(),
       currentSprite(0),
       makeVideo(false) {
   const auto pacman = new TwoWayMultiSprite("Pacman");
