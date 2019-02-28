@@ -12,19 +12,6 @@ Image::Image(SDL_Surface* surf)
   regenerateTexture();
 }
 
-Image::Image(const Image& image)
-    : renderer(image.renderer),
-      surface(image.surface),
-      texture(image.texture),
-      view(image.view) {}
-
-Image& Image::operator=(const Image& rhs) {
-  renderer = rhs.renderer;
-  texture = rhs.texture;
-  view = rhs.view;
-  return *this;
-}
-
 void Image::regenerateTexture() {
   if (texture != nullptr) SDL_DestroyTexture(texture);
   RenderContext& renderContext = RenderContext::getInstance();

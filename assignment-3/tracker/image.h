@@ -7,10 +7,7 @@
 
 class Image {
  public:
-  Image() = delete;
   Image(SDL_Surface*);
-  Image(const Image&);
-  Image& operator=(const Image&);
 
   void regenerateTexture();
   void draw(int x, int y) const;
