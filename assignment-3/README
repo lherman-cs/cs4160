@@ -1,23 +1,23 @@
-Name:
+Name: Lukas Herman
 
-Course:
+Course: CS4160
 
-Clemson Email Address:
+Clemson Email Address: lukash@g.clemson.edu
 
 Project no: #3
 
-Project due date:
+Project due date: February 14, 2019
 
-Project description:
+Project description: Create a parallax scrolling and a two-way multi frame sprite using the Tracker framework
 
-where did I get my sprites, including background:
+where did I get my sprites, including background: Google
 
 What is the theme of my animation:
 
-Did I make a polymorphic vector:  Yes or No
+Did I make a polymorphic vector:  Yes
 
-What do I like better: GoF Singleton or Meyer's Singleton?
+What do I like better: GoF Singleton or Meyer's Singleton? Meyer's Singleton
 
-The easiest part of this project:
+The easiest part of this project: Creating a two-way multi frame sprite class
 
-Problems that I had in completing this project:
+Problems that I had in completing this project: Creating sprites
