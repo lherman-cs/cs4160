@@ -1,14 +1,13 @@
 #ifndef GAMEDATA__H
 #define GAMEDATA__H
-#include <string>
 #include <map>
-#include "vector2f.h"
+#include <string>
 #include "parseXML.h"
+#include "vector2f.h"
 
 class Gamedata {
-public:
+ public:
   static Gamedata& getInstance();
-  ~Gamedata();
   void displayData() const;
 
   bool getXmlBool(const std::string&) const;
@@ -17,11 +16,12 @@ public:
   int getXmlInt(const std::string&) const;
   float getRandInRange(int min, int max) const;
   float getRandFloat(float min, float max) const;
-  bool  checkTag(const std::string&)const;
+  bool checkTag(const std::string&) const;
 
   Gamedata(const Gamedata&) = delete;
   Gamedata& operator=(const Gamedata&) = delete;
-private:
+
+ private:
   ParseXML parser;
   const map<std::string, std::string> gameData;
 

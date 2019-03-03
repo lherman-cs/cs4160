@@ -4,6 +4,7 @@
 class TwoWayMultiSprite : public MultiSprite {
  public:
   TwoWayMultiSprite(const std::string& name);
+  virtual ~TwoWayMultiSprite() {}
   TwoWayMultiSprite(const TwoWayMultiSprite&) = delete;
   TwoWayMultiSprite& operator=(const TwoWayMultiSprite&) = delete;
   virtual void update(Uint32 ticks);

@@ -9,8 +9,6 @@ Gamedata& Gamedata::getInstance() {
   return gamedata;
 }
 
-Gamedata::~Gamedata() {}
-
 Gamedata::Gamedata(const string& fn)
     : parser(fn), gameData(parser.getXmlData()) {}
 
