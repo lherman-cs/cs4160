@@ -1,0 +1,37 @@
+# Emscripten
+
+## Code Changes
+
+In order for the browser to still have access to its main loop, we need to use a wrapper function
+from emscripten. For example:
+
+```cpp
+#ifdef EMSCRIPTEN
+  emscripten_set_main_loop(render_func, 60, 1);
+#else
+  while(true) {
+    render_func();
+  }
+#endif
+```
+
+To cancel emscripten's main loop, 
+
+```cpp
+#ifdef EMSCRIPTEN
+  emscripten_cancel_main_loop();
+#endif
+```
+
+## Compiling
+
+These are useful flags for SDL specific:
+  * -s USE_SDL=2
+  * -s USE_SDL_IMAGE=2
+  * -s USE_SDL_TTF=2
+
+To include assets, 
+
+```sh
+emcc --preload-file=<dir> ...
+```
