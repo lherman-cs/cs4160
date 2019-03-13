@@ -35,3 +35,8 @@ To include assets,
 ```sh
 emcc --preload-file=<dir> ...
 ```
+
+## Reference
+
+* https://emscripten.org/docs/getting_started/FAQ.html#why-doesn-t-my-sdl-app-work
+* https://stackoverflow.com/questions/29335510/using-sdl2-renderdraw-functions-with-emscripten
