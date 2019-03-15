@@ -10,6 +10,7 @@ class Engine {
  public:
   Engine();
   ~Engine();
+  void forward(bool& done);
   void play();
   void switchSprite();
 

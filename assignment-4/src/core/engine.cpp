@@ -10,7 +10,7 @@
 #include "sprite/sprite.h"
 #include "sprite/twoWayMultisprite.h"
 
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
@@ -78,26 +78,34 @@ void Engine::switchSprite() {
   Viewport::getInstance().setObjectToTrack(sprites[currentSprite]);
 }
 
-#ifdef EMSCRIPTEN
+void Engine::forward(bool &done) {
+  static SDL_Event event;
+  static const Uint8 *keystate;
+  static Uint32 ticks = clock.getElapsedTicks();
 
-void loop(void *data) {
-  // Engine *self = (Engine *)data;
-  // static SDL_Event event;
-  // static const Uint8 *keystate;
-  // static bool done = false;
-  // static Uint32 ticks = self->clock.getElapsedTicks();
-
-  // // In this section of the event loop we allow key bounce:
-  // ticks = self->clock.getElapsedTicks();
-  // if (ticks > 0) {
-  //   self->clock.incrFrame();
-  //   self->draw();
-  //   self->update(ticks);
-  // }
-}
-
-void Engine::play() {
-  Uint32 ticks = clock.getElapsedTicks();
+  // The next loop polls for events, guarding against key bounce:
+  while (SDL_PollEvent(&event)) {
+    keystate = SDL_GetKeyboardState(NULL);
+    if (event.type == SDL_QUIT) {
+      done = true;
+      break;
+    }
+    if (event.type == SDL_KEYDOWN) {
+      if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
+        done = true;
+        break;
+      }
+      if (keystate[SDL_SCANCODE_P]) {
+        if (clock.isPaused())
+          clock.unpause();
+        else
+          clock.pause();
+      }
+      if (keystate[SDL_SCANCODE_T]) {
+        switchSprite();
+      }
+    }
+  }
 
   // In this section of the event loop we allow key bounce:
   ticks = clock.getElapsedTicks();
@@ -106,49 +114,26 @@ void Engine::play() {
     draw();
     update(ticks);
   }
-
-  emscripten_set_main_loop_arg(loop, (void *)this, 60, 1);
 }
+
+#ifdef __EMSCRIPTEN__
+
+void loop(void *data) {
+  Engine *self = (Engine *)data;
+  bool done = false;
+  self->forward(done);
+  if (done) {
+    emscripten_cancel_main_loop();
+  }
+}
+
+void Engine::play() { emscripten_set_main_loop_arg(loop, (void *)this, 60, 1); }
 
 #else
 void Engine::play() {
-  SDL_Event event;
-  const Uint8 *keystate;
   bool done = false;
-  Uint32 ticks = clock.getElapsedTicks();
-
   while (!done) {
-    // The next loop polls for events, guarding against key bounce:
-    while (SDL_PollEvent(&event)) {
-      keystate = SDL_GetKeyboardState(NULL);
-      if (event.type == SDL_QUIT) {
-        done = true;
-        break;
-      }
-      if (event.type == SDL_KEYDOWN) {
-        if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
-          done = true;
-          break;
-        }
-        if (keystate[SDL_SCANCODE_P]) {
-          if (clock.isPaused())
-            clock.unpause();
-          else
-            clock.pause();
-        }
-        if (keystate[SDL_SCANCODE_T]) {
-          switchSprite();
-        }
-      }
-    }
-
-    // In this section of the event loop we allow key bounce:
-    ticks = clock.getElapsedTicks();
-    if (ticks > 0) {
-      clock.incrFrame();
-      draw();
-      update(ticks);
-    }
+    forward(done);
   }
 }
 #endif
