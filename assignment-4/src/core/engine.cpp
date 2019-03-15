@@ -127,7 +127,7 @@ void loop(void *data) {
   }
 }
 
-void Engine::play() { emscripten_set_main_loop_arg(loop, (void *)this, 60, 1); }
+void Engine::play() { emscripten_set_main_loop_arg(loop, (void *)this, 0, 1); }
 
 #else
 void Engine::play() {
