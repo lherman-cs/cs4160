@@ -37,8 +37,8 @@ SDL_Window* RenderContext::initWindow() {
 SDL_Renderer* RenderContext::initRenderer() {
   // To test the Clock class's ability to cap the frame rate, use:
   // SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-  SDL_Renderer* renderer =
-      SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+  SDL_Renderer* renderer = SDL_CreateRenderer(
+      window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (renderer == NULL) throw std::string("No Renderer");
   return renderer;
 }
