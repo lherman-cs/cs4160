@@ -49,92 +49,13 @@
   <alpha>0</alpha>
 </font>
 
-<Ramens>
-  <ramen-1>
-    <file>assets/img/ramen.png</file>
-    <startLoc x="227" y="240"/>
-    <frames>8</frames>
-    <frameInterval>200</frameInterval>
-    <speedX>200</speedX>
-    <speedY>200</speedY>
-    <transparency>true</transparency>
-  </ramen-1>
-  <ramen-2>
-    <file>assets/img/ramen.png</file>
-    <startLoc x="300" y="400"/>
-    <frames>8</frames>
-    <frameInterval>200</frameInterval>
-    <speedX>300</speedX>
-    <speedY>200</speedY>
-    <transparency>true</transparency>
-  </ramen-2>
-  <ramen-3>
-    <file>assets/img/ramen.png</file>
-    <startLoc x="2000" y="400"/>
-    <frames>8</frames>
-    <frameInterval>200</frameInterval>
-    <speedX>-200</speedX>
-    <speedY>200</speedY>
-    <transparency>true</transparency>
-  </ramen-3>
-  <ramen-4>
-    <file>assets/img/ramen.png</file>
-    <startLoc x="3000" y="600"/>
-    <frames>8</frames>
-    <frameInterval>200</frameInterval>
-    <speedX>-200</speedX>
-    <speedY>-200</speedY>
-    <transparency>true</transparency>
-  </ramen-4>
-  <ramen-5>
-    <file>assets/img/ramen.png</file>
-    <startLoc x="50" y="720"/>
-    <frames>8</frames>
-    <frameInterval>200</frameInterval>
-    <speedX>400</speedX>
-    <speedY>-200</speedY>
-    <transparency>true</transparency>
-  </ramen-5>
-  <ramen-6>
-    <file>assets/img/ramen.png</file>
-    <startLoc x="500" y="400"/>
-    <frames>8</frames>
-    <frameInterval>200</frameInterval>
-    <speedX>150</speedX>
-    <speedY>-100</speedY>
-    <transparency>true</transparency>
-  </ramen-6>
-  <ramen-7>
-    <file>assets/img/ramen.png</file>
-    <startLoc x="999" y="27"/>
-    <frames>8</frames>
-    <frameInterval>200</frameInterval>
-    <speedX>500</speedX>
-    <speedY>-500</speedY>
-    <transparency>true</transparency>
-  </ramen-7>
-</Ramens>
-
-<Pacman>
-  <left>
-    <file>assets/img/pacman-left.png</file>
-    <transparency>false</transparency> 
-    <!-- these frames are for creating sprite sheet -->
-    <frames>4</frames>
-   </left>
-  <right>
-    <file>assets/img/pacman-right.png</file>
-    <transparency>false</transparency> 
-    <!-- these frames are for creating sprite sheet -->
-    <frames>4</frames>
-  </right>
-
-  <!-- these frames are being used for rendering the sprite -->
+<spin-star>
+  <file>assets/img/spinstar.png</file>
+  <transparency>true</transparency>
+  <start-location x="500" y="500"/>
+  <speed x="300" y="300"/>
   <frames>4</frames>
-  <frameInterval>200</frameInterval>
-  <startLoc x="0" y="0"/>
-  <speedX>300</speedX>
-  <speedY>300</speedY>
-</Pacman>
+  <frame-interval>300</frame-interval>
+</spin-star>
 
 </GameData>

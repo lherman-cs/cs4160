@@ -25,8 +25,9 @@ Viewport::Viewport()
 
 void Viewport::setObjectToTrack(const Drawable* obj) {
   objectToTrack = obj;
-  objWidth = objectToTrack->getScaledWidth();
-  objHeight = objectToTrack->getScaledHeight();
+  auto img = obj->getImage();
+  objWidth = img->getWidth();
+  objHeight = img->getHeight();
 }
 
 void Viewport::draw() const {
@@ -39,8 +40,9 @@ void Viewport::draw() const {
 }
 
 void Viewport::update() {
-  const float x = objectToTrack->getX();
-  const float y = objectToTrack->getY();
+  const auto& pos = objectToTrack->getPosition();
+  const float x = pos[0];
+  const float y = pos[1];
 
   viewPos[0] = (x + objWidth / 2) - viewWidth / 2;
   viewPos[1] = (y + objHeight / 2) - viewHeight / 2;

@@ -10,44 +10,21 @@ void MultiSprite::advanceFrame(Uint32 ticks) {
   }
 }
 
-MultiSprite::MultiSprite(const std::string& name,
-                         const std::string& imagePrefix)
+MultiSprite::MultiSprite(const std::string& name)
     : Drawable(
           name,
-          Vector2f(Gamedata::getInstance().getXmlInt(name + "/startLoc/x"),
-                   Gamedata::getInstance().getXmlInt(name + "/startLoc/y")),
-          Vector2f(Gamedata::getInstance().getXmlInt(name + "/speedX"),
-                   Gamedata::getInstance().getXmlInt(name + "/speedY"))),
-      images(ImageFactory::getInstance().getImages(name + imagePrefix)),
-
+          Vector2f(
+              Gamedata::getInstance().getXmlInt(name + "/start-location/x"),
+              Gamedata::getInstance().getXmlInt(name + "/start-location/y")),
+          Vector2f(Gamedata::getInstance().getXmlInt(name + "/speed/x"),
+                   Gamedata::getInstance().getXmlInt(name + "/speed/y"))),
+      images(ImageFactory::getInstance().getImages(name)),
       currentFrame(0),
       numberOfFrames(Gamedata::getInstance().getXmlInt(name + "/frames")),
-      frameInterval(Gamedata::getInstance().getXmlInt(name + "/frameInterval")),
-      timeSinceLastFrame(0),
-      worldWidth(Gamedata::getInstance().getXmlInt("world/width")),
-      worldHeight(Gamedata::getInstance().getXmlInt("world/height")) {}
+      frameInterval(
+          Gamedata::getInstance().getXmlInt(name + "/frame-interval")),
+      timeSinceLastFrame(0) {}
 
-void MultiSprite::draw() const {
-  images[currentFrame]->draw(getX(), getY(), getScale());
-}
+void MultiSprite::draw() const { images[currentFrame]->draw(getPosition()); }
 
-void MultiSprite::update(Uint32 ticks) {
-  advanceFrame(ticks);
-
-  Vector2f incr = getVelocity() * static_cast<float>(ticks) * 0.001;
-  setPosition(getPosition() + incr);
-
-  if (getY() < 0) {
-    setVelocityY(fabs(getVelocityY()));
-  }
-  if (getY() + getScaledHeight() > worldHeight) {
-    setVelocityY(-fabs(getVelocityY()));
-  }
-
-  if (getX() < 0) {
-    setVelocityX(fabs(getVelocityX()));
-  }
-  if (getX() + getScaledWidth() > worldWidth) {
-    setVelocityX(-fabs(getVelocityX()));
-  }
-}
+void MultiSprite::update(Uint32 ticks) { advanceFrame(ticks); }

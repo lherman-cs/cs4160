@@ -18,6 +18,8 @@ void Image::regenerateTexture() {
   texture = SDL_CreateTextureFromSurface(renderContext.getRenderer(), surface);
 }
 
+void Image::draw(const Vector2f& pos) const { draw(pos[0], pos[1], 1.0f); }
+
 void Image::draw(int x, int y) const { draw(x, y, 1.0f); }
 
 void Image::draw(int x, int y, float scale) const {

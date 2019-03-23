@@ -24,11 +24,9 @@ class Engine {
 
   SDL_Renderer* const renderer;
   World background;
-  World waitress;
-  World hangingLightBulb;
   Viewport& viewport;
 
-  std::vector<Drawable*> sprites;
+  Drawable* spinstar;
   int currentSprite;
 
   bool makeVideo;

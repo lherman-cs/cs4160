@@ -2,12 +2,14 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <string>
+#include "util/vector2f.h"
 
 class Image {
  public:
   Image(SDL_Surface*);
 
   void regenerateTexture();
+  void draw(const Vector2f& pos) const;
   void draw(int x, int y) const;
   void draw(int x, int y, float scale) const;
   void draw(int sx, int sy, int dx, int dy) const;

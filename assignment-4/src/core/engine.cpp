@@ -8,14 +8,13 @@
 #include "global/gameData.h"
 #include "sprite/multisprite.h"
 #include "sprite/sprite.h"
-#include "sprite/twoWayMultisprite.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
 Engine::~Engine() {
-  for (auto &sprite : sprites) delete sprite;
+  delete spinstar;
   std::cout << "Terminating program" << std::endl;
 }
 
@@ -26,56 +25,31 @@ Engine::Engine()
       renderer(rc.getRenderer()),
       background("background",
                  Gamedata::getInstance().getXmlInt("background/factor")),
-      waitress("waitress",
-               Gamedata::getInstance().getXmlInt("waitress/factor")),
-      hangingLightBulb("hangingLightBulb", Gamedata::getInstance().getXmlInt(
-                                               "hangingLightBulb/factor")),
       viewport(Viewport::getInstance()),
-      sprites(),
+      spinstar(new MultiSprite("spin-star")),
       currentSprite(0),
       makeVideo(false) {
-  const auto pacman = new TwoWayMultiSprite("Pacman");
-  pacman->setScale(2);
-
-  auto i = 1;
-  auto id = "Ramens/ramen-" + std::to_string(i);
-  while (Gamedata::getInstance().checkTag(id + "/file")) {
-    const auto ramen = new MultiSprite(id);
-    ramen->setScale(1.5);
-    sprites.emplace_back(ramen);
-    i++;
-    id = "Ramens/ramen-" + std::to_string(i);
-  }
-
-  sprites.emplace_back(pacman);
-  Viewport::getInstance().setObjectToTrack(pacman);
+  Viewport::getInstance().setObjectToTrack(spinstar);
   std::cout << "Loading complete" << std::endl;
 }
 
 void Engine::draw() const {
   background.draw();
-  waitress.draw();
-  hangingLightBulb.draw();
-
-  for (const auto &sprite : sprites) sprite->draw();
-
+  spinstar->draw();
   viewport.draw();
+
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
-  for (const auto &sprite : sprites) sprite->update(ticks);
-
+  spinstar->update(ticks);
   background.update();
-  waitress.update();
-  hangingLightBulb.update();
   viewport.update();  // always update viewport last
 }
 
 void Engine::switchSprite() {
-  ++currentSprite;
-  currentSprite = currentSprite % sprites.size();
-  Viewport::getInstance().setObjectToTrack(sprites[currentSprite]);
+  // TODO!
+  Viewport::getInstance().setObjectToTrack(spinstar);
 }
 
 void Engine::forward(bool &done) {
