@@ -5,7 +5,7 @@
 <title>The Tracker Framework</title>
 <maxStringSize>50</maxStringSize>
 
-<frameCapOn>false</frameCapOn>
+<frameCapOn>true</frameCapOn>
 <period>17</period>
 
 <maxFrames>300</maxFrames>
