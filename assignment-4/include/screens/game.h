@@ -4,7 +4,6 @@
 #include "core/event.h"
 #include "core/observable.h"
 #include "global/navigator.h"
-// #include "player/player.h"
 #include "screen.h"
 #include "util/ioMod.h"
 #include "util/world.h"
@@ -32,31 +31,11 @@ class GameScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  enum Column { type, quantity };
-  struct Bet {
-    short quantity;
-    short type;
-  };
-
   World background;
   int difficulty;
   int turn;
-  int column;
   int players;
-  Bet lastBet;
-  Bet currBet;
-  int diceOnTable = 25;
-
-  // std::vector<std::unique_ptr<Player>> players;
 
   IoMod menuWriter;
   Navigator& navigator;
-
-  void onCallLiar(const GameEvent::CallLiar& e);
-  void onSetBet(const GameEvent::SetBet& e);
-
-  void incType();
-  void incQuan();
-  void decType();
-  void decQuan();
 };
