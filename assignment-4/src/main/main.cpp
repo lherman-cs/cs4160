@@ -1,5 +1,5 @@
-// Brian Malloy        Data-Driven Object oriented Game Construction
 #include "core/engine.h"
+#include "core/event.h"
 #include "player/human.h"
 
 void callback(const SetBetEvent& e) {
