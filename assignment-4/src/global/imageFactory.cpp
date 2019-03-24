@@ -1,4 +1,3 @@
-#include "global/ioMod.h"
 #include "global/renderContext.h"
 #include "util/vector2f.h"
 
@@ -55,7 +54,8 @@ Image* ImageFactory::getImage(const std::string& name) {
   std::map<std::string, Image*>::const_iterator it = images.find(name);
   if (it == images.end()) {
     SDL_Surface* const surface =
-        IoMod::getInstance().readSurface(gdata.getXmlStr(name + "/file"));
+        IMG_Load(gdata.getXmlStr(name + "/file").c_str());
+
     bool transparency = gdata.getXmlBool(name + "/transparency");
     if (transparency) {
       int keyColor = SDL_MapRGBA(surface->format, 255, 0, 255, 255);
@@ -78,10 +78,9 @@ std::vector<Image*> ImageFactory::getImages(const std::string& name) {
     return pos->second;
   }
 
-  IoMod& iomod = IoMod::getInstance();
   RenderContext& renderContext = RenderContext::getInstance();
   std::string sheetPath = gdata.getXmlStr(name + "/file");
-  SDL_Surface* spriteSurface = iomod.readSurface(sheetPath);
+  SDL_Surface* spriteSurface = IMG_Load(sheetPath.c_str());
   bool transparency = gdata.getXmlBool(name + "/transparency");
 
   // It wasn't in the map, so we have to make the vector of Images:

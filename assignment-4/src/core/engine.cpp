@@ -6,6 +6,8 @@
 #include <sstream>
 #include <string>
 #include "global/gameData.h"
+#include "global/navigator.h"
+#include "screens/intro.h"
 #include "sprite/multisprite.h"
 #include "sprite/sprite.h"
 
@@ -13,43 +15,23 @@
 #include <emscripten.h>
 #endif
 
-Engine::~Engine() {
-  delete spinstar;
-  std::cout << "Terminating program" << std::endl;
-}
+Engine::~Engine() { std::cout << "Terminating program" << std::endl; }
 
 Engine::Engine()
     : rc(RenderContext::getInstance()),
-      io(IoMod::getInstance()),
       clock(Clock::getInstance()),
-      renderer(rc.getRenderer()),
-      background("background",
-                 Gamedata::getInstance().getXmlInt("background/factor")),
-      viewport(Viewport::getInstance()),
-      spinstar(new MultiSprite("spin-star")),
-      currentSprite(0),
-      makeVideo(false) {
-  Viewport::getInstance().setObjectToTrack(spinstar);
+      navigator(Navigator::getInstance()),
+      renderer(rc.getRenderer()) {
   std::cout << "Loading complete" << std::endl;
 }
 
 void Engine::draw() const {
-  background.draw();
-  spinstar->draw();
-  viewport.draw();
-
+  navigator.getCurrentScreen()->draw();
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
-  spinstar->update(ticks);
-  background.update();
-  viewport.update();  // always update viewport last
-}
-
-void Engine::switchSprite() {
-  // TODO!
-  Viewport::getInstance().setObjectToTrack(spinstar);
+  navigator.getCurrentScreen()->update(ticks);
 }
 
 void Engine::forward(bool &done) {
@@ -59,15 +41,16 @@ void Engine::forward(bool &done) {
 
   // The next loop polls for events, guarding against key bounce:
   while (SDL_PollEvent(&event)) {
-    keystate = SDL_GetKeyboardState(NULL);
     if (event.type == SDL_QUIT) {
       done = true;
-      break;
+      return;
     }
+
     if (event.type == SDL_KEYDOWN) {
+      keystate = SDL_GetKeyboardState(NULL);
       if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
         done = true;
-        break;
+        return;
       }
       if (keystate[SDL_SCANCODE_P]) {
         if (clock.isPaused())
@@ -75,9 +58,8 @@ void Engine::forward(bool &done) {
         else
           clock.pause();
       }
-      if (keystate[SDL_SCANCODE_T]) {
-        switchSprite();
-      }
+
+      navigator.getCurrentScreen()->onKeyDown(keystate);
     }
   }
 

@@ -1,4 +1,5 @@
 #include "image.cpp"
+#include "ioMod.cpp"
 #include "parseXML.cpp"
 #include "spriteSheet.cpp"
 #include "vector2f.cpp"

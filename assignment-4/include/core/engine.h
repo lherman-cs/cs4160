@@ -1,9 +1,11 @@
 #include <SDL2/SDL.h>
-#include <vector>
+#include <memory>
+#include <unordered_map>
 #include "global/clock.h"
-#include "global/ioMod.h"
+#include "global/navigator.h"
 #include "global/renderContext.h"
 #include "global/viewport.h"
+#include "screens/screen.h"
 #include "util/world.h"
 
 class Engine {
@@ -12,24 +14,16 @@ class Engine {
   ~Engine();
   void forward(bool& done);
   void play();
-  void switchSprite();
 
   Engine(const Engine&) = delete;
   Engine& operator=(const Engine&) = delete;
 
  private:
   const RenderContext& rc;
-  const IoMod& io;
   Clock& clock;
+  Navigator& navigator;
 
   SDL_Renderer* const renderer;
-  World background;
-  Viewport& viewport;
-
-  Drawable* spinstar;
-  int currentSprite;
-
-  bool makeVideo;
 
   void draw() const;
   void update(Uint32);

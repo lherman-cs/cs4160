@@ -17,4 +17,4 @@ Sprite::Sprite(const std::string& name)
 
 void Sprite::draw() const { image->draw(getPosition()); }
 
-void Sprite::update(Uint32 ticks) {}
+void Sprite::update(Uint32 ticks) { (void)ticks; }

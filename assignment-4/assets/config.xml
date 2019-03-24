@@ -12,41 +12,23 @@
 <username>lukash</username>
 
 <view>
-  <width>1080</width>
-  <height>720</height>
-  <loc x="30" y="30"/>
+  <width>1024</width>
+  <height>768</height>
+  <loc x="0" y="0"/>
 </view>
 
 <world>
-  <width>3840</width>
-  <height>720</height>
+  <width>1024</width>
+  <height>768</height>
 </world>
 
-<background>
-  <file>assets/img/background.png</file>
-  <factor>8</factor>
+<intro>
+  <file>assets/img/intro.png</file>
   <transparency>false</transparency>
-</background>
-
-<waitress>
-  <file>assets/img/waitress.png</file>
-  <factor>4</factor>
-  <transparency>true</transparency>
-</waitress>
-
-<hangingLightBulb>
-  <file>assets/img/hanging-light-bulb.png</file>
-  <factor>2</factor>
-  <transparency>true</transparency>
-</hangingLightBulb>
+</intro>
 
 <font name="font">
-  <file>assets/font/arial.ttf</file>
-  <size>24</size>
-  <red>255</red>
-  <green>255</green>
-  <blue>0</blue>
-  <alpha>0</alpha>
+  <file>assets/font/black-pearl.ttf</file>
 </font>
 
 <spin-star>

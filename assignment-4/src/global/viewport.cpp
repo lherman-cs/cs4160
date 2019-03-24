@@ -1,7 +1,6 @@
 #include "global/viewport.h"
 #include <sstream>
 #include "global/clock.h"
-#include "global/ioMod.h"
 
 const std::string NAME = "Lukas Herman";
 
@@ -30,14 +29,7 @@ void Viewport::setObjectToTrack(const Drawable* obj) {
   objHeight = img->getHeight();
 }
 
-void Viewport::draw() const {
-  IoMod::getInstance().writeText("Tracking: " + objectToTrack->getName(),
-                                 msgPos[0], msgPos[1]);
-
-  std::stringstream ss;
-  ss << NAME << " | FPS: " << Clock::getInstance().getFps();
-  IoMod::getInstance().writeText(ss.str(), 30, viewHeight - 60);
-}
+void Viewport::draw() const {}
 
 void Viewport::update() {
   const auto& pos = objectToTrack->getPosition();
