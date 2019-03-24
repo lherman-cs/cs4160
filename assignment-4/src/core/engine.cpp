@@ -22,6 +22,7 @@ Engine::Engine()
       clock(Clock::getInstance()),
       navigator(Navigator::getInstance()),
       renderer(rc.getRenderer()) {
+  navigator.push<IntroScreen>();
   std::cout << "Loading complete" << std::endl;
 }
 
@@ -48,6 +49,8 @@ void Engine::forward(bool &done) {
 
     if (event.type == SDL_KEYDOWN) {
       keystate = SDL_GetKeyboardState(NULL);
+      navigator.getCurrentScreen()->onKeyDown(keystate);
+
       if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
         done = true;
         return;
@@ -58,8 +61,6 @@ void Engine::forward(bool &done) {
         else
           clock.pause();
       }
-
-      navigator.getCurrentScreen()->onKeyDown(keystate);
     }
   }
 

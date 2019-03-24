@@ -19,6 +19,9 @@ class Navigator {
   void pop();
   std::shared_ptr<Screen> getCurrentScreen();
 
+  Navigator(const Navigator&) = delete;
+  Navigator& operator=(const Navigator&) = delete;
+
  private:
   Navigator();
   std::shared_ptr<Screen> currentScreen;

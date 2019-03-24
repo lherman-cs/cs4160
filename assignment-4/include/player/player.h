@@ -1,14 +1,14 @@
 #pragma once
 #include <string>
 #include "core/observable.h"
+#include "screens/game.h"
 
 class Player : public Observable {
- protected:
-  Player(const std::string &name);
-
  public:
   virtual ~Player();
+  const std::string name;
 
  protected:
-  std::string name;
+  Player(const GameScreen &game, const std::string &name);
+  const GameScreen &game;
 };

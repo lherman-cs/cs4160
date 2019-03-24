@@ -1,4 +1,5 @@
 #pragma once
+#include "global/navigator.h"
 #include "screens/screen.h"
 #include "util/ioMod.h"
 #include "util/world.h"
@@ -17,13 +18,13 @@ class IntroScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  enum Difficulty { easy, medium, hard };
   enum Row { player, bot, difficult };
-  World introBackground;
+  const World introBackground;
   int row;
   int players;
   int bots;
   int difficulty;
 
   IoMod menuWriter;
+  Navigator& navigator;
 };

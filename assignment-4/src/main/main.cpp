@@ -2,14 +2,7 @@
 #include "core/event.h"
 #include "player/human.h"
 
-void callback(const SetBetEvent& e) {
-  std::cout << "CALLBACK " << e.quantity << std::endl;
-}
-
 int main(int, char*[]) {
-  Human h("Lukas");
-  h.subscribe<SetBetEvent>(callback);
-
   try {
     Engine engine;
     engine.play();

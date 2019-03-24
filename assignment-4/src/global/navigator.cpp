@@ -1,17 +1,17 @@
 #include "global/navigator.h"
-#include "screens/intro.h"
+#include <iostream>
 
 Navigator& Navigator::getInstance() {
   static Navigator navigator;
   return navigator;
 }
 
-Navigator::Navigator() : currentScreen(), history() { push<IntroScreen>(); }
+Navigator::Navigator() : currentScreen(), history() {}
 
 void Navigator::pop() {
   if (history.size() == 0) return;
-  currentScreen = history.top();
   history.pop();
+  currentScreen = history.top();
 }
 
 std::shared_ptr<Screen> Navigator::getCurrentScreen() { return currentScreen; }

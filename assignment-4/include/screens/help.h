@@ -1,9 +1,10 @@
 #pragma once
+#include "global/navigator.h"
 #include "screens/screen.h"
 #include "util/world.h"
 
 // help screen
-//  responds to '
+//  responds to 'H' rules, 'P' player info, 'C' close menu
 
 class HelpScreen : public Screen {
  public:
@@ -14,5 +15,6 @@ class HelpScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  World helpBackground;
+  const World helpBackground;
+  Navigator& navigator;
 };

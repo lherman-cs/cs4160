@@ -27,17 +27,27 @@
   <transparency>false</transparency>
 </intro>
 
+<game-background>
+  <file>assets/img/game.png</file>
+  <transparency>false</transparency>
+</game-background>
+
+<rules>
+  <file>assets/img/rules.png</file>
+  <transparency>false</transparency>
+</rules>
+
+<help>
+  <file>assets/img/help.png</file>
+  <transparency>false</transparency>
+</help>
+
+<player-info>
+  <file>assets/img/player-info.png</file>
+  <transparency>false</transparency>
+</player-info>
+
 <font name="font">
   <file>assets/font/black-pearl.ttf</file>
 </font>
-
-<spin-star>
-  <file>assets/img/spinstar.png</file>
-  <transparency>true</transparency>
-  <start-location x="500" y="500"/>
-  <speed x="300" y="300"/>
-  <frames>4</frames>
-  <frame-interval>300</frame-interval>
-</spin-star>
-
 </GameData>

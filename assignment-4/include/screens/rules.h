@@ -1,18 +1,20 @@
 #pragma once
+#include "global/navigator.h"
 #include "screens/screen.h"
 #include "util/world.h"
 
 // rules screen
-//  responds to
+//  responds to 'C' close
 
-class rulesScreen : public Screen {
+class RulesScreen : public Screen {
  public:
-  virtual ~rulesScreen();
-  rulesScreen();
+  virtual ~RulesScreen();
+  RulesScreen();
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
   virtual void update(Uint32 ticks);
 
  private:
-  World rulesBackground;
+  const World rulesBackground;
+  Navigator& navigator;
 };

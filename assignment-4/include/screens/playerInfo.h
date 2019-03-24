@@ -1,18 +1,20 @@
 #pragma once
+#include "global/navigator.h"
 #include "screens/screen.h"
 #include "util/world.h"
 
 // playerInfo screen
-//  responds to
+//  responds to 'C' close
 
-class playerInfoScreen : public Screen {
+class PlayerInfoScreen : public Screen {
  public:
-  virtual ~playerInfoScreen();
-  playerInfoScreen();
+  PlayerInfoScreen();
+  virtual ~PlayerInfoScreen();
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
   virtual void update(Uint32 ticks);
 
  private:
-  World playerInfoBackground;
+  const World playerInfoBackground;
+  Navigator& navigator;
 };

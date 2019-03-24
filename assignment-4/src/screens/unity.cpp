@@ -1,2 +1,6 @@
+#include "game.cpp"
+#include "help.cpp"
 #include "intro.cpp"
+#include "playerInfo.cpp"
+#include "rules.cpp"
 #include "screen.cpp"
