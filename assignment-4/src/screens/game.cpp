@@ -22,15 +22,11 @@ GameScreen::GameScreen(int players, int bots, int difficulty)
       players(),
       menuWriter(70, {88, 53, 31, 255}),
       navigator(Navigator::getInstance()) {
-  auto onDone = std::bind(&GameScreen::onDone, this, _1);
-
   auto human = std::make_shared<Human>(this, "Human");
-  human->subscribe<GameEvent::Done>(onDone);
   this->players.emplace_back(human);
 
   for (int id = 1; id <= bots; id++) {
     auto bot = std::make_shared<Bot>(this, id);
-    bot->subscribe<GameEvent::Done>(onDone);
     this->players.emplace_back(bot);
   }
 }
@@ -39,10 +35,9 @@ GameScreen::~GameScreen() {}
 
 // This is a callback when the player who got the turn finish with
 // their turn.
-void GameScreen::onDone(const GameEvent::Done& e) {
+void GameScreen::onDone() {
   turn = (turn + 1) % players.size();
   // TODO! do something useful here
-  (void)e;
   std::cout << "ON DONE" << std::endl;
 }
 
@@ -51,15 +46,14 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<HelpScreen>();
   }
 
-  // Human's turn
-  if (players[turn]->type == 0) {
-    int quantity, type;  // probably initialize this with a proper number.
-    players[turn]->decide(keystate, quantity, type);
+  int quantity, type;  // probably initialize this with a proper number.
+  bool done = players[turn]->decide(keystate, quantity, type);
 
-    // TODO! validate quantity and type here.
+  // TODO! validate quantity and type here.
 
-    // TODO! update the UI.
-  }
+  // TODO! update the UI
+
+  if (done) onDone();
 }
 
 void GameScreen::draw() const { background.draw(); }

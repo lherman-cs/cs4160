@@ -1,24 +1,25 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <string>
-#include "core/observable.h"
 #include "screens/game.h"
 
 class GameScreen;
-class Player : public Observable {
+class Player {
  public:
   virtual ~Player();
   const std::string name;
   const uint type;
-  virtual void decide(Uint32 ticks, int &quantity, int &type) {
+  virtual bool decide(Uint32 ticks, int &quantity, int &type) {
     (void)ticks;
     (void)quantity;
     (void)type;
+    return false;
   };
-  virtual void decide(const Uint8 *const keystate, int &quantity, int &type) {
+  virtual bool decide(const Uint8 *const keystate, int &quantity, int &type) {
     (void)keystate;
     (void)quantity;
     (void)type;
+    return false;
   };
 
  protected:

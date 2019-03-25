@@ -11,7 +11,6 @@
 
 namespace GameEvent {
 class CallLiar : public Event {};
-class Done : public Event {};
 }  // namespace GameEvent
 
 class Player;
@@ -37,5 +36,5 @@ class GameScreen : public Screen {
   IoMod menuWriter;
   Navigator& navigator;
 
-  void onDone(const GameEvent::Done& e);
+  void onDone();
 };
