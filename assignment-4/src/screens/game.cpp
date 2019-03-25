@@ -7,6 +7,7 @@
 #include "player/bot.h"
 #include "player/human.h"
 #include "screens/help.h"
+#include "util/dice.h"
 #include "util/ioMod.h"
 
 using namespace std::placeholders;
@@ -62,12 +63,23 @@ void GameScreen::update(Uint32 ticks) {
   if (done) onDone();
 }
 
+void drawDice() {
+  Dice d = Dice();
+  d.roll();
+  d.positionDie(Vector2f(400, 650), 0);
+  d.draw();
+  d.positionDie(Vector2f(650, 150), (40 * M_PI) / 180);
+  d.draw();
+}
+
 void GameScreen::draw() const {
   auto normalColor = SDL_Color({52, 44, 42, 255});
   auto hoverColor = SDL_Color({255, 255, 0, 255});
   auto secondaryColor = SDL_Color({182, 148, 103, 255});
 
   background.draw();
+
+  drawDice();
 
   // Current data
   int ystart = 30;

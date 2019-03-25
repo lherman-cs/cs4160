@@ -1,53 +1,71 @@
 <?xml version = "1.0"?>
 <GameData>
-<!-- screenTitle is also used to identify you and your animation. 
+  <!-- screenTitle is also used to identify you and your animation. 
      So make sure to include your name as part of the screenTitle -->
-<title>The Tracker Framework</title>
-<maxStringSize>50</maxStringSize>
+  <title>The Tracker Framework</title>
+  <maxStringSize>50</maxStringSize>
 
-<frameCapOn>true</frameCapOn>
-<period>17</period>
+  <frameCapOn>true</frameCapOn>
+  <period>17</period>
 
-<maxFrames>300</maxFrames>
-<username>lukash</username>
+  <maxFrames>300</maxFrames>
+  <username>lukash</username>
 
-<view>
-  <width>1024</width>
-  <height>768</height>
-  <loc x="0" y="0"/>
-</view>
+  <view>
+    <width>1024</width>
+    <height>768</height>
+    <loc x="0" y="0"/>
+  </view>
 
-<world>
-  <width>1024</width>
-  <height>768</height>
-</world>
+  <world>
+    <width>1024</width>
+    <height>768</height>
+  </world>
 
-<intro>
-  <file>assets/img/intro.png</file>
-  <transparency>false</transparency>
-</intro>
+  <intro>
+    <file>assets/img/intro.png</file>
+    <transparency>false</transparency>
+  </intro>
 
-<game-background>
-  <file>assets/img/game.png</file>
-  <transparency>false</transparency>
-</game-background>
+  <game-background>
+    <file>assets/img/game.png</file>
+    <transparency>false</transparency>
+  </game-background>
 
-<rules>
-  <file>assets/img/rules.png</file>
-  <transparency>false</transparency>
-</rules>
+  <rules>
+    <file>assets/img/rules.png</file>
+    <transparency>false</transparency>
+  </rules>
 
-<help>
-  <file>assets/img/help.png</file>
-  <transparency>false</transparency>
-</help>
+  <help>
+    <file>assets/img/help.png</file>
+    <transparency>false</transparency>
+  </help>
 
-<player-info>
-  <file>assets/img/player-info.png</file>
-  <transparency>false</transparency>
-</player-info>
+  <player-info>
+    <file>assets/img/player-info.png</file>
+    <transparency>false</transparency>
+  </player-info>
 
-<font name="font">
-  <file>assets/font/black-pearl.ttf</file>
-</font>
+  <font name="font">
+    <file>assets/font/black-pearl.ttf</file>
+  </font>
+
+  <dice>
+    <file>assets/img/dice.png</file>
+    <transparency>true</transparency>
+    <frames>6</frames>
+  </dice>
+
+
+  <hidden-dice>
+    <file>assets/img/dice.png</file>
+    <transparency>true</transparency>
+  </hidden-dice>
+
+  <invisible-dice>
+    <file>assets/img/dice.png</file>
+    <transparency>true</transparency>
+  </invisible-dice>
+
 </GameData>

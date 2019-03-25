@@ -19,7 +19,4 @@ class MultiSprite : public Drawable {
 
   unsigned currentFrame;
   unsigned numberOfFrames;
-  unsigned frameInterval;
-  float timeSinceLastFrame;
-  void advanceFrame(Uint32 ticks);
 };
