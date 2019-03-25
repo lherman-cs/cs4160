@@ -15,6 +15,6 @@ class HelpScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World helpBackground;
-  Navigator& navigator;
+  const World helpBackground{"help"};
+  Navigator& navigator{Navigator::getInstance()};
 };

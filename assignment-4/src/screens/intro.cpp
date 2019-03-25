@@ -5,15 +5,7 @@
 #include "screens/rules.h"
 #include "util/ioMod.h"
 
-IntroScreen::IntroScreen()
-    : introBackground("intro"),
-      row(0),
-      players(5),
-      bots(4),
-      difficulty(0),
-      menuWriter(70),
-      navigator(Navigator::getInstance()) {}
-
+IntroScreen::IntroScreen() {}
 IntroScreen::~IntroScreen() {}
 
 void IntroScreen::onKeyDown(const Uint8* const keystate) {

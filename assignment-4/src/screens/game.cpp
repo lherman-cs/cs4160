@@ -16,16 +16,7 @@ using namespace std::placeholders;
 //  responds to 'B' bet, 'L' call liar, and 'H' help
 //              ← → ↑ ↓ for selection of type and quantity
 
-GameScreen::GameScreen(int players, int bots, int difficulty)
-    : background("game-background"),
-      turn(0),
-      round(1),
-      players(),
-      lastBet({0, 1}),
-      currBet({1, 1}),
-      menuWriter(60),
-      loadingWriter(32),
-      navigator(Navigator::getInstance()) {
+GameScreen::GameScreen(int players, int bots, int difficulty) {
   // TODO! do something with this variable.
   (void)players;
   (void)difficulty;

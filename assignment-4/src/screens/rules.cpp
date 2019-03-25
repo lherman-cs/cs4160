@@ -1,8 +1,6 @@
 #include "screens/rules.h"
 
-RulesScreen::RulesScreen()
-    : rulesBackground("rules"), navigator(Navigator::getInstance()) {}
-
+RulesScreen::RulesScreen() {}
 RulesScreen::~RulesScreen() {}
 
 void RulesScreen::onKeyDown(const Uint8* const keystate) {

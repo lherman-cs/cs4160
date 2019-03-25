@@ -2,9 +2,7 @@
 #include "screens/playerInfo.h"
 #include "screens/rules.h"
 
-HelpScreen::HelpScreen()
-    : helpBackground("help"), navigator(Navigator::getInstance()) {}
-
+HelpScreen::HelpScreen() {}
 HelpScreen::~HelpScreen() {}
 
 void HelpScreen::onKeyDown(const Uint8* const keystate) {

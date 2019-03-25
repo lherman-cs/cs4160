@@ -18,12 +18,12 @@ class IntroScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World introBackground;
-  int row;
-  int players;
-  int bots;
-  int difficulty;
+  const World introBackground{"intro"};
+  int row = 0;
+  int players = 5;
+  int bots = 4;
+  int difficulty = 0;
 
-  IoMod menuWriter;
-  Navigator& navigator;
+  IoMod menuWriter{70};
+  Navigator& navigator{Navigator::getInstance()};
 };

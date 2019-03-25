@@ -1,9 +1,6 @@
 #include "screens/playerInfo.h"
 
-PlayerInfoScreen::PlayerInfoScreen()
-    : playerInfoBackground("player-info"),
-      navigator(Navigator::getInstance()) {}
-
+PlayerInfoScreen::PlayerInfoScreen() {}
 PlayerInfoScreen::~PlayerInfoScreen() {}
 
 void PlayerInfoScreen::onKeyDown(const Uint8* const keystate) {
