@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    branches:
+      only:
+        - master
+    working_directory: ~/repo/assignment-4
+    docker:
+      - image: lherman/sdl
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 15:d4:31:23:32:57:0d:92:a0:0d:29:e2:96:f2:89:64
+      - checkout:
+          path: ~/repo
+      - run:
+          name: "build wasm"
+          command: ./build-wasm.sh
+      - deploy:
+          name: "deploying"
+          working_directory: ~/web
+          command: |
+            echo "github.com,192.30.253.113 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==" >> ~/.ssh/known_hosts
+            ssh-add -l
+            git clone git@github.com:lukas-sites/game.git
+            cd game
+            mv ~/repo/assignment-4/index.* ./project-4
+            git config --global user.email "lherman.cs@gmail.com"
+            git config --global user.name "Lukas Herman"
+            git add .
+            git commit -m "Auto generated at `date`"
+            git push origin master
