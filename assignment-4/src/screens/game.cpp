@@ -51,7 +51,7 @@ void GameScreen::validateBet(int& quantity, int& type) {
       type++;
       return;
     }
-    if (quantity <= lastBet.quantity && lastBet.type == 6) return incQuan();
+    // if (quantity <= lastBet.quantity && lastBet.type == 6) return incQuan();
     type = lastBet.type;
     type += quantity > lastBet.quantity ? 0 : 1;
   };
