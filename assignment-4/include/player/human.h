@@ -4,7 +4,11 @@
 
 class Human : public Player {
  public:
-  Human(const GameScreen& game, std::string name);
+  Human(const GameScreen *const game, std::string name);
   virtual ~Human();
-  void onKeyDown(const Uint8* const keystate);
+  virtual void decide(const Uint8 *const keystate, int &quantity, int &type);
+
+ private:
+  // if true, user is changing the type. Otherwise, it's the quantity
+  bool onType;
 };

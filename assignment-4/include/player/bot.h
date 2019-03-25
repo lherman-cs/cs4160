@@ -3,6 +3,6 @@
 
 class Bot : public Player {
  public:
-  Bot(const GameScreen& game, int id);
+  Bot(const GameScreen* const game, int id);
   virtual ~Bot();
 };
