@@ -21,7 +21,8 @@ GameScreen::GameScreen(int players, int bots, int difficulty)
       turn(0),
       players(),
       lastBet({0, 1}),
-      menuWriter(70, {52, 44, 42, 255}),
+      currBet({1, 1}),
+      menuWriter(60),
       navigator(Navigator::getInstance()) {
   auto human = std::make_shared<Human>(this, "Human");
   this->players.emplace_back(human);
@@ -47,23 +48,44 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<HelpScreen>();
   }
 
-  int quantity, type;  // probably initialize this with a proper number.
-  bool done = players[turn]->decide(keystate, quantity, type);
+  bool done = players[turn]->decide(keystate, currBet.quantity, currBet.type);
 
-  // TODO! validate quantity and type here.
-  validateBet(quantity, type);
-  // TODO! update the UI
+  validateBet(currBet.quantity, currBet.type);
 
   if (done) onDone();
 }
 
-void GameScreen::draw() const { background.draw(); }
+void GameScreen::draw() const {
+  background.draw();
+
+  // Current data
+  int ystart = 30;
+  int xstart = 825;
+  int xstep = 110;
+  std::stringstream ss;
+  ss << currBet.quantity;
+  menuWriter.writeText(ss.str(), xstart, ystart, {52, 44, 42, 255});
+  ss.str("");
+  ss << currBet.type;
+  menuWriter.writeText(ss.str(), xstart + xstep, ystart, {52, 44, 42, 255});
+  ss.str("");
+  ystart = 705;
+  xstart = 50;
+  ss << turn;
+  menuWriter.writeText(ss.str(), xstart + xstep, ystart, {182, 148, 103, 255});
+  ss.str("");
+}
 
 void GameScreen::update(Uint32 ticks) { (void)ticks; }
 
 // validate and update the inputted quantity
 void GameScreen::validateBet(int& quantity, int& type) {
-  if (quantity > lastBet.quantity || type > lastBet.type) return;
+  quantity = quantity > diceOnTable ? diceOnTable : quantity;
+  type = type > 6 ? 6 : type;
+
+  if (quantity >= lastBet.quantity && type >= lastBet.type &&
+      (quantity > lastBet.quantity || type > lastBet.type))
+    return;
 
   /**
    * Case 1:

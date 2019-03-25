@@ -30,14 +30,15 @@ class GameScreen : public Screen {
 
  private:
   struct Bet {
-    short quantity;
-    short type;
+    int quantity;
+    int type;
   };
   World background;
   int difficulty;
   int turn;
   std::vector<std::shared_ptr<Player>> players;
   Bet lastBet;
+  Bet currBet;
   int diceOnTable = 25;
 
   IoMod menuWriter;

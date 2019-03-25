@@ -8,12 +8,11 @@ IoMod::~IoMod() {
   TTF_Quit();
 }
 
-IoMod::IoMod(int size, SDL_Color textColor)
+IoMod::IoMod(int size)
     : init(TTF_Init()),
       renderer(RenderContext::getInstance().getRenderer()),
       font(TTF_OpenFont(Gamedata::getInstance().getXmlStr("font/file").c_str(),
-                        size)),
-      textColor(textColor) {
+                        size)) {
   if (init == -1) {
     throw std::string("error: Couldn't init font");
   }
@@ -22,7 +21,8 @@ IoMod::IoMod(int size, SDL_Color textColor)
   }
 }
 
-void IoMod::writeText(const std::string& msg, int x, int y) const {
+void IoMod::writeText(const std::string& msg, int x, int y,
+                      SDL_Color textColor) const {
   SDL_Surface* surface = TTF_RenderText_Solid(font, msg.c_str(), textColor);
 
   SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);

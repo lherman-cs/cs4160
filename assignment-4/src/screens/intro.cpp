@@ -12,7 +12,7 @@ IntroScreen::IntroScreen()
       players(5),
       bots(4),
       difficulty(0),
-      menuWriter(70, {88, 53, 31, 255}),
+      menuWriter(70),
       navigator(Navigator::getInstance()) {}
 
 IntroScreen::~IntroScreen() {}
@@ -63,20 +63,20 @@ void IntroScreen::draw() const {
   int xstart = 630;
   std::stringstream ss;
   ss << (players);
-  menuWriter.writeText(ss.str(), xstart, ystart);
+  menuWriter.writeText(ss.str(), xstart, ystart, {52, 44, 42, 255});
   ss.str("");
   ss << bots;
-  menuWriter.writeText(ss.str(), xstart, ystart + ystep);
+  menuWriter.writeText(ss.str(), xstart, ystart + ystep, {52, 44, 42, 255});
   ss.str("");
   switch (difficulty) {
     case 0:
-      menuWriter.writeText("E", xstart, ystart + 2 * ystep);
+      menuWriter.writeText("E", xstart, ystart + 2 * ystep, {52, 44, 42, 255});
       break;
     case 1:
-      menuWriter.writeText("M", xstart, ystart + 2 * ystep);
+      menuWriter.writeText("M", xstart, ystart + 2 * ystep, {52, 44, 42, 255});
       break;
     case 2:
-      menuWriter.writeText("H", xstart, ystart + 2 * ystep);
+      menuWriter.writeText("H", xstart, ystart + 2 * ystep, {52, 44, 42, 255});
       break;
   }
 }

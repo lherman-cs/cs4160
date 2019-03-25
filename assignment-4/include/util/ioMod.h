@@ -6,9 +6,9 @@
 
 class IoMod {
  public:
-  IoMod(int size, SDL_Color textColor);
+  IoMod(int size);
   ~IoMod();
-  void writeText(const std::string&, int, int) const;
+  void writeText(const std::string&, int, int, SDL_Color) const;
   IoMod(const IoMod&) = delete;
   IoMod& operator=(const IoMod&) = delete;
 
@@ -16,5 +16,4 @@ class IoMod {
   int init;
   SDL_Renderer* renderer;
   TTF_Font* font;
-  SDL_Color textColor;
 };
