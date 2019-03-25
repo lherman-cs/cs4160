@@ -18,7 +18,6 @@ using namespace std::placeholders;
 
 GameScreen::GameScreen(int players, int bots, int difficulty)
     : background("game-background"),
-      difficulty(difficulty),
       turn(0),
       round(1),
       players(),
@@ -27,6 +26,10 @@ GameScreen::GameScreen(int players, int bots, int difficulty)
       menuWriter(60),
       loadingWriter(32),
       navigator(Navigator::getInstance()) {
+  // TODO! do something with this variable.
+  (void)players;
+  (void)difficulty;
+
   auto human = std::make_shared<Human>(this, "Human");
   this->players.emplace_back(human);
 

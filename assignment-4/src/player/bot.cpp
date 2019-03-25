@@ -15,6 +15,10 @@ Bot::Bot(const GameScreen *const game, int id)
 
 Bot::~Bot() {}
 bool Bot::decide(Uint32 ticks, int &quantity, int &type) {
+  // TODO!
+  (void)type;
+  (void)quantity;
+
   elapsed += ticks;
   auto chance = sigmoid(mapInput(elapsed * 1e-3)) * 100;
   auto decided = rand() % 100 < floor(chance);

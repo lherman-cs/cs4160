@@ -34,7 +34,6 @@ class GameScreen : public Screen {
     int type;
   };
   World background;
-  int difficulty;
   int turn;
   int round;
   std::vector<std::shared_ptr<Player>> players;
