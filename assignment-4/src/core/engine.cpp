@@ -55,7 +55,7 @@ void Engine::forward(bool &done) {
         done = true;
         return;
       }
-      if (keystate[SDL_SCANCODE_P]) {
+      if (keystate[SDL_SCANCODE_Z]) {
         if (clock.isPaused())
           clock.unpause();
         else
