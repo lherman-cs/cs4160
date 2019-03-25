@@ -1,7 +1,8 @@
 #include "screens/playerInfo.h"
 
 PlayerInfoScreen::PlayerInfoScreen()
-    : playerInfoBackground("playerInfo"), navigator(Navigator::getInstance()) {}
+    : playerInfoBackground("player-info"),
+      navigator(Navigator::getInstance()) {}
 
 PlayerInfoScreen::~PlayerInfoScreen() {}
 

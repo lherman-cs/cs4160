@@ -3,6 +3,7 @@
 #include <functional>
 #include <iostream>
 #include <sstream>
+#include "global/clock.h"
 #include "player/bot.h"
 #include "player/human.h"
 #include "screens/help.h"
@@ -55,6 +56,11 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
   if (done) onDone();
 }
 
+void GameScreen::update(Uint32 ticks) {
+  bool done = players[turn]->decide(ticks, currBet.quantity, currBet.type);
+  if (done) onDone();
+}
+
 void GameScreen::draw() const {
   background.draw();
 
@@ -75,8 +81,6 @@ void GameScreen::draw() const {
   menuWriter.writeText(ss.str(), xstart + xstep, ystart, {182, 148, 103, 255});
   ss.str("");
 }
-
-void GameScreen::update(Uint32 ticks) { (void)ticks; }
 
 // validate and update the inputted quantity
 void GameScreen::validateBet(int& quantity, int& type) {

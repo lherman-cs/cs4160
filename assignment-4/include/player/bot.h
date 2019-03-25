@@ -3,6 +3,12 @@
 
 class Bot : public Player {
  public:
-  Bot(const GameScreen* const game, int id);
+  Bot(const GameScreen *const game, int id);
   virtual ~Bot();
+  virtual bool decide(Uint32 ticks, int &quantity, int &type);
+
+ private:
+  Uint16 start;
+  void move(int &quantity, int &type);
+  bool decided = false;
 };
