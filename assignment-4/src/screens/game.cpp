@@ -21,7 +21,7 @@ GameScreen::GameScreen(int players, int bots, int difficulty)
       turn(0),
       players(),
       lastBet({0, 1}),
-      menuWriter(70, {88, 53, 31, 255}),
+      menuWriter(70, {52, 44, 42, 255}),
       navigator(Navigator::getInstance()) {
   auto human = std::make_shared<Human>(this, "Human");
   this->players.emplace_back(human);
