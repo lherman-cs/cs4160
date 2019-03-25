@@ -46,7 +46,9 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<HelpScreen>();
   }
 
-  if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D]) onType ^= 1;
+  if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ||
+      keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])
+    onType ^= 1;
 
   bool done = players[turn]->decide(keystate, currBet.quantity, currBet.type);
 

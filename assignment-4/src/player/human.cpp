@@ -13,13 +13,14 @@ bool Human::decide(const Uint8* const keystate, int& quantity, int& type) {
   }
 
   // Selection
-  if (keystate[SDL_SCANCODE_W])
+  if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP])
     onType ? type++ : quantity++;
 
-  else if (keystate[SDL_SCANCODE_S])
+  else if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN])
     onType ? type-- : quantity--;
 
-  else if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D])
+  else if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ||
+           keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])
     onType ^= 1;
 
   return false;

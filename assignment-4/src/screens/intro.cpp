@@ -18,15 +18,15 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<GameScreen>(players, bots, difficulty);
   }
   // Selection
-  if (keystate[SDL_SCANCODE_W]) {
+  if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) {
     row--;
     if (row < 0) row = 2;
   }
-  if (keystate[SDL_SCANCODE_S]) {
+  if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) {
     row = (row + 1) % 3;
   }
 
-  if (keystate[SDL_SCANCODE_A]) {
+  if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) {
     switch (row) {
       case 2:
         difficulty--;
@@ -35,7 +35,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
     }
   }
 
-  if (keystate[SDL_SCANCODE_D]) {
+  if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) {
     switch (row) {
       case 2:
         difficulty = (difficulty + 1) % 3;
