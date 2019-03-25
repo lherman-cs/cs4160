@@ -20,10 +20,12 @@ GameScreen::GameScreen(int players, int bots, int difficulty)
     : background("game-background"),
       difficulty(difficulty),
       turn(0),
+      round(1),
       players(),
       lastBet({0, 1}),
       currBet({1, 1}),
       menuWriter(60),
+      loadingWriter(32),
       navigator(Navigator::getInstance()) {
   auto human = std::make_shared<Human>(this, "Human");
   this->players.emplace_back(human);
@@ -40,6 +42,7 @@ GameScreen::~GameScreen() {}
 // their turn.
 void GameScreen::onDone() {
   turn = (turn + 1) % players.size();
+  round++;
   // TODO! do something useful here
   std::cout << "ON DONE" << std::endl;
 }
@@ -77,9 +80,17 @@ void GameScreen::draw() const {
   ss.str("");
   ystart = 705;
   xstart = 50;
-  ss << turn;
+  ss << round;
   menuWriter.writeText(ss.str(), xstart + xstep, ystart, {182, 148, 103, 255});
   ss.str("");
+
+  // If bot, renders a loading text saying that the bot is thinking.
+  auto player = players[turn];
+  if (player->type == 1) {
+    auto loadingText = player->name + " is thinking...";
+    loadingWriter.writeText(loadingText, 680, 720, {182, 148, 103, 255});
+  } else
+    loadingWriter.writeText("Your turn", 770, 720, {182, 148, 103, 255});
 }
 
 // validate and update the inputted quantity

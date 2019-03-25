@@ -8,7 +8,5 @@ class Bot : public Player {
   virtual bool decide(Uint32 ticks, int &quantity, int &type);
 
  private:
-  Uint16 start;
-  void move(int &quantity, int &type);
-  bool decided = false;
+  Uint32 elapsed;
 };

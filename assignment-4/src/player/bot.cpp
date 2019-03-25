@@ -1,24 +1,29 @@
 #include "player/bot.h"
+#include <cmath>
+#include <cstdlib>
 
-Bot::Bot(const GameScreen *const game, int id) : Player(game, "bot " + id, 1) {}
+const double MAX_DELAY = 8;  // 4 seconds
+const double MAX_SIGMOID_VAL = 12;
+const double MAP_STEP = MAX_SIGMOID_VAL / MAX_DELAY;
+
+// map [0, 4] to [0, 12]
+static inline double mapInput(double n) { return n * MAP_STEP; }
+static inline double sigmoid(double t) { return 1.0 / (1 + exp(-1 * (t - 6))); }
+
+Bot::Bot(const GameScreen *const game, int id)
+    : Player(game, "bot " + std::to_string(id), 1), elapsed(0) {}
+
 Bot::~Bot() {}
 bool Bot::decide(Uint32 ticks, int &quantity, int &type) {
-  return true;
-  //   // if we have waited long enough
-  //   if (decided && ticks - start > 20000) {
-  //     decided = false;
-  //     return true;
-  //   }
-  //   // if this is the beginning of our turn, choose a move
-  //   if (!decided) {
-  //     start = ticks;
-  //     move(quantity, type);
-  //     decided = true;
-  //   }
-  //   return false;
-}
+  elapsed += ticks;
+  auto chance = sigmoid(mapInput(elapsed * 1e-3)) * 100;
+  auto decided = rand() % 100 < floor(chance);
 
-void Bot::move(int &quantity, int &type) {
-  // random 5% chance of calling liar
-  // compute probability
+  if (decided) {
+    // random 5% chance of calling liar
+    // compute probability
+    elapsed = 0;
+    return true;
+  }
+  return false;
 }

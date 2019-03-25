@@ -36,12 +36,14 @@ class GameScreen : public Screen {
   World background;
   int difficulty;
   int turn;
+  int round;
   std::vector<std::shared_ptr<Player>> players;
   Bet lastBet;
   Bet currBet;
   int diceOnTable = 25;
 
   IoMod menuWriter;
+  IoMod loadingWriter;
   Navigator& navigator;
 
   void onDone();
