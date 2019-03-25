@@ -29,12 +29,19 @@ class GameScreen : public Screen {
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
   virtual void update(Uint32 ticks);
+  void validateBet(int& quantity, int& type);
 
  private:
+  struct Bet {
+    short quantity;
+    short type;
+  };
   World background;
   int difficulty;
   int turn;
   int players;
+  Bet lastBet;
+  int diceOnTable = 25;
 
   IoMod menuWriter;
   Navigator& navigator;

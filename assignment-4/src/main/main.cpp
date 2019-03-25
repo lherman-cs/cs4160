@@ -2,7 +2,7 @@
 #include "core/event.h"
 #include "player/human.h"
 
-int main(int, char*[]) {
+int main(int, char* []) {
   try {
     Engine engine;
     engine.play();
