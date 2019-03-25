@@ -41,6 +41,9 @@ class GameScreen : public Screen {
   Bet currBet;
   int diceOnTable = 25;
 
+  // UI stuff
+  bool onType = false;
+
   IoMod menuWriter;
   IoMod loadingWriter;
   Navigator& navigator;

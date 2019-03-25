@@ -1,7 +1,6 @@
 #include "screens/intro.h"
 #include <cmath>
 #include <iostream>
-#include <sstream>
 #include "screens/game.h"
 #include "screens/rules.h"
 #include "util/ioMod.h"
@@ -37,7 +36,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
 
   if (keystate[SDL_SCANCODE_A]) {
     switch (row) {
-      case Row::difficult:
+      case 2:
         difficulty--;
         if (difficulty < 0) difficulty = 2;
         break;
@@ -46,7 +45,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
 
   if (keystate[SDL_SCANCODE_D]) {
     switch (row) {
-      case Row::difficult:
+      case 2:
         difficulty = (difficulty + 1) % 3;
         break;
     }
@@ -54,6 +53,9 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void IntroScreen::draw() const {
+  auto normalColor = SDL_Color({52, 44, 42, 255});
+  auto hoverColor = SDL_Color({255, 255, 0, 255});
+
   // World
   introBackground.draw();
 
@@ -61,22 +63,21 @@ void IntroScreen::draw() const {
   int ystart = 500;
   int ystep = 75;
   int xstart = 630;
-  std::stringstream ss;
-  ss << (players);
-  menuWriter.writeText(ss.str(), xstart, ystart, {52, 44, 42, 255});
-  ss.str("");
-  ss << bots;
-  menuWriter.writeText(ss.str(), xstart, ystart + ystep, {52, 44, 42, 255});
-  ss.str("");
+
+  menuWriter.writeText(std::to_string(players), xstart, ystart,
+                       row == 0 ? hoverColor : normalColor);
+  menuWriter.writeText(std::to_string(bots), xstart, ystart + ystep,
+                       row == 1 ? hoverColor : normalColor);
+  auto color = row == 2 ? hoverColor : normalColor;
   switch (difficulty) {
     case 0:
-      menuWriter.writeText("E", xstart, ystart + 2 * ystep, {52, 44, 42, 255});
+      menuWriter.writeText("E", xstart, ystart + 2 * ystep, color);
       break;
     case 1:
-      menuWriter.writeText("M", xstart, ystart + 2 * ystep, {52, 44, 42, 255});
+      menuWriter.writeText("M", xstart, ystart + 2 * ystep, color);
       break;
     case 2:
-      menuWriter.writeText("H", xstart, ystart + 2 * ystep, {52, 44, 42, 255});
+      menuWriter.writeText("H", xstart, ystart + 2 * ystep, color);
       break;
   }
 }

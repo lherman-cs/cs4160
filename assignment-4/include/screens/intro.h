@@ -18,7 +18,6 @@ class IntroScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  enum Row { player, bot, difficult };
   const World introBackground;
   int row;
   int players;

@@ -55,6 +55,8 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<HelpScreen>();
   }
 
+  if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D]) onType ^= 1;
+
   bool done = players[turn]->decide(keystate, currBet.quantity, currBet.type);
 
   validateBet(currBet.quantity, currBet.type);
@@ -68,32 +70,33 @@ void GameScreen::update(Uint32 ticks) {
 }
 
 void GameScreen::draw() const {
+  auto normalColor = SDL_Color({52, 44, 42, 255});
+  auto hoverColor = SDL_Color({255, 255, 0, 255});
+  auto secondaryColor = SDL_Color({182, 148, 103, 255});
+
   background.draw();
 
   // Current data
   int ystart = 30;
   int xstart = 825;
   int xstep = 110;
-  std::stringstream ss;
-  ss << currBet.quantity;
-  menuWriter.writeText(ss.str(), xstart, ystart, {52, 44, 42, 255});
-  ss.str("");
-  ss << currBet.type;
-  menuWriter.writeText(ss.str(), xstart + xstep, ystart, {52, 44, 42, 255});
-  ss.str("");
+  menuWriter.writeText(std::to_string(currBet.quantity), xstart, ystart,
+                       !onType ? hoverColor : normalColor);
+  menuWriter.writeText(std::to_string(currBet.type), xstart + xstep, ystart,
+                       onType ? hoverColor : normalColor);
+
   ystart = 705;
   xstart = 50;
-  ss << round;
-  menuWriter.writeText(ss.str(), xstart + xstep, ystart, {182, 148, 103, 255});
-  ss.str("");
+  menuWriter.writeText(std::to_string(round), xstart + xstep, ystart,
+                       secondaryColor);
 
   // If bot, renders a loading text saying that the bot is thinking.
   auto player = players[turn];
   if (player->type == 1) {
     auto loadingText = player->name + " is thinking...";
-    loadingWriter.writeText(loadingText, 680, 720, {182, 148, 103, 255});
+    loadingWriter.writeText(loadingText, 680, 720, secondaryColor);
   } else
-    loadingWriter.writeText("Your turn", 770, 720, {182, 148, 103, 255});
+    loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
 }
 
 // validate and update the inputted quantity
