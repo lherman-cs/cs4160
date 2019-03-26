@@ -2,9 +2,9 @@
 #include <cmath>
 #include <string>
 #include <vector>
-#include "core/drawable.h"
+#include "core/interface.h"
 
-class MultiSprite : public Drawable {
+class MultiSprite : public Drawable, public Updatable, public Moveable {
  public:
   MultiSprite(const std::string&);
   MultiSprite(const MultiSprite&) = delete;
@@ -12,7 +12,6 @@ class MultiSprite : public Drawable {
 
   virtual void draw() const;
   virtual void update(Uint32 ticks);
-  virtual const Image* getImage() const { return images[currentFrame]; }
 
  protected:
   std::vector<Image*> images;

@@ -1,17 +1,17 @@
 #include <vector>
-#include "core/drawable.h"
+#include "core/interface.h"
 #include "player/player.h"
 #include "sprite/die.h"
 #include "util/vector2f.h"
 
 // 5 dice, set position into a line with starting point and degree
 
-class Dice {
+class Dice : public Drawable {
  public:
   Dice(int numDice = 5, int g = 50);
 
   // Draw dice to screen
-  void draw();
+  void draw() const;
 
   // Set all dice to show face
   void show();

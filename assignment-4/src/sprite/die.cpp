@@ -5,7 +5,7 @@ Die::Die() {}
 Die::Die(const Vector2f& pos, State s, int v)
     : state(s), value(v), position(pos) {}
 
-void Die::draw() {
+void Die::draw() const {
   switch (state) {
     case State::hidden:
       hide.draw();

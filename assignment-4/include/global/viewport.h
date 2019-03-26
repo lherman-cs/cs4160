@@ -1,5 +1,5 @@
 #pragma once
-#include "core/drawable.h"
+#include "core/interface.h"
 #include "global/gameData.h"
 
 class Viewport {
@@ -14,8 +14,8 @@ class Viewport {
   float getY() const { return viewPos[1]; }
   void setY(float y) { viewPos[1] = y; }
 
-  void setObjectToTrack(const Drawable* obj);
-  const Drawable* getObjectToTrack() const { return objectToTrack; }
+  void setObjectToTrack(const Trackable* obj);
+  const Trackable* getObjectToTrack() const { return objectToTrack; }
 
   Viewport(const Viewport&) = delete;
   Viewport& operator=(const Viewport&) = delete;
@@ -31,7 +31,7 @@ class Viewport {
   int objWidth;
   int objHeight;
 
-  const Drawable* objectToTrack;
+  const Trackable* objectToTrack;
 
   Viewport();
 };

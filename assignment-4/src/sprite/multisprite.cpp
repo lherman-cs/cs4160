@@ -3,8 +3,7 @@
 #include "global/imageFactory.h"
 
 MultiSprite::MultiSprite(const std::string& name)
-    : Drawable(Vector2f(0, 0)),
-      images(ImageFactory::getInstance().getImages(name)),
+    : images(ImageFactory::getInstance().getImages(name)),
       currentFrame(0),
       numberOfFrames(Gamedata::getInstance().getXmlInt(name + "/frames")) {}
 

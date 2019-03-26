@@ -18,8 +18,8 @@ void Dice::positionDie(const Vector2f& start, double theta = 0) {
   }
 }
 
-void Dice::draw() {
-  for (auto& d : dice) {
+void Dice::draw() const {
+  for (const auto& d : dice) {
     d.draw();
   }
 }

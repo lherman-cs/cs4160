@@ -10,7 +10,7 @@ class Die {
   Die(const Vector2f&, State, int val = 0);
   Die(const Die&) = delete;
   Die& operator=(const Die&) = delete;
-  void draw();
+  void draw() const;
   void update(Uint32 ticks);
   Die& set(const Vector2f& position);
   Die& set(const Die::State state);

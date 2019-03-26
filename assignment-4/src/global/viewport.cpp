@@ -2,7 +2,7 @@
 #include <sstream>
 #include "global/clock.h"
 
-const std::string NAME = "Lukas Herman";
+const std::string NAME = "Lukas Herman & Gabrielle Stewart";
 
 Viewport& Viewport::getInstance() {
   static Viewport viewport;
@@ -22,7 +22,7 @@ Viewport::Viewport()
       objHeight(0),
       objectToTrack(NULL) {}
 
-void Viewport::setObjectToTrack(const Drawable* obj) {
+void Viewport::setObjectToTrack(const Trackable* obj) {
   objectToTrack = obj;
   auto img = obj->getImage();
   objWidth = img->getWidth();

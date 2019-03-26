@@ -1,5 +1,4 @@
 #include "util/image.h"
-#include "core/drawable.h"
 #include "global/renderContext.h"
 #include "global/viewport.h"
 
