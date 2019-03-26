@@ -70,6 +70,10 @@ void drawDice() {
   d.draw();
   d.positionDie(Vector2f(650, 150), (40 * M_PI) / 180);
   d.draw();
+  d.positionDie(Vector2f(350, 150), (-40 * M_PI) / 180);
+  d.draw();
+  d.positionDie(Vector2f(400, 400), (72 * M_PI) / 180);
+  d.draw();
 }
 
 void GameScreen::draw() const {
@@ -79,7 +83,7 @@ void GameScreen::draw() const {
 
   background.draw();
 
-  drawDice();
+  // drawDice();
 
   // Current data
   int ystart = 30;

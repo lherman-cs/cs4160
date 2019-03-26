@@ -36,6 +36,24 @@ To include assets,
 emcc --preload-file=<dir> ...
 ```
 
+## Warning
+
+On compillation, our program would throw "-Wnon-virtual-dtor" warning from -Weffc++, but is manually supressed.
+In researching this warning (citation in References), we found a quote from a G++ developer
+
+"enable_shared_from_this doesn't have virtual functions, but GCC will warn if 
+the derived class has virtual functions not only if the base class does. -Weffc++
+ has lots of known flaws, including the fact the Item numbers refer to old editions 
+ of the books, some of those Items were removed or rewritten for later editions and
+  the warning hasn't been updated, and in some cases it warns about style not 
+  correctness, it's not always useful. The -Wdelete-non-virtual-dtor option 
+  (which originated with Clang and I added to G++) is more useful than -Wnon-virtual-dtor"
+
+Another quote says 
+
+Don't use -Weffc++ all the time. It's useful to turn it on sometimes to check your code, 
+but not really to use it permanently. It gives false positives and *is not really maintained these days.*
+
 ## Reference
 
 * https://emscripten.org/docs/getting_started/FAQ.html#why-doesn-t-my-sdl-app-work
@@ -44,3 +62,5 @@ emcc --preload-file=<dir> ...
 * Liar's Dice Logo: https://is3-ssl.mzstatic.com/image/thumb/Purple62/v4/d2/1d/f8/d21df8ea-77d3-1699-29ee-1aa1234fce32/source/512x512bb.jpg
 * Wood Pattern for Round Table: https://images.pexels.com/photos/164005/pexels-photo-164005.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260
 * Forest Background: https://images.pexels.com/photos/1054196/pexels-photo-1054196.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+* "warning: base class ‘class std::enable_shared_from_this<GameScreen>’ has accessible non-virtual destructor"
+  - https://stackoverflow.com/questions/2571850/why-does-enable-shared-from-this-have-a-non-virtual-destructor

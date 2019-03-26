@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL2/SDL.h>
+#include <memory>
 #include <string>
 #include "screens/game.h"
 
@@ -24,5 +25,5 @@ class Player {
 
  protected:
   Player(const GameScreen *const game, const std::string &name, uint type);
-  const GameScreen *const game;
+  const std::weak_ptr<GameScreen const> game;
 };

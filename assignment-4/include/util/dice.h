@@ -8,7 +8,7 @@
 
 class Dice : public Drawable {
  public:
-  Dice(int numDice = 5, int g = 50);
+  Dice(long unsigned int numDice = 5, int g = 50);
 
   // Draw dice to screen
   void draw() const;

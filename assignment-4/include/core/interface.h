@@ -23,7 +23,7 @@ class Moveable {
   }
 
  private:
-  Vector2f position;
+  Vector2f position{0.0, 0.0};
 };
 
 class Trackable : public Drawable, public Updatable, public Moveable {

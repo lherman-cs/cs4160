@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <cmath>
 
-Dice::Dice(int numDice, int g) : dice({numDice}), gap(g) { roll(); }
+Dice::Dice(long unsigned int numDice, int g) : dice({numDice}), gap(g) {
+  roll();
+}
 
 void Dice::roll() {
   for (auto& d : dice) {
