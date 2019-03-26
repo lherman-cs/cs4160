@@ -22,50 +22,62 @@
     <height>768</height>
   </world>
 
-  <intro>
-    <file>assets/img/intro.png</file>
-    <transparency>false</transparency>
-  </intro>
-
-  <game-background>
-    <file>assets/img/game.png</file>
-    <transparency>false</transparency>
-  </game-background>
-
-  <rules>
-    <file>assets/img/rules.png</file>
-    <transparency>false</transparency>
-  </rules>
-
-  <help>
-    <file>assets/img/help.png</file>
-    <transparency>false</transparency>
-  </help>
-
-  <player-info>
-    <file>assets/img/player-info.png</file>
-    <transparency>false</transparency>
-  </player-info>
-
   <font name="font">
     <file>assets/font/black-pearl.ttf</file>
   </font>
 
-  <dice>
-    <file>assets/img/dice.png</file>
-    <transparency>true</transparency>
-    <frames>6</frames>
-  </dice>
+  <!-- new config -->
+  <screens>
+    <intro>
+      <background>
+        <file>assets/img/intro.png</file>
+        <transparency>false</transparency>
+      </background>
+    </intro>
 
+    <game>
+      <background>
+        <file>assets/img/game.png</file>
+        <transparency>false</transparency>
+      </background>
 
-  <hidden-dice>
-    <file>assets/img/dice.png</file>
-    <transparency>true</transparency>
-  </hidden-dice>
+      <dice>
+        <file>assets/img/dice.png</file>
+        <transparency>true</transparency>
+        <frames>6</frames>
+      </dice>
 
-  <invisible-dice>
-    <file>assets/img/dice.png</file>
-    <transparency>true</transparency>
-  </invisible-dice>
+      <hidden-dice>
+        <file>assets/img/dice.png</file>
+        <transparency>true</transparency>
+      </hidden-dice>
+
+      <invisible-dice>
+        <file>assets/img/dice.png</file>
+        <transparency>true</transparency>
+      </invisible-dice>
+    </game>
+
+    <help>
+      <background>
+        <file>assets/img/help.png</file>
+        <transparency>false</transparency>
+      </background>
+    </help>
+
+    <rules>
+      <background>
+        <file>assets/img/rules.png</file>
+        <transparency>false</transparency>
+      </background>
+    </rules>
+
+    <player-info>
+      <background>
+        <file>assets/img/player-info.png</file>
+        <transparency>false</transparency>
+      </background>
+    </player-info>
+  </screens>
 
 </GameData>

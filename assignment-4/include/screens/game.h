@@ -33,7 +33,7 @@ class GameScreen : public Screen {
     int quantity;
     int type;
   };
-  World background{"game-background"};
+  World background{"screens/game/background"};
   int turn = 0;
   int round = 1;
   std::vector<std::shared_ptr<Player>> players{};

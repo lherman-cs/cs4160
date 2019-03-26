@@ -15,6 +15,6 @@ class RulesScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World rulesBackground{"rules"};
+  const World rulesBackground{"screens/rules/background"};
   Navigator& navigator{Navigator::getInstance()};
 };

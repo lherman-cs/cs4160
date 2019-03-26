@@ -19,9 +19,10 @@ class Die {
   static int getSize();
 
  private:
-  std::vector<Image*> faces{ImageFactory::getInstance().getImages("dice")};
-  Sprite hide{"hidden-dice"};
-  Sprite gone{"invisible-dice"};
+  std::vector<Image*> faces{
+      ImageFactory::getInstance().getImages("screens/game/dice")};
+  Sprite hide{"screens/game/hidden-dice"};
+  Sprite gone{"screens/game/invisible-dice"};
   State state = visible;
   int value = 0;
   Vector2f position = Vector2f(0, 0);

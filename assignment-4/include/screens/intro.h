@@ -18,7 +18,7 @@ class IntroScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World introBackground{"intro"};
+  const World introBackground{"screens/intro/background"};
   int row = 0;
   int players = 5;
   int bots = 4;

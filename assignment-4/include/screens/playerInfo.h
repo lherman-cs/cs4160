@@ -15,6 +15,6 @@ class PlayerInfoScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World playerInfoBackground{"player-info"};
+  const World playerInfoBackground{"screens/player-info/background"};
   Navigator& navigator{Navigator::getInstance()};
 };
