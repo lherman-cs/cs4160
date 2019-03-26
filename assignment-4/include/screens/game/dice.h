@@ -1,7 +1,8 @@
+#pragma once
 #include <vector>
 #include "core/interface.h"
-#include "player/player.h"
-#include "sprite/die.h"
+#include "die.h"
+#include "player.h"
 #include "util/vector2f.h"
 
 // 5 dice, set position into a line with starting point and degree

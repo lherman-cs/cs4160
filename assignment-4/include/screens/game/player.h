@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>
 #include <memory>
 #include <string>
-#include "screens/game.h"
+#include "game.h"
 
 class GameScreen;
 class Player {

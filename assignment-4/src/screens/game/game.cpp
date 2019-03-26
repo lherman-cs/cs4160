@@ -1,13 +1,13 @@
-#include "screens/game.h"
+#include "screens/game/game.h"
 #include <cmath>
 #include <functional>
 #include <iostream>
 #include <sstream>
 #include "global/clock.h"
-#include "player/bot.h"
-#include "player/human.h"
+#include "screens/game/bot.h"
+#include "screens/game/dice.h"
+#include "screens/game/human.h"
 #include "screens/help.h"
-#include "util/dice.h"
 #include "util/ioMod.h"
 
 using namespace std::placeholders;

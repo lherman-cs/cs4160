@@ -1,5 +1,6 @@
+#pragma once
 #include "global/imageFactory.h"
-#include "sprite.h"
+#include "sprite/sprite.h"
 #include "util/vector2f.h"
 
 class Die {

@@ -1,4 +1,4 @@
-#include "player/bot.h"
+#include "screens/game/bot.h"
 #include <cmath>
 #include <cstdlib>
 

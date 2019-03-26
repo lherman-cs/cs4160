@@ -1,7 +1,7 @@
 #include "screens/intro.h"
 #include <cmath>
 #include <iostream>
-#include "screens/game.h"
+#include "screens/game/game.h"
 #include "screens/rules.h"
 #include "util/ioMod.h"
 

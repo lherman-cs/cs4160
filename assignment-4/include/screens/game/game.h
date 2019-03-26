@@ -4,8 +4,8 @@
 #include "core/event.h"
 #include "core/observable.h"
 #include "global/navigator.h"
-#include "player/player.h"
-#include "screen.h"
+#include "player.h"
+#include "screens/screen.h"
 #include "util/ioMod.h"
 #include "util/world.h"
 

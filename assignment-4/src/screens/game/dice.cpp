@@ -1,4 +1,4 @@
-#include "util/dice.h"
+#include "screens/game/dice.h"
 #include <stdlib.h>
 #include <cmath>
 

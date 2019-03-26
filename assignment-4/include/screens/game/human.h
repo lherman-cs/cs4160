@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL2/SDL.h>
-#include "player/player.h"
+#include "player.h"
 
 class Human : public Player {
  public:

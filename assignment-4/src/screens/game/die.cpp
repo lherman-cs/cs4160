@@ -1,4 +1,4 @@
-#include "sprite/die.h"
+#include "screens/game/die.h"
 
 Die::Die() {}
 

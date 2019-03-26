@@ -1,6 +1,5 @@
 #include "core/engine.h"
 #include "core/event.h"
-#include "player/human.h"
 
 int main(int, char* []) {
   try {

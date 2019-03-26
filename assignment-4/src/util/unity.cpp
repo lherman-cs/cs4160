@@ -1,4 +1,3 @@
-#include "dice.cpp"
 #include "image.cpp"
 #include "ioMod.cpp"
 #include "parseXML.cpp"

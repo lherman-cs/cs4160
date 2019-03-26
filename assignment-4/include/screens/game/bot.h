@@ -1,5 +1,5 @@
 #pragma once
-#include "player/player.h"
+#include "player.h"
 
 class Bot : public Player {
  public:

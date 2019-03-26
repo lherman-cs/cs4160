@@ -1,4 +1,4 @@
-#include "player/human.h"
+#include "screens/game/human.h"
 
 Human::Human(const GameScreen* const game, std::string name)
     : Player(game, name, 0), onType(false) {}
