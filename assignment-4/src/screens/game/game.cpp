@@ -1,5 +1,4 @@
 #include "screens/game/game.h"
-#include <cmath>
 #include <functional>
 #include <iostream>
 #include <sstream>
@@ -18,7 +17,6 @@ using namespace std::placeholders;
 //              ← → ↑ ↓ for selection of type and quantity
 
 GameScreen::GameScreen(int players, int bots, int difficulty) {
-  // TODO! do something with this variable.
   (void)players;
   (void)difficulty;
 
@@ -66,14 +64,12 @@ void GameScreen::update(Uint32 ticks) {
 void drawDice() {
   Dice d = Dice();
   d.roll();
-  d.positionDie(Vector2f(400, 650), 0);
-  d.draw();
-  d.positionDie(Vector2f(650, 150), (40 * M_PI) / 180);
-  d.draw();
-  d.positionDie(Vector2f(350, 150), (-40 * M_PI) / 180);
-  d.draw();
-  d.positionDie(Vector2f(400, 400), (72 * M_PI) / 180);
-  d.draw();
+  for (auto p : dice_position) {
+    d.positionDie(std::get<0>(p.second), std::get<1>(p.second));
+    d.draw();
+  }
+  // d.positionDie(Vector2f(350, 150), (-40 * M_PI) / 180);
+  // d.positionDie(Vector2f(400, 400), (72 * M_PI) / 180);
 }
 
 void GameScreen::draw() const {
