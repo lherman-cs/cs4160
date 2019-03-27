@@ -1,58 +1,106 @@
+Project from Gabrielle Stewart and Lukas Herman
+
+Check it out on the web
+  https://game.lukas-coding.us/project-4/
+
 # Emscripten
 
-## Code Changes
+  Used for Compiling c++ to web
 
-In order for the browser to still have access to its main loop, we need to use a wrapper function
-from emscripten. For example:
+## Code Changes (for web-ability)
 
-```cpp
-#ifdef EMSCRIPTEN
-  emscripten_set_main_loop(render_func, 60, 1);
-#else
-  while(true) {
-    render_func();
-  }
-#endif
-```
+  In order for the browser to still have access to its main loop, we need to use a wrapper function
+  from emscripten. For example:
 
-To cancel emscripten's main loop, 
+  ```cpp
+  #ifdef EMSCRIPTEN
+    emscripten_set_main_loop(render_func, 60, 1);
+  #else
+    while(true) {
+      render_func();
+    }
+  #endif
+  ```
 
-```cpp
-#ifdef EMSCRIPTEN
-  emscripten_cancel_main_loop();
-#endif
-```
+  To cancel emscripten's main loop, 
+
+  ```cpp
+  #ifdef EMSCRIPTEN
+    emscripten_cancel_main_loop();
+  #endif
+  ```
 
 ## Compiling
 
-These are useful flags for SDL specific:
-  * -s USE_SDL=2
-  * -s USE_SDL_IMAGE=2
-  * -s USE_SDL_TTF=2
+  These are useful flags for SDL specific:
+    * -s USE_SDL=2
+    * -s USE_SDL_IMAGE=2
+    * -s USE_SDL_TTF=2
 
 To include assets, 
 
-```sh
-emcc --preload-file=<dir> ...
-```
+  ```sh
+  emcc --preload-file=<dir> ...
+  ```
 
 ## Warning
 
-On compillation, our program would throw "-Wnon-virtual-dtor" warning from -Weffc++, but is manually supressed.
-In researching this warning (citation in References), we found a quote from a G++ developer
+  On compillation, our program would throw "-Wnon-virtual-dtor" warning from -Weffc++, but is manually supressed.
+  In researching this warning (citation in References), we found a quote from a G++ developer
 
-"enable_shared_from_this doesn't have virtual functions, but GCC will warn if 
-the derived class has virtual functions not only if the base class does. -Weffc++
- has lots of known flaws, including the fact the Item numbers refer to old editions 
- of the books, some of those Items were removed or rewritten for later editions and
-  the warning hasn't been updated, and in some cases it warns about style not 
-  correctness, it's not always useful. The -Wdelete-non-virtual-dtor option 
-  (which originated with Clang and I added to G++) is more useful than -Wnon-virtual-dtor"
+  "enable_shared_from_this doesn't have virtual functions, but GCC will warn if 
+  the derived class has virtual functions not only if the base class does. -Weffc++
+  has lots of known flaws, including the fact the Item numbers refer to old editions 
+  of the books, some of those Items were removed or rewritten for later editions and
+    the warning hasn't been updated, and in some cases it warns about style not 
+    correctness, it's not always useful. The -Wdelete-non-virtual-dtor option 
+    (which originated with Clang and I added to G++) is more useful than -Wnon-virtual-dtor"
 
-Another quote says 
+  Another quote says 
 
-Don't use -Weffc++ all the time. It's useful to turn it on sometimes to check your code, 
-but not really to use it permanently. It gives false positives and *is not really maintained these days.*
+  Don't use -Weffc++ all the time. It's useful to turn it on sometimes to check your code, 
+  but not really to use it permanently. It gives false positives and *is not really maintained these days.*
+
+## Contriutions
+
+Lukas: 
+
+  created event class
+  created observable class
+  created navigator class
+  created screen class
+  created player classes
+    bot
+    human
+  ported application to web **
+    major amount of work
+  assisted in game class
+  redesign xml format
+  redesign ioMod class
+
+Gabrielle: 
+
+  created game assets
+    sprites homeade
+    others using gimp
+  created screens classess
+    intro
+    help
+    playerInfo
+    rules
+    help
+  created include.h
+  created die class
+  created dice class
+  created game class
+  redesign sprite class
+  redesign multisprite class
+  developed bet-placing logic
+
+Together: 
+
+  game design
+  redesign Drawable interface
 
 ## Reference
 
@@ -64,3 +112,21 @@ but not really to use it permanently. It gives false positives and *is not reall
 * Forest Background: https://images.pexels.com/photos/1054196/pexels-photo-1054196.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
 * "warning: base class ‘class std::enable_shared_from_this<GameScreen>’ has accessible non-virtual destructor"
   - https://stackoverflow.com/questions/2571850/why-does-enable-shared-from-this-have-a-non-virtual-destructor
+
+
+## Assets
+
+  Wooden Sign (intro page)
+    https://www.pngkey.com/png/full/25-256856_the-gallery-for-hanging-wooden-sign-png-hanging.png
+
+  Wooden Pattern (game page)
+    https://images.pexels.com/photos/164005/pexels-photo-164005.jpeg?auto=compress&cs=tinysrgb&h=650&w=940
+
+  Forest Background (game page)
+    https://images.pexels.com/photos/1054196/pexels-photo-1054196.jpeg?auto=compress&cs=tinysrgb&h=650&w=940
+
+  Font (all pages)
+    https://www.fontspace.com/joannavu/blackpearl
+
+  Liar's Dice Sign (all pages)
+    https://d2yal1mtmg1ts6.cloudfront.net/zLVRBgHavbLmikIWVCQByhJoKxsHi-seHF81RboLw_8cbi-7fCe5rbYIQzo-6_WtHK-V=w100
