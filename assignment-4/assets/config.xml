@@ -47,6 +47,12 @@
         <frames>6</frames>
       </dice>
 
+      <highlighted-dice>
+        <file>assets/img/highlighted-dice.png</file>
+        <transparency>true</transparency>
+        <frames>6</frames>
+      </highlighted-dice>
+
       <hidden-dice>
         <file>assets/img/dice.png</file>
         <transparency>true</transparency>

@@ -12,6 +12,8 @@ class Die {
   Die(const Die&) = delete;
   Die& operator=(const Die&) = delete;
   void draw() const;
+  Die& select();
+  Die& deselect();
   void update(Uint32 ticks);
   Die& set(const Vector2f& position);
   Die& set(const Die::State state);

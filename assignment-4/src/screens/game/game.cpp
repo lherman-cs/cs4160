@@ -61,37 +61,38 @@ void GameScreen::update(Uint32 ticks) {
   if (done) onDone();
 }
 
-void drawDice() {
+void drawTableDice() {
   Dice d = Dice();
   d.roll();
   for (auto p : dice_position) {
     d.positionDie(std::get<0>(p.second), std::get<1>(p.second));
     d.draw();
   }
-  // d.positionDie(Vector2f(350, 150), (-40 * M_PI) / 180);
-  // d.positionDie(Vector2f(400, 400), (72 * M_PI) / 180);
 }
 
 void GameScreen::draw() const {
-  auto normalColor = SDL_Color({52, 44, 42, 255});
-  auto hoverColor = SDL_Color({255, 255, 0, 255});
-  auto secondaryColor = SDL_Color({182, 148, 103, 255});
+  SDL_Color normalColor = SDL_Color({52, 44, 42, 255});
+  SDL_Color hoverColor = SDL_Color({255, 255, 0, 255});
+  SDL_Color secondaryColor = SDL_Color({182, 148, 103, 255});
 
   background.draw();
 
-  // drawDice();
+  // drawTableDice();
 
   // Current data
   int ystart = 30;
   int xstart = 825;
   int xstep = 110;
+
   menuWriter.writeText(std::to_string(currBet.quantity), xstart, ystart,
                        !onType ? hoverColor : normalColor);
-  menuWriter.writeText(std::to_string(currBet.type), xstart + xstep, ystart,
-                       onType ? hoverColor : normalColor);
+
+  Die d = Die(Vector2f(950, 50), Die::State::visible, currBet.type - 1);
+  onType ? d.select().draw() : d.deselect().draw();
 
   ystart = 705;
   xstart = 50;
+
   menuWriter.writeText(std::to_string(round), xstart + xstep, ystart,
                        secondaryColor);
 

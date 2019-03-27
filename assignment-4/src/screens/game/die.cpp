@@ -21,6 +21,16 @@ void Die::draw() const {
 
 void Die::update(Uint32 ticks) { (void)ticks; }
 
+Die& Die::select() {
+  faces =
+      ImageFactory::getInstance().getImages("screens/game/highlighted-dice");
+  return *this;
+}
+Die& Die::deselect() {
+  faces = ImageFactory::getInstance().getImages("screens/game/dice");
+  return *this;
+}
+
 Die& Die::set(const Vector2f& pos) {
   position = pos;
   return *this;
