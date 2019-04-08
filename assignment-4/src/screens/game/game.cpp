@@ -107,47 +107,24 @@ void GameScreen::draw() const {
 
 // validate and update the inputted quantity
 void GameScreen::validateBet(int& quantity, int& type) {
-  quantity = quantity > diceOnTable ? diceOnTable : quantity;
-  type = type > 6 ? 6 : type;
+  const auto numFaces = 6;  // for dices
 
-  if (quantity >= lastBet.quantity && type >= lastBet.type &&
-      (quantity > lastBet.quantity || type > lastBet.type))
-    return;
-
-  /**
-   * Case 1:
-   * - quantity or type is less than the last bet.
-   *
-   * Case 2:
-   * - quantity and type are equal to the last bet.
-   *
-   * Case 3:
-   * - quantity or type is greater than 25 or 6 respectively.
-   */
-
-  auto incType = [&]() {
-    if (type < 6) {
-      type++;
-      return;
-    }
-    // if (quantity <= lastBet.quantity && lastBet.type == 6) return incQuan();
-    type = lastBet.type;
-    type += quantity > lastBet.quantity ? 0 : 1;
-  };
-
-  auto incQuan = [&]() {
-    if (quantity < diceOnTable) {
-      quantity++;
-      return;
-    }
-    if (lastBet.quantity == diceOnTable) return incType();
+  if (quantity < lastBet.quantity)
     quantity = lastBet.quantity;
-    quantity += type > lastBet.type ? 0 : 1;
-  };
+  else if (quantity > diceOnTable)
+    quantity = diceOnTable;
+  else if (quantity <= 0)
+    quantity = 1;
 
-  if (type < lastBet.type) {
+  if (type < lastBet.type)
     type = lastBet.type;
-    return;
+  else if (type > numFaces)
+    type = numFaces;
+
+  if (quantity == lastBet.quantity && type == lastBet.type) {
+    if (quantity == diceOnTable)
+      type++;
+    else
+      quantity++;
   }
-  incQuan();
 }
