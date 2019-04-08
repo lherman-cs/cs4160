@@ -19,8 +19,6 @@ void Die::draw() const {
   }
 }
 
-void Die::update(Uint32 ticks) { (void)ticks; }
-
 Die& Die::select() {
   faces =
       ImageFactory::getInstance().getImages("screens/game/highlighted-dice");

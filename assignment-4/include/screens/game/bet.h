@@ -2,24 +2,22 @@
 // bet validity and drawing the bet, managing highlighted states
 
 #pragma once
-#include <SDL2/SDL.h>  // for Uint32
-#include "core/interface.h"
-#include "util/vector2f.h"
+#include <SDL2/SDL.h>        // for Uint32
+#include "core/interface.h"  // for drawable
+#include "util/vector2f.h"   // for vector
 
 class Bet : public Drawable {
  public:
-  Bet(const Vector2f& pos = Vector2f(0, 0), int gap = 0, int quan = 0,
-      int face = 1);
+  enum Type { Quantity, Face };
+  Bet(const Vector2f& pos = Vector2f(0, 0), int gap = 0,
+      const Vector2f& val = Vector2f(0, 1));
   void draw() const;
-  void update(Uint32 ticks);
-  Bet& incQuan(int);
-  Bet& decQuan(int);
-  Bet& incFace(int);
-  Bet& decFace(int);
-
-  static int getSize();
+  Bet& increment(Type);
+  Bet& decrement(Type);
 
  private:
+  Vector2f value = Vector2f(0, 1);
   int gap = 0;
   Vector2f position = Vector2f(0, 0);
+  Bet& validate();
 };
