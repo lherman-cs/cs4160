@@ -21,15 +21,37 @@ Bet& Bet::increment(Type t) {
 Bet& Bet::decrement(Type t) {
   switch (t) {
     case Quantity:
-      value -= Vector2f(1, 0);
+      current = last;
+      current.quantity += 1;
       break;
 
     case Face:
-      value -= Vector2f(0, 1);
+      current = last;
+      current.face += 1;
       break;
   }
   validate();
 }
 
-// TODO
-Bet& Bet::validate() {}
+void Bet::updateDice(int num) : diceOnTable(num) {}
+
+Bet& Bet::validate() {
+  if (current.quantity < last.quantity)
+    current.quantity = last.quantity;
+  else if (current.quantity > diceOnTable)
+    current.quantity = diceOnTable;
+  else if (current.quantity <= 0)
+    current.quantity = 1;
+
+  if (current.type < last.type)
+    current.type = last.type;
+  else if (current.type > numFaces)
+    current.type = numFaces;
+
+  if (current.quantity == last.quantity && current.type == last.type) {
+    if (current.quantity == diceOnTable)
+      current.type++;
+    else
+      current.quantity++;
+  }
+}
