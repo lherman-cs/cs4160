@@ -4,7 +4,7 @@
 #include "sprite/sprite.h"
 #include "util/vector2f.h"
 
-class Die : public Drawable, public Updatable {
+class Die : public Drawable {
  public:
   enum State { visible, invisible, hidden };
 
@@ -15,7 +15,6 @@ class Die : public Drawable, public Updatable {
   void draw() const;
   Die& select();
   Die& deselect();
-  void update(Uint32 ticks);
   Die& set(const Vector2f& position);
   Die& set(const Die::State state);
   Die& set(int value);

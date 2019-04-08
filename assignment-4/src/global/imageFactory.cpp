@@ -25,7 +25,7 @@ ImageFactory::~ImageFactory() {
 
   std::map<std::string, Image*>::const_iterator imagePtr = images.begin();
   while (imagePtr != images.end()) {
-    std::cout << "deleting " << imagePtr->first << std::endl;
+    std::cout << "Deleting " << imagePtr->first << std::endl;
     delete imagePtr->second;
     imagePtr++;
   }
@@ -43,7 +43,7 @@ ImageFactory::~ImageFactory() {
   }
 
   for (auto& images : multiImages) {
-    std::cout << "deleting " << images.first << std::endl;
+    std::cout << "Deleting " << images.first << std::endl;
     for (unsigned int i = 0; i < images.second.size(); ++i) {
       delete images.second[i];
     }

@@ -24,9 +24,3 @@ bool Human::decide(const Uint8* const keystate, int& quantity, int& type) {
 
   return false;
 }
-
-void Human::draw() {
-  int ystart = 30;
-  int xstart = 825;
-  int xstep = 110;
-}
