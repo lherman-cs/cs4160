@@ -87,7 +87,7 @@ void GameScreen::draw() const {
   menuWriter.writeText(std::to_string(currBet.quantity), xstart, ystart,
                        !onType ? hoverColor : normalColor);
 
-  Die d = Die(Vector2f(950, 50), Die::State::visible, currBet.type - 1);
+  Die d(Vector2f(950, 50), Die::State::visible, currBet.type - 1);
   onType ? d.select().draw() : d.deselect().draw();
 
   ystart = 705;

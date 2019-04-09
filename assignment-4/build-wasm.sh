@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SRCS=`ls src/**/unity.cpp`
-CXXFLAGS=(-O3 -std=c++17 -Iinclude -I/vendor/include/expat)
+CXXFLAGS=(-O3 -std=c++11 -Iinclude -I/vendor/include/expat)
 LDFLAGS=(-L/vendor/lib/expat -lexpat)
 EMFLAGS=(
     -s TOTAL_MEMORY=1GB
