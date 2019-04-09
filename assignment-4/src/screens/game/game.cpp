@@ -48,9 +48,8 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
   }
 
   if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ||
-      keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT]) {
+      keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])
     onType ^= 1;
-  }
 
   bool done = players[turn]->decide(keystate, bet);
 
