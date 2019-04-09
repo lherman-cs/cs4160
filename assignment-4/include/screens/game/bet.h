@@ -2,8 +2,10 @@
 #include <SDL2/SDL.h>           // for Uint32
 #include "core/interface.h"     // for drawable
 #include "screens/game/game.h"  // for GameScreen
-#include "util/ioMod.h"
-#include "util/vector2f.h"  // for vector
+#include "util/ioMod.h"         // for drawing
+#include "util/vector2f.h"      // for vector
+
+class GameScreen;
 
 class Bet : public Drawable {
  public:

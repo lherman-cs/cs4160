@@ -20,6 +20,7 @@ GameScreen::GameScreen(int players, int bots, int difficulty) {
   (void)players;
   (void)difficulty;
 
+  auto bet = std::make_shared<Bet>(this);
   auto human = std::make_shared<Human>(this, "Human");
   this->players.emplace_back(human);
 
@@ -50,13 +51,13 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
       keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])
     onType ^= 1;
 
-  bool done = players[turn]->decide(keystate, bet);
+  bool done = players[turn]->decide(keystate, *bet.get());
 
   if (done) onDone();
 }
 
 void GameScreen::update(Uint32 ticks) {
-  bool done = players[turn]->decide(ticks, bet);
+  bool done = players[turn]->decide(ticks, *bet.get());
   if (done) onDone();
 }
 
@@ -79,6 +80,7 @@ void GameScreen::draw() const {
   // drawTableDice();
 
   // Draw bet
+  bet.get()->draw();
 
 <<<<<<< HEAD
   int ystart = 30;

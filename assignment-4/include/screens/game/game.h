@@ -15,6 +15,7 @@ class CallLiar : public Event {};
 }  // namespace GameEvent
 
 class Player;
+class Bet;
 
 // game screen
 //  accepts type and quantity (of dice for betting)
@@ -38,7 +39,7 @@ class GameScreen : public Screen,
   int round = 1;
   std::vector<std::shared_ptr<Player>> players{};
   int diceOnTable = 25;
-  Bet& bet{this};
+  std::shared_ptr<Bet> bet;
 
   // UI stuff
   bool onType = false;
