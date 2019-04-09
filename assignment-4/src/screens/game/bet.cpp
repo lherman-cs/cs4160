@@ -1,9 +1,20 @@
 #include "screens/game/bet.h"
+#include "screens/game/die.h"
 
 Bet::Bet(const GameScreen* const g, const Vector2f& pos, int ga,
          const Value& val)
     : game(g), position(pos), gap(ga), last(val), current(val) {}
-void Bet::draw() const {}
+
+void Bet::draw() const {
+  SDL_Color normalColor = SDL_Color({52, 44, 42, 255});
+  SDL_Color hoverColor = SDL_Color({255, 255, 0, 255});
+
+  menuWriter.writeText(std::to_string(current.quantity), 30, 825,
+                       !game->getSelected() ? hoverColor : normalColor);
+
+  Die d = Die(Vector2f(950, 50), Die::State::visible, current.face - 1);
+  game->getSelected() ? d.select().draw() : d.deselect().draw();
+}
 
 Bet& Bet::increment(Type t) {
   switch (t) {
@@ -16,6 +27,7 @@ Bet& Bet::increment(Type t) {
       break;
   }
   validate();
+  return *this;
 }
 
 Bet& Bet::decrement(Type t) {
@@ -31,10 +43,11 @@ Bet& Bet::decrement(Type t) {
       break;
   }
   validate();
+  return *this;
 }
 
 // should we call increment/decrement here?
-Bet& Bet::validate() {
+void Bet::validate() {
   if (current.quantity < last.quantity)
     current.quantity = last.quantity;
   else if (current.quantity > game->getNumDice())

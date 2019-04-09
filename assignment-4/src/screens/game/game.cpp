@@ -16,11 +16,11 @@ using namespace std::placeholders;
 //  responds to 'B' bet, 'L' call liar, and 'H' help
 //              ← → ↑ ↓ for selection of type and quantity
 
-GameScreen::GameScreen(int players, int bots, int difficulty) {
+GameScreen::GameScreen(int players, int bots, int difficulty)
+    : bet(std::make_shared<Bet>(this)) {
   (void)players;
   (void)difficulty;
 
-  auto bet = std::make_shared<Bet>(this);
   auto human = std::make_shared<Human>(this, "Human");
   this->players.emplace_back(human);
 
@@ -51,13 +51,13 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
       keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])
     onType ^= 1;
 
-  bool done = players[turn]->decide(keystate, *bet.get());
+  bool done = players[turn]->decide(keystate, bet);
 
   if (done) onDone();
 }
 
 void GameScreen::update(Uint32 ticks) {
-  bool done = players[turn]->decide(ticks, *bet.get());
+  bool done = players[turn]->decide(ticks, bet);
   if (done) onDone();
 }
 
@@ -71,8 +71,8 @@ void drawTableDice() {
 }
 
 void GameScreen::draw() const {
-  SDL_Color normalColor = SDL_Color({52, 44, 42, 255});
-  SDL_Color hoverColor = SDL_Color({255, 255, 0, 255});
+  // SDL_Color normalColor = SDL_Color({52, 44, 42, 255});
+  // SDL_Color hoverColor = SDL_Color({255, 255, 0, 255});
   SDL_Color secondaryColor = SDL_Color({182, 148, 103, 255});
 
   background.draw();
@@ -80,7 +80,7 @@ void GameScreen::draw() const {
   // drawTableDice();
 
   // Draw bet
-  bet.get()->draw();
+  bet->draw();
 
 <<<<<<< HEAD
   int ystart = 30;

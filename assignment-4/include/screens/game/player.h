@@ -6,19 +6,20 @@
 #include "game.h"
 
 class GameScreen;
+class Bet;
 class Player {
  public:
   virtual ~Player();
   const std::string name;
   const uint type;
-  virtual bool decide(Uint32 ticks, Bet &b) {
+  virtual bool decide(Uint32 ticks, std::shared_ptr<Bet> bet) {
     (void)ticks;
-    (void)b;
+    (void)bet;
     return false;
   };
-  virtual bool decide(const Uint8 *const keystate, Bet &b) {
+  virtual bool decide(const Uint8 *const keystate, std::shared_ptr<Bet> bet) {
     (void)keystate;
-    (void)b;
+    (void)bet;
     return false;
   };
 

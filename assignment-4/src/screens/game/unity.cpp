@@ -1,3 +1,4 @@
+#include "bet.cpp"
 #include "bot.cpp"
 #include "dice.cpp"
 #include "die.cpp"

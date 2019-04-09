@@ -14,7 +14,7 @@ Bot::Bot(const GameScreen* const game, int id)
     : Player(game, "bot " + std::to_string(id), 1), elapsed(0) {}
 
 Bot::~Bot() {}
-bool Bot::decide(Uint32 ticks, Bet& bet) {
+bool Bot::decide(Uint32 ticks, std::shared_ptr<Bet> bet) {
   // TODO!
   (void)bet;
 

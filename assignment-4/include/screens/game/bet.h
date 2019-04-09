@@ -17,21 +17,22 @@ class Bet : public Drawable {
 
   Bet(const GameScreen* const, const Vector2f& pos = Vector2f(0, 0),
       int gap = 0, const Value& val = {0, 1});
+  Bet(const Bet&) = delete;
+  Bet& operator=(const Bet&) = delete;
   void draw() const;
   Bet& increment(Type);
   Bet& decrement(Type);
   int getQuantity() const;
   int getType() const;
-  // bad structure, we should get this from game automatically
-  void updateDice(int);
 
  private:
+  const GameScreen* const game;
+  Vector2f position;
+  int gap;
   Value last;
   Value current;
   const int numFaces = 6;
-  int gap;
-  Vector2f position;
-  Bet& validate();
-  const GameScreen* const game;
   IoMod menuWriter{60};
+
+  void validate();
 };
