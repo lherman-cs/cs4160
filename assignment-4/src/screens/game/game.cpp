@@ -71,8 +71,6 @@ void drawTableDice() {
 }
 
 void GameScreen::draw() const {
-  // SDL_Color normalColor = SDL_Color({52, 44, 42, 255});
-  // SDL_Color hoverColor = SDL_Color({255, 255, 0, 255});
   SDL_Color secondaryColor = SDL_Color({182, 148, 103, 255});
 
   background.draw();
@@ -94,9 +92,11 @@ void GameScreen::draw() const {
   // If bot, renders a loading text saying that the bot is thinking.
   auto player = players[turn];
   if (player->type == 1) {
+    bet->setSelectable(false);
     auto loadingText = player->name + " is thinking...";
     loadingWriter.writeText(loadingText, 680, 720, secondaryColor);
   } else
-    // Otherwise, notify the human that it is their turn
-    loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
+    bet->setSelectable(true);
+  // Otherwise, notify the human that it is their turn
+  loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
 }

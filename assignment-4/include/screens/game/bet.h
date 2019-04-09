@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>           // for Uint32
 #include "core/interface.h"     // for drawable
+#include "die.h"                // for Die rendering
 #include "screens/game/game.h"  // for GameScreen
 #include "util/ioMod.h"         // for drawing
 #include "util/vector2f.h"      // for vector
@@ -20,6 +21,7 @@ class Bet : public Drawable {
   Bet(const Bet&) = delete;
   Bet& operator=(const Bet&) = delete;
   void draw() const;
+  void setSelectable(bool);
   Bet& increment(Type);
   Bet& decrement(Type);
   int getQuantity() const;
@@ -29,10 +31,12 @@ class Bet : public Drawable {
   const GameScreen* const game;
   Vector2f position;
   int gap;
+  bool selectable{false};
   Value last;
   Value current;
-  const int numFaces = 6;
+  const int numFaces{6};
   IoMod menuWriter{60};
+  // Die die{Vector2f(950, 50), Die::State::visible, current.face - 1};
 
   void validate();
 };
