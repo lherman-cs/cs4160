@@ -7,18 +7,18 @@ Bet::Bet(const GameScreen* const g, const Vector2f& pos, int ga, const Value& l,
 void Bet::draw() const {
   SDL_Color normalColor = SDL_Color({52, 44, 42, 255});
   SDL_Color hoverColor = SDL_Color({255, 255, 0, 255});
-  Die die{Vector2f(950, 50), Die::State::visible, current.face - 1};
   if (selectable) {
     menuWriter.writeText(std::to_string(current.quantity), 825, 30,
                          !(game->getSelected()) ? hoverColor : normalColor);
-    game->getSelected() ? die.select().draw() : die.draw();
+    die.draw();
     return;
   }
   menuWriter.writeText(std::to_string(current.quantity), 825, 30, normalColor);
-  die.deselect().draw();
+  die.draw();
 }
 
 void Bet::setSelectable(bool b) { selectable = b; }
+void Bet::selectDie(bool b) { b ? die.select() : die.deselect(); }
 
 Bet& Bet::increment(Type t) {
   switch (t) {

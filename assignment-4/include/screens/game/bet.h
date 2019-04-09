@@ -22,6 +22,7 @@ class Bet : public Drawable {
   Bet& operator=(const Bet&) = delete;
   void draw() const;
   void setSelectable(bool);
+  void selectDie(bool);
   Bet& increment(Type);
   Bet& decrement(Type);
   int getQuantity() const;
@@ -36,7 +37,7 @@ class Bet : public Drawable {
   Value current;
   const int numFaces{6};
   IoMod menuWriter{60};
-  // Die die{Vector2f(950, 50), Die::State::visible, current.face - 1};
+  Die die{Vector2f(950, 50), Die::State::visible, current.face - 1};
 
   void validate();
 };
