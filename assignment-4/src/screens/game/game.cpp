@@ -95,8 +95,9 @@ void GameScreen::draw() const {
     bet->setSelectable(false);
     auto loadingText = player->name + " is thinking...";
     loadingWriter.writeText(loadingText, 680, 720, secondaryColor);
-  } else
+  } else {
     bet->setSelectable(true);
-  // Otherwise, notify the human that it is their turn
-  loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
+    // Otherwise, notify the human that it is their turn
+    loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
+  }
 }
