@@ -82,19 +82,7 @@ void GameScreen::draw() const {
   // Draw bet
   bet->draw();
 
-<<<<<<< HEAD
-  int ystart = 30;
-  int xstart = 825;
-  int xstep = 110;
-
-  menuWriter.writeText(std::to_string(currBet.quantity), xstart, ystart,
-                       !onType ? hoverColor : normalColor);
-
-  Die d(Vector2f(950, 50), Die::State::visible, currBet.type - 1);
-  onType ? d.select().draw() : d.deselect().draw();
-=======
   // Draw round/turn number
->>>>>>> 85ff8f9... moving game and players to use bet object
 
   int ystart = 705;
   int xstart = 50;

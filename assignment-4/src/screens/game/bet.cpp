@@ -1,19 +1,20 @@
 #include "screens/game/bet.h"
 #include "screens/game/die.h"
 
-Bet::Bet(const GameScreen* const g, const Vector2f& pos, int ga,
-         const Value& val)
-    : game(g), position(pos), gap(ga), last(val), current(val) {}
+Bet::Bet(const GameScreen* const g, const Vector2f& pos, int ga, const Value& l,
+         const Value& c)
+    : game(g), position(pos), gap(ga), last(l), current(c) {}
 
 void Bet::draw() const {
   SDL_Color normalColor = SDL_Color({52, 44, 42, 255});
   SDL_Color hoverColor = SDL_Color({255, 255, 0, 255});
-
-  menuWriter.writeText(std::to_string(current.quantity), 30, 825,
-                       !game->getSelected() ? hoverColor : normalColor);
+  menuWriter.writeText(std::to_string(current.quantity), 825, 30,
+                       !(game->getSelected()) ? hoverColor : normalColor);
 
   Die d = Die(Vector2f(950, 50), Die::State::visible, current.face - 1);
   game->getSelected() ? d.select().draw() : d.deselect().draw();
+
+  std::cout << current.quantity << ", " << current.face << std::endl;
 }
 
 Bet& Bet::increment(Type t) {
@@ -33,13 +34,11 @@ Bet& Bet::increment(Type t) {
 Bet& Bet::decrement(Type t) {
   switch (t) {
     case Quantity:
-      current = last;
-      current.quantity += 1;
+      current.quantity -= 1;
       break;
 
     case Face:
-      current = last;
-      current.face += 1;
+      current.face -= 1;
       break;
   }
   validate();
