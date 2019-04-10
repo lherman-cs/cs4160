@@ -12,16 +12,27 @@ void Bet::draw() const {
   }
   menuWriter.writeText(std::to_string(current.quantity), 825, 30, normalColor);
   die.draw();
-  std::cout << current.quantity << ", " << current.face << std::endl;
+  // std::cout << current.quantity << ", " << current.face << std::endl;
 }
 
 void Bet::setSelectable(bool b) {
   selectable = b;
-  b ? die.select() : die.deselect();
+  if (b) {
+    if (dieSelected)
+      die.select();
+    else
+      textColor = &hoverColor;
+  } else {
+    if (dieSelected)
+      die.deselect();
+    else
+      textColor = &normalColor;
+  }
 }
 void Bet::selectDie(bool b) {
+  dieSelected = b;
   b ? die.select() : die.deselect();
-  b ? textColor = &normalColor : textColor = &hoverColor;
+  textColor = b ? &normalColor : &hoverColor;
 }
 
 Bet& Bet::increment(Type t) {

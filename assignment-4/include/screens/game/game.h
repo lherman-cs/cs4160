@@ -31,7 +31,6 @@ class GameScreen : public Screen,
   virtual void draw() const;
   virtual void update(Uint32 ticks);
   int getNumDice() const;
-  bool getSelected() const;
 
  private:
   World background{"screens/game/background"};
@@ -40,9 +39,6 @@ class GameScreen : public Screen,
   std::vector<std::shared_ptr<Player>> players{};
   int diceOnTable = 25;
   std::shared_ptr<Bet> bet;
-
-  // UI stuff
-  bool onType = false;
 
   IoMod menuWriter{60};
   IoMod loadingWriter{32};

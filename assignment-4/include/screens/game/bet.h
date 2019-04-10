@@ -33,6 +33,7 @@ class Bet : public Drawable {
   Vector2f position;
   int gap;
   bool selectable{true};
+  bool dieSelected{false};
   SDL_Color normalColor{52, 44, 42, 255};
   SDL_Color hoverColor{255, 255, 0, 255};
   SDL_Color* textColor = &hoverColor;
