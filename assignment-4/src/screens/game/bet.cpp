@@ -61,8 +61,14 @@ Bet& Bet::decrement(Type t) {
   return *this;
 }
 
-// should we call increment/decrement here?
-void Bet::validate() {
+/**
+ * If **valid**, returns `true`. Else, current will be **adjusted** to be valid
+ * and return `false`.
+ */
+bool Bet::validate() {
+  auto _quantity = current.quantity;
+  auto _face = current.face;
+
   if (current.quantity < last.quantity)
     current.quantity = last.quantity;
   else if (current.quantity > game->getNumDice())
@@ -81,4 +87,6 @@ void Bet::validate() {
     else
       current.quantity++;
   }
+
+  return _quantity == current.quantity && _face == current.face;
 }

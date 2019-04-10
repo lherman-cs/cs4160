@@ -41,5 +41,5 @@ class Bet : public Drawable {
   IoMod menuWriter{60};
   Die die{Vector2f(950, 50), Die::State::visible, current.face - 1};
 
-  void validate();
+  bool validate();
 };
