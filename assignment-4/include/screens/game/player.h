@@ -25,5 +25,5 @@ class Player {
 
  protected:
   Player(const GameScreen *const game, const std::string &name, uint type);
-  const std::shared_ptr<GameScreen const> game;
+  const GameScreen *const game;
 };
