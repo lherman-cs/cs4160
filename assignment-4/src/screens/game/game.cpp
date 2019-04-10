@@ -38,6 +38,9 @@ void GameScreen::onDone() {
   // TODO! do something useful here
 }
 
+int GameScreen::getNumDice() const { return diceOnTable; }
+bool GameScreen::getSelected() const { return onType; }
+
 void GameScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_H]) {
     navigator.push<HelpScreen>();
@@ -47,15 +50,13 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
       keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])
     onType ^= 1;
 
-  bool done = players[turn]->decide(keystate, currBet.quantity, currBet.type);
-
-  validateBet(currBet.quantity, currBet.type);
+  bool done = players[turn]->decide(keystate, bet);
 
   if (done) onDone();
 }
 
 void GameScreen::update(Uint32 ticks) {
-  bool done = players[turn]->decide(ticks, currBet.quantity, currBet.type);
+  bool done = players[turn]->decide(ticks, bet);
   if (done) onDone();
 }
 
@@ -79,6 +80,7 @@ void GameScreen::draw() const {
 
   // Draw bet
 
+<<<<<<< HEAD
   int ystart = 30;
   int xstart = 825;
   int xstep = 110;
@@ -88,9 +90,13 @@ void GameScreen::draw() const {
 
   Die d(Vector2f(950, 50), Die::State::visible, currBet.type - 1);
   onType ? d.select().draw() : d.deselect().draw();
+=======
+  // Draw round/turn number
+>>>>>>> 85ff8f9... moving game and players to use bet object
 
-  ystart = 705;
-  xstart = 50;
+  int ystart = 705;
+  int xstart = 50;
+  int xstep = 110;
 
   menuWriter.writeText(std::to_string(round), xstart + xstep, ystart,
                        secondaryColor);
@@ -103,28 +109,4 @@ void GameScreen::draw() const {
   } else
     // Otherwise, notify the human that it is their turn
     loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
-}
-
-// validate and update the inputted quantity
-void GameScreen::validateBet(int& quantity, int& type) {
-  const auto numFaces = 6;  // for dices
-
-  if (quantity < lastBet.quantity)
-    quantity = lastBet.quantity;
-  else if (quantity > diceOnTable)
-    quantity = diceOnTable;
-  else if (quantity <= 0)
-    quantity = 1;
-
-  if (type < lastBet.type)
-    type = lastBet.type;
-  else if (type > numFaces)
-    type = numFaces;
-
-  if (quantity == lastBet.quantity && type == lastBet.type) {
-    if (quantity == diceOnTable)
-      type++;
-    else
-      quantity++;
-  }
 }

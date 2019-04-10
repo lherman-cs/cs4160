@@ -4,7 +4,7 @@ Human::Human(const GameScreen* const game, std::string name)
     : Player(game, name, 0), onType(false) {}
 Human::~Human() {}
 
-bool Human::decide(const Uint8* const keystate, int& quantity, int& type) {
+bool Human::decide(const Uint8* const keystate, Bet& b) {
   // Stop the human's turn if they hit enter
   if (keystate[SDL_SCANCODE_RETURN]) {
     onType = false;
@@ -13,10 +13,10 @@ bool Human::decide(const Uint8* const keystate, int& quantity, int& type) {
 
   // Selection
   if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP])
-    onType ? type++ : quantity++;
+    onType ? b.increment(Bet::Face) : b.increment(Bet::Quantity);
 
   else if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN])
-    onType ? type-- : quantity--;
+    onType ? b.decrement(Bet::Face) : b.decrement(Bet::Quantity);
 
   else if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ||
            keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])

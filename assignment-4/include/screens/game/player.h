@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <memory>
 #include <string>
+#include "bet.h"
 #include "game.h"
 
 class GameScreen;
@@ -10,16 +11,14 @@ class Player {
   virtual ~Player();
   const std::string name;
   const uint type;
-  virtual bool decide(Uint32 ticks, int &quantity, int &type) {
+  virtual bool decide(Uint32 ticks, Bet &b) {
     (void)ticks;
-    (void)quantity;
-    (void)type;
+    (void)b;
     return false;
   };
-  virtual bool decide(const Uint8 *const keystate, int &quantity, int &type) {
+  virtual bool decide(const Uint8 *const keystate, Bet &b) {
     (void)keystate;
-    (void)quantity;
-    (void)type;
+    (void)b;
     return false;
   };
 

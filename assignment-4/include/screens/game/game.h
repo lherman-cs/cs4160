@@ -29,20 +29,16 @@ class GameScreen : public Screen,
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
   virtual void update(Uint32 ticks);
-  void validateBet(int& quantity, int& type);
+  int getNumDice() const;
+  bool getSelected() const;
 
  private:
-  struct Bet {
-    int quantity;
-    int type;
-  };
   World background{"screens/game/background"};
   int turn = 0;
   int round = 1;
   std::vector<std::shared_ptr<Player>> players{};
-  Bet lastBet{0, 1};
-  Bet currBet{1, 1};
   int diceOnTable = 25;
+  Bet& bet{this};
 
   // UI stuff
   bool onType = false;
