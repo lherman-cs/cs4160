@@ -41,6 +41,7 @@ class GameScreen : public Screen,
   std::shared_ptr<Bet> bet;
 
   IoMod menuWriter{60};
+  SDL_Color secondaryColor{182, 148, 103, 255};
   IoMod loadingWriter{32};
   Navigator& navigator{Navigator::getInstance()};
 

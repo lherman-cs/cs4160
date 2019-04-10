@@ -66,8 +66,6 @@ void drawTableDice() {
 }
 
 void GameScreen::draw() const {
-  SDL_Color secondaryColor = SDL_Color({182, 148, 103, 255});
-
   background.draw();
 
   // drawTableDice();
