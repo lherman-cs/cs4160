@@ -19,8 +19,10 @@ bool Human::decide(const Uint8* const keystate, std::shared_ptr<Bet> bet) {
     onType ? bet->decrement(Bet::Face) : bet->decrement(Bet::Quantity);
 
   else if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ||
-           keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT])
+           keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT]) {
     onType ^= 1;
+    bet->selectDie(onType);
+  }
 
   return false;
 }

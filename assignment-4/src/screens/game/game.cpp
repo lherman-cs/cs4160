@@ -47,11 +47,11 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<HelpScreen>();
   }
 
-  if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ||
-      keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT]) {
-    onType ^= 1;
-    bet->setSelectable(onType);
-  }
+  // if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_D] ||
+  //     keystate[SDL_SCANCODE_LEFT] || keystate[SDL_SCANCODE_RIGHT]) {
+  //   onType ^= 1;
+  //   bet->selectDie(onType);
+  // }
 
   bool done = players[turn]->decide(keystate, bet);
 
@@ -91,14 +91,14 @@ void GameScreen::draw() const {
   menuWriter.writeText(std::to_string(round), xstart + xstep, ystart,
                        secondaryColor);
 
-  // If bot, renders a loading text saying that the bot is thinking.
   auto player = players[turn];
   if (player->type == 1) {
-    bet->setSelectable(false);
+    // bet->setSelectable(false);
+    // If bot, renders a loading text saying that the bot is thinking.
     auto loadingText = player->name + " is thinking...";
     loadingWriter.writeText(loadingText, 680, 720, secondaryColor);
   } else {
-    bet->setSelectable(true);
+    // bet->setSelectable(true);
     // Otherwise, notify the human that it is their turn
     loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
   }
