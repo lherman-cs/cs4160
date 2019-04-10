@@ -9,7 +9,8 @@
 
 class Dice : public Drawable {
  public:
-  Dice(long unsigned int numDice = 5, int g = 50);
+  Dice(const Vector2f& position, double theta, long unsigned int numDice = 5,
+       int g = 50);
 
   // Draw dice to screen
   void draw() const;
@@ -17,11 +18,13 @@ class Dice : public Drawable {
   // Set all dice to show face
   void show();
 
-  // have dice positioned in line starting at given position with given angle
-  void positionDie(const Vector2f&, double);
+  // Randomize the dice
   void roll();
 
  private:
   std::vector<Die> dice;
   int gap;
+
+  // have dice positioned in line starting at given position with given angle
+  void positionDie(const Vector2f&, double);
 };

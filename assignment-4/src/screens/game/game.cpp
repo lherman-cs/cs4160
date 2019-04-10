@@ -56,19 +56,8 @@ void GameScreen::update(Uint32 ticks) {
   if (done) onDone();
 }
 
-void drawTableDice() {
-  Dice d = Dice();
-  d.roll();
-  for (auto p : dice_position) {
-    d.positionDie(std::get<0>(p.second), std::get<1>(p.second));
-    d.draw();
-  }
-}
-
 void GameScreen::draw() const {
   background.draw();
-
-  // drawTableDice();
 
   // Draw bet
   bet->draw();
