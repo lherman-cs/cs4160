@@ -16,21 +16,19 @@ class Bet : public Drawable {
   };
 
   Bet(const GameScreen* const, const Vector2f& pos = Vector2f(0, 0),
-      int gap = 0, const Value& l = {0, 1}, const Value& c = {1, 1});
+      const Value& l = {0, 1}, const Value& c = {1, 1});
   Bet(const Bet&) = delete;
   Bet& operator=(const Bet&) = delete;
   void draw() const;
   void setSelectable(bool);
-  void selectDie(bool);
+  void select(Type);
   Bet& increment(Type);
   Bet& decrement(Type);
-  int getQuantity() const;
-  int getType() const;
+  int get(Type) const;
 
  private:
   const GameScreen* const game;
   Vector2f position;
-  int gap;
   bool dieSelected{false};
   SDL_Color normalColor{52, 44, 42, 255};
   SDL_Color hoverColor{255, 255, 0, 255};

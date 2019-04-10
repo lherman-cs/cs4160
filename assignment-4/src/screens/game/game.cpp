@@ -12,9 +12,9 @@
 using namespace std::placeholders;
 
 // game screen
-//  accepts type and quantity (of dice for betting)
+//  accepts face and quantity (of dice for betting)
 //  responds to 'B' bet, 'L' call liar, and 'H' help
-//              ← → ↑ ↓ for selection of type and quantity
+//              ← → ↑ ↓ for selection of face and quantity
 
 GameScreen::GameScreen(int players, int bots, int difficulty)
     : bet(std::make_shared<Bet>(this)) {

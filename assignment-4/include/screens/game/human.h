@@ -9,6 +9,6 @@ class Human : public Player {
   virtual bool decide(const Uint8 *const keystate, std::shared_ptr<Bet> bet);
 
  private:
-  // if true, user is changing the type. Otherwise, it's the quantity
-  bool onType;
+  // if true, user is changing the face. Otherwise, it's the quantity
+  bool onFace;
 };

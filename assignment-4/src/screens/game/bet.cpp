@@ -1,8 +1,8 @@
 #include "screens/game/bet.h"
 
-Bet::Bet(const GameScreen* const g, const Vector2f& pos, int ga, const Value& l,
+Bet::Bet(const GameScreen* const g, const Vector2f& pos, const Value& l,
          const Value& c)
-    : game(g), position(pos), gap(ga), last(l), current(c) {}
+    : game(g), position(pos), last(l), current(c) {}
 
 void Bet::draw() const {
   menuWriter.writeText(std::to_string(current.quantity), 825, 30, *textColor);
@@ -11,22 +11,22 @@ void Bet::draw() const {
 }
 
 void Bet::setSelectable(bool b) {
-  if (b) {
-    if (dieSelected)
-      die.select();
-    else
-      textColor = &hoverColor;
-  } else {
-    if (dieSelected)
-      die.deselect();
-    else
-      textColor = &normalColor;
+  if (!b) {
+    die.deselect();
+    textColor = &normalColor;
+    return;
   }
+
+  if (dieSelected)
+    die.select();
+  else
+    textColor = &hoverColor;
 }
-void Bet::selectDie(bool b) {
-  dieSelected = b;
-  b ? die.select() : die.deselect();
-  textColor = b ? &normalColor : &hoverColor;
+
+void Bet::select(Type t) {
+  dieSelected = t == Face ? true : false;
+  dieSelected ? die.select() : die.deselect();
+  textColor = dieSelected ? &normalColor : &hoverColor;
 }
 
 Bet& Bet::increment(Type t) {
@@ -89,4 +89,13 @@ bool Bet::validate() {
   }
 
   return _quantity == current.quantity && _face == current.face;
+}
+
+int Bet::get(Type t) const {
+  switch (t) {
+    case Quantity:
+      return current.quantity;
+    case Face:
+      return current.face;
+  }
 }
