@@ -5,18 +5,12 @@ Bet::Bet(const GameScreen* const g, const Vector2f& pos, int ga, const Value& l,
     : game(g), position(pos), gap(ga), last(l), current(c) {}
 
 void Bet::draw() const {
-  if (selectable) {
-    menuWriter.writeText(std::to_string(current.quantity), 825, 30, *textColor);
-    die.draw();
-    return;
-  }
-  menuWriter.writeText(std::to_string(current.quantity), 825, 30, normalColor);
+  menuWriter.writeText(std::to_string(current.quantity), 825, 30, *textColor);
   die.draw();
   // std::cout << current.quantity << ", " << current.face << std::endl;
 }
 
 void Bet::setSelectable(bool b) {
-  selectable = b;
   if (b) {
     if (dieSelected)
       die.select();
@@ -46,6 +40,8 @@ Bet& Bet::increment(Type t) {
       break;
   }
   validate();
+  // update die rendering
+  die.set(current.face - 1);
   return *this;
 }
 
@@ -60,6 +56,8 @@ Bet& Bet::decrement(Type t) {
       break;
   }
   validate();
+  // update die rendering
+  die.set(current.face - 1);
   return *this;
 }
 
@@ -83,5 +81,4 @@ void Bet::validate() {
     else
       current.quantity++;
   }
-  die.set(current.face - 1);
 }

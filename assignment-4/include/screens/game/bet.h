@@ -1,5 +1,4 @@
 #pragma once
-#include <SDL2/SDL.h>           // for Uint32
 #include "core/interface.h"     // for drawable
 #include "die.h"                // for Die rendering
 #include "screens/game/game.h"  // for GameScreen
@@ -32,7 +31,6 @@ class Bet : public Drawable {
   const GameScreen* const game;
   Vector2f position;
   int gap;
-  bool selectable{true};
   bool dieSelected{false};
   SDL_Color normalColor{52, 44, 42, 255};
   SDL_Color hoverColor{255, 255, 0, 255};
