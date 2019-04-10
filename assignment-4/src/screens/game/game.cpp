@@ -31,13 +31,11 @@ GameScreen::GameScreen(int players, int bots, int difficulty) {
 
 GameScreen::~GameScreen() {}
 
-// This is a callback when the player who got the turn finish with
-// their turn.
+// Callback for player turn completion.
 void GameScreen::onDone() {
   turn = (turn + 1) % players.size();
   round++;
   // TODO! do something useful here
-  std::cout << "ON DONE" << std::endl;
 }
 
 void GameScreen::onKeyDown(const Uint8* const keystate) {
@@ -79,7 +77,8 @@ void GameScreen::draw() const {
 
   // drawTableDice();
 
-  // Current data
+  // Draw bet
+
   int ystart = 30;
   int xstart = 825;
   int xstep = 110;
@@ -102,6 +101,7 @@ void GameScreen::draw() const {
     auto loadingText = player->name + " is thinking...";
     loadingWriter.writeText(loadingText, 680, 720, secondaryColor);
   } else
+    // Otherwise, notify the human that it is their turn
     loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
 }
 

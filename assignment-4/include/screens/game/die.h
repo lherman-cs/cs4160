@@ -1,9 +1,10 @@
 #pragma once
+#include "core/interface.h"
 #include "global/imageFactory.h"
 #include "sprite/sprite.h"
 #include "util/vector2f.h"
 
-class Die {
+class Die : public Drawable, public Updatable {
  public:
   enum State { visible, invisible, hidden };
 

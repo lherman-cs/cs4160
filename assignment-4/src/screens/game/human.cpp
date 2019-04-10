@@ -5,9 +5,8 @@ Human::Human(const GameScreen* const game, std::string name)
 Human::~Human() {}
 
 bool Human::decide(const Uint8* const keystate, int& quantity, int& type) {
-  // Begin Game
+  // Stop the human's turn if they hit enter
   if (keystate[SDL_SCANCODE_RETURN]) {
-    // Reset onType for future UI interaction
     onType = false;
     return true;
   }
@@ -24,4 +23,10 @@ bool Human::decide(const Uint8* const keystate, int& quantity, int& type) {
     onType ^= 1;
 
   return false;
+}
+
+void Human::draw() {
+  int ystart = 30;
+  int xstart = 825;
+  int xstep = 110;
 }
