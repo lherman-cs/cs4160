@@ -40,6 +40,7 @@ Bet& Bet::increment(Type t) {
       break;
   }
   validate();
+  select(t);
   // update die rendering
   die.set(current.face - 1);
   return *this;
@@ -56,6 +57,7 @@ Bet& Bet::decrement(Type t) {
       break;
   }
   validate();
+  select(t);
   // update die rendering
   die.set(current.face - 1);
   return *this;
