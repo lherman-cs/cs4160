@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <memory>
 #include <unordered_map>
+#include "core/promise.h"
 #include "global/clock.h"
 #include "global/navigator.h"
 #include "global/renderContext.h"
@@ -22,6 +23,7 @@ class Engine {
   const RenderContext& rc;
   Clock& clock;
   Navigator& navigator;
+  PromiseScheduler& promiseScheduler;
 
   SDL_Renderer* const renderer;
 
