@@ -44,4 +44,5 @@ class GameScreen : public Screen {
   Navigator& navigator{Navigator::getInstance()};
 
   void onDone();
+  void onCallLiar(std::shared_ptr<Player> caller);
 };

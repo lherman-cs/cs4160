@@ -98,6 +98,10 @@ bool Bet::validate() {
   return _quantity == current.quantity && _face == current.face;
 }
 
-int Bet::get(Type t) const {
-  return t == Quantity ? current.quantity : current.face;
+Bet::Value Bet::getLast() const { return last; }
+
+void Bet::reset() {
+  last = {0, 1};
+  current = last;
+  validate();
 }

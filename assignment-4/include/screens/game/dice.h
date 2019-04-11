@@ -27,6 +27,9 @@ class Dice : public Drawable {
   // Remove a die from dice
   void remove();
 
+  // Get the dice
+  const std::vector<Die>& getDice() const;
+
  private:
   std::vector<Die> dice;
   int gap;

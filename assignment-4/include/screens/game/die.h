@@ -20,6 +20,7 @@ class Die : public Drawable {
   Die& set(const Vector2f& position);
   Die& set(const Die::State state);
   Die& set(int value);
+  int getValue() const;
 
   static int getSize();
 

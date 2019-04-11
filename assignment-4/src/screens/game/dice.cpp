@@ -44,3 +44,5 @@ void Dice::hide() {
 void Dice::remove() {
   if (!dice.empty()) dice.pop_back();
 }
+
+const std::vector<Die>& Dice::getDice() const { return dice; }

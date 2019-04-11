@@ -32,3 +32,11 @@ bool Bot::decide(Uint32 ticks, std::shared_ptr<Bet> bet) {
   }
   return false;
 }
+
+/**
+ * callLiar will be called every time after somebody makes a bet
+ */
+bool Bot::callLiar() {
+  // TODO! Do call liar logic here
+  return false;
+}

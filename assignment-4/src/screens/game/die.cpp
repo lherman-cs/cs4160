@@ -40,8 +40,12 @@ Die& Die::set(const Die::State s) {
   return *this;
 }
 Die& Die::set(int v) {
+  v = abs(v);
+  v %= 6;
   value = v;
   return *this;
 }
+
+int Die::getValue() const { return value; }
 
 int Die::getSize() { return 32; }

@@ -25,7 +25,8 @@ class Bet : public Drawable {
   void submit();
   Bet& increment(Type);
   Bet& decrement(Type);
-  int get(Type) const;
+  Value getLast() const;
+  void reset();
 
  private:
   const GameScreen* const game;

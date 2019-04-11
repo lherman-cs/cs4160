@@ -38,7 +38,10 @@ GameScreen::~GameScreen() {}
 void GameScreen::onDone() {
   turn = (turn + 1) % players.size();
   round++;
-  // TODO! do something useful here
+
+  for (auto player : players) {
+    if (player->callLiar()) return onCallLiar(player);
+  }
 }
 
 int GameScreen::getNumDice() const { return diceOnTable; }
@@ -46,6 +49,11 @@ int GameScreen::getNumDice() const { return diceOnTable; }
 void GameScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_H]) {
     navigator.push<HelpScreen>();
+  }
+
+  // TODO! check if there's a first bet
+  for (auto player : players) {
+    if (player->callLiar(keystate)) return onCallLiar(player);
   }
 
   bool done = players[turn]->decide(keystate, bet);
@@ -86,4 +94,33 @@ void GameScreen::draw() const {
   }
 
   for (const auto player : players) player->draw();
+}
+
+void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
+  // Show all player's dice
+  for (const auto player : players) player->dice.show();
+  // wait for some amount of time
+  // print out who was correct
+
+  // Sums all dice
+  int sums[6] = {0};
+  for (const auto player : players)
+    for (const Die die : player->dice.getDice()) sums[die.getValue()]++;
+
+  // Compares to last bet
+  if (sums[bet->getLast().face] < bet->getLast().quantity) {
+    // The better lied (the caller was right)
+    auto playerId = turn - 1;
+    if (playerId == -1) playerId = players.size() - 1;
+    players[playerId]->dice.remove();
+  } else {
+    // The better told the truth (the caller was wrong)
+    caller->dice.remove();
+  }
+
+  for (auto player : players) {
+    player->dice.roll();
+    if (player->type == 1) player->dice.hide();
+  }
+  bet->reset();
 }

@@ -29,6 +29,11 @@ class Player : public Drawable {
     (void)bet;
     return false;
   };
+  virtual bool callLiar() { return false; }
+  virtual bool callLiar(const Uint8 *const keystate) {
+    (void)keystate;
+    return false;
+  }
 
  protected:
   Player(const GameScreen *const game, Dice dice, const std::string &name,

@@ -26,3 +26,8 @@ bool Human::decide(const Uint8* const keystate, std::shared_ptr<Bet> bet) {
 
   return false;
 }
+
+bool Human::callLiar(const Uint8* const keystate) {
+  if (keystate[SDL_SCANCODE_L]) return true;
+  return false;
+}
