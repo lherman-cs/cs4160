@@ -1,7 +1,9 @@
+#include <ctime>
 #include "core/engine.h"
 #include "core/event.h"
 
 int main(int, char* []) {
+  srand(time(NULL));
   try {
     Engine engine;
     engine.play();

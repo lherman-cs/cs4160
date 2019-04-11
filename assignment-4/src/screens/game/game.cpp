@@ -40,7 +40,7 @@ void GameScreen::onDone() {
   round++;
 
   for (auto player : players) {
-    if (player->callLiar()) return onCallLiar(player);
+    if (player->callLiar(bet)) return onCallLiar(player);
   }
 }
 
@@ -53,7 +53,7 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
 
   // TODO! check if there's a first bet
   for (auto player : players) {
-    if (player->callLiar(keystate)) return onCallLiar(player);
+    if (player->callLiar(keystate, bet)) return onCallLiar(player);
   }
 
   bool done = players[turn]->decide(keystate, bet);
@@ -123,4 +123,5 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
     if (player->type == 1) player->dice.hide();
   }
   bet->reset();
+  diceOnTable--;
 }
