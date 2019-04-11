@@ -2,6 +2,7 @@
 #include <functional>
 #include <iostream>
 #include <sstream>
+#include "core/promise.h"
 #include "global/clock.h"
 #include "screens/game/bot.h"
 #include "screens/game/dice.h"
@@ -51,6 +52,8 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<HelpScreen>();
   }
 
+  if (state == State::CallingLiar) return;
+
   // TODO! check if there's a first bet
   for (auto player : players) {
     if (player->callLiar(keystate, bet)) return onCallLiar(player);
@@ -62,6 +65,8 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void GameScreen::update(Uint32 ticks) {
+  if (state == State::CallingLiar) return;
+
   bool done = players[turn]->decide(ticks, bet);
   if (done) onDone();
 }
@@ -81,47 +86,61 @@ void GameScreen::draw() const {
   menuWriter.writeText(std::to_string(round), xstart + xstep, ystart,
                        secondaryColor);
 
-  auto player = players[turn];
-  if (player->type == 1) {
-    bet->setSelectable(false);
-    // If bot, renders a loading text saying that the bot is thinking.
-    auto loadingText = player->name + " is thinking...";
-    loadingWriter.writeText(loadingText, 680, 720, secondaryColor);
-  } else {
-    bet->setSelectable(true);
-    // Otherwise, notify the human that it is their turn
-    loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
-  }
-
   for (const auto player : players) player->draw();
+
+  if (state == State::Ongoing) {
+    auto player = players[turn];
+    if (player->type == 1) {
+      bet->setSelectable(false);
+      // If bot, renders a loading text saying that the bot is thinking.
+      auto loadingText = player->name + " is thinking...";
+      loadingWriter.writeText(loadingText, 680, 720, secondaryColor);
+    } else {
+      bet->setSelectable(true);
+      // Otherwise, notify the human that it is their turn
+      loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
+    }
+  } else if (state == CallingLiar) {
+    loadingWriter.writeText("Judging...", 770, 720, secondaryColor);
+  }
 }
 
 void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
+  state = State::CallingLiar;
+
   // Show all player's dice
   for (const auto player : players) player->dice.show();
   // wait for some amount of time
   // print out who was correct
 
-  // Sums all dice
-  int sums[6] = {0};
-  for (const auto player : players)
-    for (const Die die : player->dice.getDice()) sums[die.getValue()]++;
+  auto& promise = PromiseScheduler::getInstance().add();
+  auto judge = [&, caller]() -> bool {
+    // Sums all dice
+    int sums[6] = {0};
+    for (const auto player : players)
+      for (const Die die : player->dice.getDice()) sums[die.getValue()]++;
 
-  // Compares to last bet
-  if (sums[bet->getLast().face] < bet->getLast().quantity) {
-    // The better lied (the caller was right)
-    auto playerId = turn - 1;
-    if (playerId == -1) playerId = players.size() - 1;
-    players[playerId]->dice.remove();
-  } else {
-    // The better told the truth (the caller was wrong)
-    caller->dice.remove();
-  }
+    // Compares to last bet
+    if (sums[bet->getLast().face] < bet->getLast().quantity) {
+      // The better lied (the caller was right)
+      auto playerId = turn - 1;
+      if (playerId == -1) playerId = players.size() - 1;
+      players[playerId]->dice.remove();
+    } else {
+      // The better told the truth (the caller was wrong)
+      caller->dice.remove();
+    }
+    return true;
+  };
+  auto reset = [&]() -> bool {
+    for (auto player : players) {
+      player->dice.roll();
+      if (player->type == 1) player->dice.hide();
+    }
+    bet->reset();
+    state = State::Ongoing;
+    return true;
+  };
 
-  for (auto player : players) {
-    player->dice.roll();
-    if (player->type == 1) player->dice.hide();
-  }
-  bet->reset();
-  diceOnTable--;
+  promise.sleep(3).then(judge).sleep(2).then(reset);
 }
