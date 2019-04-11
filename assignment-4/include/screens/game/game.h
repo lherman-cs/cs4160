@@ -31,6 +31,7 @@ class GameScreen : public Screen {
   int getNumDice() const;
 
  private:
+  enum State { Ongoing, CallingLiar };
   World background{"screens/game/background"};
   int turn = 0;
   int round = 1;
@@ -46,4 +47,5 @@ class GameScreen : public Screen {
   void onDone();
   void onCallLiar(std::shared_ptr<Player> caller);
   void removeLosers();
+  State state{Ongoing};
 };
