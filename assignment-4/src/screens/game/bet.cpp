@@ -31,6 +31,7 @@ void Bet::select(Type t) {
 
 void Bet::submit() {
   last = current;
+  rand() % 100 < 70 ? current.quantity++ : current.face++;
   validate();
 }
 

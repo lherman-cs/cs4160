@@ -60,6 +60,13 @@
     "utility": "cpp",
     "vector": "cpp",
     "array": "cpp",
-    "__hash_table": "cpp"
+    "__hash_table": "cpp",
+    "*.tcc": "cpp",
+    "clocale": "cpp",
+    "unordered_map": "cpp",
+    "optional": "cpp",
+    "cinttypes": "cpp",
+    "typeindex": "cpp",
+    "variant": "cpp"
   }
 }
