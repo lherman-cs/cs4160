@@ -54,12 +54,12 @@
       </highlighted-dice>
 
       <hidden-dice>
-        <file>assets/img/dice.png</file>
+        <file>assets/img/hidden-dice.png</file>
         <transparency>true</transparency>
       </hidden-dice>
 
       <invisible-dice>
-        <file>assets/img/dice.png</file>
+        <file>assets/img/invisible-dice.png</file>
         <transparency>true</transparency>
       </invisible-dice>
     </game>

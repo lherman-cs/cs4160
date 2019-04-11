@@ -9,6 +9,7 @@ class Sprite : public Drawable, public Moveable {
   virtual ~Sprite() {}
   Sprite& operator=(const Sprite&) = delete;
   virtual void draw() const;
+  void draw(const Vector2f&) const;
 
  private:
   const Image* image;

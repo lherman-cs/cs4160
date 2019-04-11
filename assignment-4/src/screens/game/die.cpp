@@ -9,10 +9,10 @@ Die::Die(const Vector2f& pos, State s, int v)
 void Die::draw() const {
   switch (state) {
     case State::hidden:
-      hide.draw();
+      hide.draw(position);
       break;
     case State::invisible:
-      gone.draw();
+      gone.draw(position);
       break;
     case State::visible:
       (*faces)[value]->draw(position);

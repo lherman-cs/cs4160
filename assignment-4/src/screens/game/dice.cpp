@@ -34,3 +34,9 @@ void Dice::show() {
     d.set(Die::State::visible);
   }
 }
+
+void Dice::hide() {
+  for (auto& d : dice) {
+    d.set(Die::State::hidden);
+  }
+}

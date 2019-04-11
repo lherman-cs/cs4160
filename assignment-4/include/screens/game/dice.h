@@ -18,6 +18,9 @@ class Dice : public Drawable {
   // Set all dice to show face
   void show();
 
+  // Set all dice to hide face
+  void hide();
+
   // Randomize the dice
   void roll();
 

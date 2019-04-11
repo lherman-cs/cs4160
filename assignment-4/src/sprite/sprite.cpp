@@ -9,3 +9,4 @@ Sprite::Sprite(const std::string& name)
     : image(ImageFactory::getInstance().getImage(name)) {}
 
 void Sprite::draw() const { image->draw(getPosition()); }
+void Sprite::draw(const Vector2f& pos) const { image->draw(pos); }
