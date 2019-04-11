@@ -4,7 +4,7 @@
 
 class Human : public Player {
  public:
-  Human(const GameScreen *const game, std::string name);
+  Human(const GameScreen *const game, Dice d, std::string name);
   virtual ~Human();
   virtual bool decide(const Uint8 *const keystate, std::shared_ptr<Bet> bet);
 

@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include "bet.h"
+#include "dice.h"
 #include "game.h"
 
 class GameScreen;
@@ -24,6 +25,8 @@ class Player {
   };
 
  protected:
-  Player(const GameScreen *const game, const std::string &name, uint type);
+  Player(const GameScreen *const game, Dice dice, const std::string &name,
+         uint type);
   const GameScreen *const game;
+  Dice dice;
 };

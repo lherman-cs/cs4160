@@ -10,8 +10,6 @@ class Die : public Drawable {
 
   Die();
   Die(const Vector2f&, State, int val = 0);
-  Die(const Die&) = delete;
-  Die& operator=(const Die&) = delete;
   void draw() const;
   Die& select();
   Die& deselect();
@@ -22,11 +20,16 @@ class Die : public Drawable {
   static int getSize();
 
  private:
-  std::vector<Image*> faces{
-      ImageFactory::getInstance().getImages("screens/game/dice")};
-  Sprite hide{"screens/game/hidden-dice"};
-  Sprite gone{"screens/game/invisible-dice"};
+  static std::vector<Image*> faces;
+  static Sprite hide;
+  static Sprite gone;
   State state = visible;
   int value = 0;
   Vector2f position = Vector2f(0, 0);
 };
+
+std::vector<Image*> Die::faces(
+    ImageFactory::getInstance().getImages("screens/game/dice"));
+
+Sprite Die::hide("screens/game/hidden-dice");
+Sprite Die::gone("screens/game/invisible-dice");

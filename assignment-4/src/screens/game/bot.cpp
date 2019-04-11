@@ -10,8 +10,8 @@ const double MAP_STEP = MAX_SIGMOID_VAL / MAX_DELAY;
 static inline double mapInput(double n) { return n * MAP_STEP; }
 static inline double sigmoid(double t) { return 1.0 / (1 + exp(-1 * (t - 6))); }
 
-Bot::Bot(const GameScreen* const game, int id)
-    : Player(game, "bot " + std::to_string(id), 1), elapsed(0) {}
+Bot::Bot(const GameScreen* const game, Dice d, int id)
+    : Player(game, d, "bot " + std::to_string(id), 1), elapsed(0) {}
 
 Bot::~Bot() {}
 bool Bot::decide(Uint32 ticks, std::shared_ptr<Bet> bet) {

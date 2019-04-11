@@ -1,4 +1,5 @@
 #include "screens/game/die.h"
+#include <algorithm>
 
 Die::Die() {}
 

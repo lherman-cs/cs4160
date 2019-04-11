@@ -1,11 +1,11 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include "const.h"
 #include "core/event.h"
 #include "core/observable.h"
 #include "global/navigator.h"
 #include "player.h"
-#include "screens/game/include.h"
 #include "screens/screen.h"
 #include "util/ioMod.h"
 #include "util/world.h"
