@@ -15,18 +15,17 @@ void Die::draw() const {
       gone.draw();
       break;
     case State::visible:
-      faces[value]->draw(position);
+      (*faces)[value]->draw(position);
       break;
   }
 }
 
 Die& Die::select() {
-  faces =
-      ImageFactory::getInstance().getImages("screens/game/highlighted-dice");
+  faces = &highlightedDice;
   return *this;
 }
 Die& Die::deselect() {
-  faces = ImageFactory::getInstance().getImages("screens/game/dice");
+  faces = &unhighlightedDice;
   return *this;
 }
 

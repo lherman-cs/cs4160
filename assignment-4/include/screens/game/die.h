@@ -20,16 +20,20 @@ class Die : public Drawable {
   static int getSize();
 
  private:
-  static std::vector<Image*> faces;
+  static std::vector<Image*> unhighlightedDice;
+  static std::vector<Image*> highlightedDice;
   static Sprite hide;
   static Sprite gone;
+
+  std::vector<Image*>* faces = &unhighlightedDice;
   State state = visible;
   int value = 0;
   Vector2f position = Vector2f(0, 0);
 };
 
-std::vector<Image*> Die::faces(
+std::vector<Image*> Die::unhighlightedDice(
     ImageFactory::getInstance().getImages("screens/game/dice"));
-
+std::vector<Image*> Die::highlightedDice(
+    ImageFactory::getInstance().getImages("screens/game/highlighted-dice"));
 Sprite Die::hide("screens/game/hidden-dice");
 Sprite Die::gone("screens/game/invisible-dice");

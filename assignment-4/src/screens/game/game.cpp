@@ -84,4 +84,6 @@ void GameScreen::draw() const {
     // Otherwise, notify the human that it is their turn
     loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
   }
+
+  for (const auto player : players) player->draw();
 }
