@@ -22,6 +22,7 @@ class Bet : public Drawable {
   void draw() const;
   void setSelectable(bool);
   void select(Type);
+  void submit();
   Bet& increment(Type);
   Bet& decrement(Type);
   int get(Type) const;

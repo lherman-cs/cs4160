@@ -29,6 +29,11 @@ void Bet::select(Type t) {
   textColor = dieSelected ? &normalColor : &hoverColor;
 }
 
+void Bet::submit() {
+  last = current;
+  validate();
+}
+
 Bet& Bet::increment(Type t) {
   switch (t) {
     case Quantity:
