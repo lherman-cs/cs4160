@@ -7,6 +7,10 @@
 #include "dice.h"
 #include "game.h"
 
+/* ignore effc++ since faces is just going to be used */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+
 class GameScreen;
 class Bet;
 class Player : public Drawable {
@@ -32,3 +36,5 @@ class Player : public Drawable {
   const GameScreen *const game;
   Dice dice;
 };
+
+#pragma GCC diagnostic pop

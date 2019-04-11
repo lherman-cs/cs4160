@@ -4,6 +4,10 @@
 #include "sprite/sprite.h"
 #include "util/vector2f.h"
 
+/* ignore effc++ since faces is just going to be used */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+
 class Die : public Drawable {
  public:
   enum State { visible, invisible, hidden };
@@ -37,3 +41,5 @@ std::vector<Image*> Die::highlightedDice(
     ImageFactory::getInstance().getImages("screens/game/highlighted-dice"));
 Sprite Die::hide("screens/game/hidden-dice");
 Sprite Die::gone("screens/game/invisible-dice");
+
+#pragma GCC diagnostic pop

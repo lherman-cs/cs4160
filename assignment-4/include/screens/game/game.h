@@ -21,9 +21,7 @@ class Bet;
 //  accepts type and quantity (of dice for betting)
 //  responds to 'B' bet, 'L' call liar, and 'H' help
 //              ← → ↑ ↓ for selection of type and quantity
-#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
-class GameScreen : public Screen,
-                   public std::enable_shared_from_this<GameScreen> {
+class GameScreen : public Screen {
  public:
   GameScreen(int players, int bots, int difficulty);
   ~GameScreen();
