@@ -1,4 +1,5 @@
 #include "screens/game/game.h"
+#include <algorithm>
 #include <functional>
 #include <iostream>
 #include <sstream>
@@ -124,4 +125,12 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
   }
   bet->reset();
   diceOnTable--;
+  removeLosers();
+}
+
+void GameScreen::removeLosers() {
+  players.erase(
+      std::remove_if(players.begin(), players.end(),
+                     [](auto p) { return p->dice.getDice().size() == 0; }),
+      players.end());
 }
