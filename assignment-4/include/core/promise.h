@@ -7,6 +7,7 @@
 #include "interface.h"
 
 class Engine;
+
 class PromiseScheduler {
  private:
   friend class Engine;
@@ -35,5 +36,5 @@ class PromiseScheduler {
   PromiseScheduler() {}
   PromiseScheduler(const PromiseScheduler&) = delete;
   PromiseScheduler& operator=(const PromiseScheduler&) = delete;
-  std::shared_ptr<Promise> add();
+  Promise& add();
 };

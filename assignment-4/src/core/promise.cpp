@@ -6,10 +6,10 @@ PromiseScheduler& PromiseScheduler::getInstance() {
   return instance;
 }
 
-std::shared_ptr<PromiseScheduler::Promise> PromiseScheduler::add() {
+PromiseScheduler::Promise& PromiseScheduler::add() {
   auto promise = std::make_shared<Promise>();
   promises.push_back(promise);
-  return promise;
+  return *promise;
 }
 
 void PromiseScheduler::update(Uint32 ticks) {

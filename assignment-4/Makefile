@@ -10,7 +10,7 @@ CXX = g++
 
 # SDL2 specifics
 # Warnings frequently signal eventual errors:
-CXXFLAGS=`sdl2-config --cflags` -std=c++11 -I `sdl2-config --prefix`/include/
+CXXFLAGS=`sdl2-config --cflags` -std=c++17 -I `sdl2-config --prefix`/include/
 ifeq "$(ENV)" "prod"
 	CXXFLAGS += -Ofast
 else
