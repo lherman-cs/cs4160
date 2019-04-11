@@ -21,11 +21,13 @@ GameScreen::GameScreen(int players, int bots, int difficulty)
   (void)players;
   (void)difficulty;
 
-  auto human = std::make_shared<Human>(this, "Human");
+  auto human = std::make_shared<Human>(
+      this, Dice(dicePos[0].first, dicePos[0].second), "Human");
   this->players.emplace_back(human);
 
   for (int id = 1; id <= bots; id++) {
-    auto bot = std::make_shared<Bot>(this, id);
+    auto bot = std::make_shared<Bot>(
+        this, Dice(dicePos[id].first, dicePos[id].second), id);
     this->players.emplace_back(bot);
   }
 }
@@ -82,4 +84,6 @@ void GameScreen::draw() const {
     // Otherwise, notify the human that it is their turn
     loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
   }
+
+  for (const auto player : players) player->draw();
 }

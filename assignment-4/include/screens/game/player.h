@@ -3,15 +3,18 @@
 #include <memory>
 #include <string>
 #include "bet.h"
+#include "core/interface.h"
+#include "dice.h"
 #include "game.h"
 
 class GameScreen;
 class Bet;
-class Player {
+class Player : public Drawable {
  public:
   virtual ~Player();
   const std::string name;
   const uint type;
+  virtual void draw() const;
   virtual bool decide(Uint32 ticks, std::shared_ptr<Bet> bet) {
     (void)ticks;
     (void)bet;
@@ -24,6 +27,8 @@ class Player {
   };
 
  protected:
-  Player(const GameScreen *const game, const std::string &name, uint type);
+  Player(const GameScreen *const game, Dice dice, const std::string &name,
+         uint type);
   const GameScreen *const game;
+  Dice dice;
 };

@@ -94,10 +94,5 @@ bool Bet::validate() {
 }
 
 int Bet::get(Type t) const {
-  switch (t) {
-    case Quantity:
-      return current.quantity;
-    case Face:
-      return current.face;
-  }
+  return t == Quantity ? current.quantity : current.face;
 }
