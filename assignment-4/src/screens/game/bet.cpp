@@ -104,5 +104,5 @@ Bet::Value Bet::getLast() const { return last; }
 void Bet::reset() {
   last = {0, 1};
   current = last;
-  validate();
+  increment(Quantity);
 }
