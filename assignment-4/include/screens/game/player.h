@@ -35,6 +35,8 @@ class Player : public Drawable {
          uint type);
   const GameScreen *const game;
   Dice dice;
+
+  friend class GameScreen;
 };
 
 #pragma GCC diagnostic pop
