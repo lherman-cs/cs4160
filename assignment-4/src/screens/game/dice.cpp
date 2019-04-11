@@ -40,3 +40,7 @@ void Dice::hide() {
     d.set(Die::State::hidden);
   }
 }
+
+void Dice::remove() {
+  if (!dice.empty()) dice.pop_back();
+}

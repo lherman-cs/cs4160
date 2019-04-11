@@ -24,6 +24,9 @@ class Dice : public Drawable {
   // Randomize the dice
   void roll();
 
+  // Remove a die from dice
+  void remove();
+
  private:
   std::vector<Die> dice;
   int gap;
