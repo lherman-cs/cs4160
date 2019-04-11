@@ -6,8 +6,8 @@ PromiseScheduler& PromiseScheduler::getInstance() {
   return instance;
 }
 
-PromiseScheduler::Promise& PromiseScheduler::add() {
-  auto promise = std::make_shared<Promise>();
+Promise& PromiseScheduler::add() {
+  std::shared_ptr<Promise> promise(new Promise());
   promises.push_back(promise);
   return *promise;
 }
@@ -23,12 +23,12 @@ void PromiseScheduler::update(Uint32 ticks) {
   }
 }
 
-PromiseScheduler::Promise& PromiseScheduler::Promise::then(Action a) {
+Promise& Promise::then(Action a) {
   actions.push(a);
   return *this;
 }
 
-PromiseScheduler::Promise& PromiseScheduler::Promise::sleep(uint32_t seconds) {
+Promise& Promise::sleep(uint32_t seconds) {
   auto a = [&, seconds]() -> bool {
     // elapsed is in miliseconds
     return elapsed > seconds * 1000;
@@ -37,7 +37,7 @@ PromiseScheduler::Promise& PromiseScheduler::Promise::sleep(uint32_t seconds) {
   return *this;
 }
 
-bool PromiseScheduler::Promise::next(Uint32 ticks) {
+bool Promise::next(Uint32 ticks) {
   if (actions.empty()) return false;
   elapsed += ticks;
   if (actions.front()()) {
