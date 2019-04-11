@@ -1,9 +1,11 @@
 #include "screens/intro.h"
 #include <cmath>
 #include <iostream>
+#include "core/promise.h"
 #include "screens/game/game.h"
 #include "screens/rules.h"
 #include "util/ioMod.h"
+#include "widget/loading.h"
 
 IntroScreen::IntroScreen() {}
 IntroScreen::~IntroScreen() {}
@@ -15,7 +17,24 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   }
   // Begin Game
   if (keystate[SDL_SCANCODE_RETURN]) {
-    navigator.push<GameScreen>(players, bots, difficulty);
+    auto& loading = Loading::getInstance();
+    auto& promise = PromiseScheduler::getInstance().add();
+    promise.then(loading.show)
+        .sleep(2)
+        .then(loading.dismiss)
+        .then([&]() -> bool {
+          navigator.push<RulesScreen>();
+          return true;
+        })
+        .sleep(3)
+        .then(loading.show)
+        .sleep(2)
+        .then(loading.dismiss)
+        .then([&]() -> bool {
+          navigator.pop();
+          navigator.push<GameScreen>(players, bots, difficulty);
+          return true;
+        });
   }
   // Selection
   if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) {

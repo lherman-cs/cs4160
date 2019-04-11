@@ -23,6 +23,7 @@ Engine::Engine()
       clock(Clock::getInstance()),
       navigator(Navigator::getInstance()),
       promiseScheduler(PromiseScheduler::getInstance()),
+      loading(Loading::getInstance()),
       renderer(rc.getRenderer()) {
   navigator.push<IntroScreen>();
   std::cout << "Loading complete" << std::endl;
@@ -30,11 +31,13 @@ Engine::Engine()
 
 void Engine::draw() const {
   navigator.getCurrentScreen()->draw();
+  loading.draw();
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
   navigator.getCurrentScreen()->update(ticks);
+  loading.update(ticks);
 }
 
 void Engine::forward(bool &done) {

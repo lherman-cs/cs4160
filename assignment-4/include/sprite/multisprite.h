@@ -18,4 +18,6 @@ class MultiSprite : public Drawable, public Updatable, public Moveable {
 
   unsigned currentFrame;
   unsigned numberOfFrames;
+  unsigned interval;
+  unsigned elapsed = 0;
 };
