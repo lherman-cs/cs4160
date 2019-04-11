@@ -5,6 +5,7 @@
 #include <random>
 #include <sstream>
 #include <string>
+#include "core/promise.h"
 #include "global/gameData.h"
 #include "global/navigator.h"
 #include "screens/intro.h"
@@ -21,6 +22,7 @@ Engine::Engine()
     : rc(RenderContext::getInstance()),
       clock(Clock::getInstance()),
       navigator(Navigator::getInstance()),
+      promiseScheduler(PromiseScheduler::getInstance()),
       renderer(rc.getRenderer()) {
   navigator.push<IntroScreen>();
   std::cout << "Loading complete" << std::endl;
@@ -70,6 +72,7 @@ void Engine::forward(bool &done) {
     clock.incrFrame();
     draw();
     update(ticks);
+    promiseScheduler.update(ticks);
   }
 }
 
