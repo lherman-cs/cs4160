@@ -56,6 +56,12 @@ void Engine::forward(bool &done) {
       keystate = SDL_GetKeyboardState(NULL);
       navigator.getCurrentScreen()->onKeyDown(keystate);
 
+      if (keystate[SDL_SCANCODE_R]) {
+        navigator.reset();
+        navigator.push<IntroScreen>();
+        return;
+      }
+
       if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
         done = true;
         return;

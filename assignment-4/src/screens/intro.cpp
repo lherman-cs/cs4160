@@ -19,22 +19,10 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_RETURN]) {
     auto& loading = Loading::getInstance();
     auto& promise = PromiseScheduler::getInstance().add();
-    promise
-        .then(loading.show)
-#ifndef DEBUG
-        .sleep(2)
+    promise.then(loading.show)
+        .sleep(1)
         .then(loading.dismiss)
         .then([&]() -> bool {
-          navigator.push<RulesScreen>();
-          return true;
-        })
-        .sleep(3)
-        .then(loading.show)
-        .sleep(2)
-#endif
-        .then(loading.dismiss)
-        .then([&]() -> bool {
-          navigator.pop();
           navigator.push<GameScreen>(players, bots, difficulty);
           return true;
         });

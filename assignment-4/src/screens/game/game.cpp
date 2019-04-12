@@ -1,5 +1,4 @@
 #include "screens/game/game.h"
-#include <bits/stdc++.h>
 #include <algorithm>
 #include <functional>
 #include <iostream>

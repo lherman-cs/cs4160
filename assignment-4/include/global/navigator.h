@@ -17,6 +17,7 @@ class Navigator {
     history.push(currentScreen);
   }
   void pop();
+  void reset();
   std::shared_ptr<Screen> getCurrentScreen();
 
   Navigator(const Navigator&) = delete;

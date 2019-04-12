@@ -14,4 +14,6 @@ void Navigator::pop() {
   currentScreen = history.top();
 }
 
+void Navigator::reset() { history = std::stack<std::shared_ptr<Screen>>(); }
+
 std::shared_ptr<Screen> Navigator::getCurrentScreen() { return currentScreen; }
