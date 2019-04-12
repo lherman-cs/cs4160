@@ -19,7 +19,9 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_RETURN]) {
     auto& loading = Loading::getInstance();
     auto& promise = PromiseScheduler::getInstance().add();
-    promise.then(loading.show)
+    promise
+        .then(loading.show)
+#ifndef DEBUG
         .sleep(2)
         .then(loading.dismiss)
         .then([&]() -> bool {
@@ -29,6 +31,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
         .sleep(3)
         .then(loading.show)
         .sleep(2)
+#endif
         .then(loading.dismiss)
         .then([&]() -> bool {
           navigator.pop();

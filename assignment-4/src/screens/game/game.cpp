@@ -23,11 +23,16 @@ GameScreen::GameScreen(int players, int bots, int difficulty)
   (void)players;
   (void)difficulty;
 
+#ifdef DEBUG
+  int start = 0;
+#else
   auto human = std::make_shared<Human>(
       this, Dice(dicePos[0].first, dicePos[0].second), "Human");
   this->players.emplace_back(human);
+  int start = 1;
+#endif
 
-  for (int id = 1; id <= bots; id++) {
+  for (int id = start; id <= bots; id++) {
     auto bot = std::make_shared<Bot>(
         this, Dice(dicePos[id].first, dicePos[id].second), id);
     this->players.emplace_back(bot);
@@ -146,7 +151,11 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
     return true;
   };
 
+#ifdef DEBUG
+  promise.sleep(1).then(judge).sleep(1).then(reset);
+#else
   promise.sleep(3).then(judge).sleep(2).then(reset);
+#endif
 }
 
 void GameScreen::removeLosers() {

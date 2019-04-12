@@ -14,7 +14,7 @@ CXXFLAGS=`sdl2-config --cflags` -std=c++17 -I `sdl2-config --prefix`/include/
 ifeq "$(ENV)" "prod"
 	CXXFLAGS += -Ofast
 else
-	CXXFLAGS += -g -O0 -W -Wall -Weffc++ -Wextra -pedantic
+	CXXFLAGS += -g -O0 -W -Wall -Weffc++ -Wextra -pedantic -DDEBUG
 endif
 LDFLAGS = `sdl2-config --libs` -lm -lSDL2_ttf -lSDL2_image -lexpat
 # User space
