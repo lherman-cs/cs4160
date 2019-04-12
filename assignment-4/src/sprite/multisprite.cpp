@@ -5,8 +5,17 @@
 MultiSprite::MultiSprite(const std::string& name)
     : images(ImageFactory::getInstance().getImages(name)),
       currentFrame(0),
-      numberOfFrames(Gamedata::getInstance().getXmlInt(name + "/frames")) {}
+      numberOfFrames(Gamedata::getInstance().getXmlInt(name + "/frames")),
+      interval(Gamedata::getInstance().getXmlInt(name + "/interval")) {}
 
 void MultiSprite::draw() const { images[currentFrame]->draw(getPosition()); }
 
-void MultiSprite::update(Uint32 ticks) { (void)(ticks); }
+void MultiSprite::update(Uint32 ticks) {
+  if (interval == 0) return;
+
+  elapsed += ticks;
+  if (elapsed > interval) {
+    currentFrame = (currentFrame + 1) % numberOfFrames;
+    elapsed -= interval;
+  }
+}

@@ -2,7 +2,11 @@
 #include <cmath>
 #include <cstdlib>
 
+#ifdef DEBUG
+const double MAX_DELAY = 1;
+#else
 const double MAX_DELAY = 8;  // 8 seconds
+#endif
 const double MAX_SIGMOID_VAL = 12;
 const double MAP_STEP = MAX_SIGMOID_VAL / MAX_DELAY;
 

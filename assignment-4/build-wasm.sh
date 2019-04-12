@@ -11,6 +11,7 @@ EMFLAGS=(
     -s SDL2_IMAGE_FORMATS='["bmp","png"]'
     --preload-file assets
     --closure 1
+    --shell-file ./wasm-template.html
 )
 
 FLAGS="${CXXFLAGS[@]} ${LDFLAGS[@]} ${EMFLAGS[@]}"

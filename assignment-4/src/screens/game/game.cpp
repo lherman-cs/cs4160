@@ -25,11 +25,16 @@ GameScreen::GameScreen(int players, int bots, int difficulty)
   (void)players;
   (void)difficulty;
 
+#ifdef DEBUG
+  int start = 0;
+#else
   auto human = std::make_shared<Human>(
       this, Dice(dicePos[0].first, dicePos[0].second), "Human");
   this->players.emplace_back(human);
+  int start = 1;
+#endif
 
-  for (int id = 1; id <= bots; id++) {
+  for (int id = start; id <= bots; id++) {
     auto bot = std::make_shared<Bot>(
         this, Dice(dicePos[id].first, dicePos[id].second), id);
     this->players.emplace_back(bot);
@@ -63,7 +68,7 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<HelpScreen>();
   }
 
-  if (state == State::CallingLiar) return;
+  if (state == State::CallingLiar || state == State::Finish) return;
 
   // TODO! check if there's a first bet
 
@@ -77,7 +82,7 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void GameScreen::update(Uint32 ticks) {
-  if (state == State::CallingLiar) return;
+  if (state == State::CallingLiar || state == State::Finish) return;
 
   bool done = players[turn]->decide(ticks, bet);
   if (done) onDone();
@@ -114,6 +119,9 @@ void GameScreen::draw() const {
     }
   } else if (state == CallingLiar) {
     loadingWriter.writeText("Judging...", 770, 720, secondaryColor);
+  } else {
+    const auto finishText = players[0]->name + " won!";
+    loadingWriter.writeText(finishText, 750, 720, secondaryColor);
   }
 }
 
@@ -153,16 +161,27 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
     diceOnTable--;
     removeLosers();
 
-    state = State::Ongoing;
+    state = players.size() == 1 ? State::Finish : State::Ongoing;
     return true;
   };
 
+#ifdef DEBUG
+  promise.sleep(1).then(judge).sleep(1).then(reset);
+#else
   promise.sleep(3).then(judge).sleep(2).then(reset);
+#endif
 }
 
 void GameScreen::removeLosers() {
-  players.erase(
-      std::remove_if(players.begin(), players.end(),
-                     [](auto p) { return p->dice.getDice().size() == 0; }),
-      players.end());
+  int id = 0;
+  auto it = players.begin();
+  while (it != players.end()) {
+    if ((*it)->dice.getDice().size() == 0) {
+      players.erase(it);
+      if (id < turn) turn--;
+      break;
+    }
+    id++;
+    it++;
+  }
 }

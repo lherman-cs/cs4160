@@ -8,6 +8,7 @@
 #include "global/viewport.h"
 #include "screens/screen.h"
 #include "util/world.h"
+#include "widget/loading.h"
 
 class Engine {
  public:
@@ -24,6 +25,7 @@ class Engine {
   Clock& clock;
   Navigator& navigator;
   PromiseScheduler& promiseScheduler;
+  Loading& loading;
 
   SDL_Renderer* const renderer;
 

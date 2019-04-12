@@ -45,12 +45,14 @@
         <file>assets/img/dice.png</file>
         <transparency>true</transparency>
         <frames>6</frames>
+        <interval>0</interval>
       </dice>
 
       <highlighted-dice>
         <file>assets/img/highlighted-dice.png</file>
         <transparency>true</transparency>
         <frames>6</frames>
+        <interval>0</interval>
       </highlighted-dice>
 
       <hidden-dice>
@@ -86,4 +88,17 @@
     </player-info>
   </screens>
 
+  <widget>
+    <loading>
+      <file>assets/img/loading.png</file>
+      <transparency>true</transparency>
+      <frames>24</frames>
+      <interval>500</interval>
+    </loading>
+
+    <modal>
+      <file>assets/img/modal.png</file>
+      <transparency>true</transparency>
+    </modal>
+  </widget>
 </GameData>
