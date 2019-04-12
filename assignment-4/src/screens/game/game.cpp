@@ -159,8 +159,15 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
 }
 
 void GameScreen::removeLosers() {
-  players.erase(
-      std::remove_if(players.begin(), players.end(),
-                     [](auto p) { return p->dice.getDice().size() == 0; }),
-      players.end());
+  int id = 0;
+  auto it = players.begin();
+  while (it != players.end()) {
+    if ((*it)->dice.getDice().size() == 0) {
+      players.erase(it);
+      if (id < turn) id--;
+      break;
+    }
+    id++;
+    it++;
+  }
 }
