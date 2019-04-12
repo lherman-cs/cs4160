@@ -29,10 +29,14 @@ class Player : public Drawable {
     (void)bet;
     return false;
   };
-  virtual bool callLiar(const std::shared_ptr<const Bet> bet) { return false; }
+  virtual bool callLiar(const std::shared_ptr<const Bet> bet) {
+    (void)bet;
+    return false;
+  }
   virtual bool callLiar(const Uint8 *const keystate,
                         const std::shared_ptr<const Bet> bet) {
     (void)keystate;
+    (void)bet;
     return false;
   }
 
