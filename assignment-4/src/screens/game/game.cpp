@@ -57,7 +57,6 @@ void GameScreen::onDone() {
           std::chrono::system_clock::now().time_since_epoch().count()));
   for (auto player : temp) {
     if (player->callLiar(bet)) return onCallLiar(player);
-    std::cout << player->name << std::endl;
   }
 }
 
