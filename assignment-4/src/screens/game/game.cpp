@@ -1,7 +1,9 @@
 #include "screens/game/game.h"
+#include <bits/stdc++.h>
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#include <random>
 #include <sstream>
 #include "core/promise.h"
 #include "global/clock.h"
@@ -41,8 +43,16 @@ void GameScreen::onDone() {
   turn = (turn + 1) % players.size();
   round++;
 
-  for (auto player : players) {
+  // Allows each bot to get an equal chance of calling liar first, prevents
+  //   first bot from always getting to go first
+  std::vector<std::shared_ptr<Player>> temp = players;
+  std::shuffle(
+      std::begin(temp), std::end(temp),
+      std::default_random_engine(
+          std::chrono::system_clock::now().time_since_epoch().count()));
+  for (auto player : temp) {
     if (player->callLiar(bet)) return onCallLiar(player);
+    std::cout << player->name << std::endl;
   }
 }
 
@@ -56,6 +66,7 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
   if (state == State::CallingLiar) return;
 
   // TODO! check if there's a first bet
+
   for (auto player : players) {
     if (player->callLiar(keystate, bet)) return onCallLiar(player);
   }
