@@ -58,7 +58,7 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
     navigator.push<HelpScreen>();
   }
 
-  if (state == State::CallingLiar) return;
+  if (state == State::CallingLiar || state == State::Finish) return;
 
   // TODO! check if there's a first bet
   for (auto player : players) {
@@ -71,7 +71,7 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void GameScreen::update(Uint32 ticks) {
-  if (state == State::CallingLiar) return;
+  if (state == State::CallingLiar || state == State::Finish) return;
 
   bool done = players[turn]->decide(ticks, bet);
   if (done) onDone();
@@ -108,6 +108,9 @@ void GameScreen::draw() const {
     }
   } else if (state == CallingLiar) {
     loadingWriter.writeText("Judging...", 770, 720, secondaryColor);
+  } else {
+    const auto finishText = players[0]->name + " won!";
+    loadingWriter.writeText(finishText, 750, 720, secondaryColor);
   }
 }
 
@@ -147,7 +150,7 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
     diceOnTable--;
     removeLosers();
 
-    state = State::Ongoing;
+    state = players.size() == 1 ? State::Finish : State::Ongoing;
     return true;
   };
 
@@ -164,7 +167,7 @@ void GameScreen::removeLosers() {
   while (it != players.end()) {
     if ((*it)->dice.getDice().size() == 0) {
       players.erase(it);
-      if (id < turn) id--;
+      if (id < turn) turn--;
       break;
     }
     id++;

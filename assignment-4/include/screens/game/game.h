@@ -31,7 +31,7 @@ class GameScreen : public Screen {
   int getNumDice() const;
 
  private:
-  enum State { Ongoing, CallingLiar };
+  enum State { Ongoing, CallingLiar, Finish };
   World background{"screens/game/background"};
   int turn = 0;
   int round = 1;
