@@ -6,6 +6,11 @@
 #include "sprite/sprite.h"
 #include "util/ioMod.h"
 
+/* ignore effc++ since enabled_from_this is meant to be created using smart
+ * pointers */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+
 class Widget : public Drawable,
                public Updatable,
                public std::enable_shared_from_this<Widget> {
@@ -33,3 +38,5 @@ class Widget : public Drawable,
     };
   }
 };
+
+#pragma GCC diagnostic pop
