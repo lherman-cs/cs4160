@@ -1,17 +1,10 @@
 #include "widget/loading.h"
 #include "util/ioMod.h"
 
-Loading& Loading::getInstance() {
-  static Loading instance;
-  return instance;
+Loading::Loading(std::string text) : text(text) {
+  std::cout << "[loading] finished initializing" << std::endl;
+  loading.setPosition(Vector2f(470, 300));
 }
-
-Loading& Loading::create(std::string text) {
-  this->text = text;
-  return *this;
-}
-
-Loading::Loading() { loading.setPosition(Vector2f(470, 300)); }
 
 void Loading::draw() const {
   if (!showing) return;

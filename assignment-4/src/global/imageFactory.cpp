@@ -1,9 +1,16 @@
+#include "global/global.h"
 #include "global/renderContext.h"
 #include "util/vector2f.h"
 
-ImageFactory& ImageFactory::getInstance() {
-  static ImageFactory instance;
-  return instance;
+ImageFactory::ImageFactory(Gamedata& gamedata)
+    : gdata(gamedata),
+      surfaces(),
+      textures(),
+      images(),
+      multiSurfaces(),
+      multiTextures(),
+      multiImages() {
+  std::cout << "[imageFactory] finished initializing" << std::endl;
 }
 
 ImageFactory::~ImageFactory() {
@@ -78,7 +85,7 @@ std::vector<Image*> ImageFactory::getImages(const std::string& name) {
     return pos->second;
   }
 
-  RenderContext& renderContext = RenderContext::getInstance();
+  RenderContext& renderContext = Global::get().renderContext;
   std::string sheetPath = gdata.getXmlStr(name + "/file");
   SDL_Surface* spriteSurface = IMG_Load(sheetPath.c_str());
   bool transparency = gdata.getXmlBool(name + "/transparency");

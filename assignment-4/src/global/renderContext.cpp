@@ -1,14 +1,7 @@
-#include "global/renderContext.h"
-#include "global/gameData.h"
+#include "global/global.h"
 
-RenderContext::RenderContext()
-    : window(nullptr), renderer(nullptr), factory(ImageFactory::getInstance()) {
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-    throw(std::string("Could not init SDL: ") + SDL_GetError());
-  }
-  window = initWindow();
-  renderer = initRenderer();
-}
+RenderContext::RenderContext(Gamedata& gamedata)
+    : gamedata(gamedata), window(initWindow()), renderer(initRenderer()) {}
 
 RenderContext::~RenderContext() {
   SDL_DestroyRenderer(renderer);
@@ -16,15 +9,10 @@ RenderContext::~RenderContext() {
   SDL_Quit();
 }
 
-RenderContext& RenderContext::getInstance() {
-  static RenderContext instance;
-  return instance;
-}
-
 SDL_Window* RenderContext::initWindow() {
-  std::string title = Gamedata::getInstance().getXmlStr("title");
-  int width = Gamedata::getInstance().getXmlInt("view/width");
-  int height = Gamedata::getInstance().getXmlInt("view/height");
+  std::string title = gamedata.getXmlStr("title");
+  int width = gamedata.getXmlInt("view/width");
+  int height = gamedata.getXmlInt("view/height");
   window =
       SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
                        SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);

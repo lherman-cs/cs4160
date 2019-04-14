@@ -4,7 +4,7 @@
 #include "const.h"
 #include "core/event.h"
 #include "core/observable.h"
-#include "global/navigator.h"
+#include "global/global.h"
 #include "player.h"
 #include "screens/screen.h"
 #include "util/ioMod.h"
@@ -42,7 +42,7 @@ class GameScreen : public Screen {
   IoMod menuWriter{60};
   SDL_Color secondaryColor{182, 148, 103, 255};
   IoMod loadingWriter{32};
-  Navigator& navigator{Navigator::getInstance()};
+  Navigator& navigator{Global::get().navigator};
 
   void onDone();
   void onCallLiar(std::shared_ptr<Player> caller);

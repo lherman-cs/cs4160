@@ -1,14 +1,16 @@
 #pragma once
 #include "util/audio.h"
 
+class Global;
+
 class Mixer {
  public:
-  static Mixer &getInstance();
   Mixer(const Mixer &) = delete;
   Mixer &operator=(const Mixer &) = delete;
 
   const Music background;
 
  private:
-  Mixer();
+  friend class Global;
+  Mixer(Gamedata &gamedata);
 };

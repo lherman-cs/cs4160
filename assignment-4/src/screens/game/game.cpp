@@ -5,8 +5,7 @@
 #include <iostream>
 #include <random>
 #include <sstream>
-#include "core/promise.h"
-#include "global/clock.h"
+#include "global/global.h"
 #include "screens/game/bot.h"
 #include "screens/game/dice.h"
 #include "screens/game/human.h"
@@ -132,7 +131,7 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
   // wait for some amount of time
   // print out who was correct
 
-  auto& promise = PromiseScheduler::getInstance().add();
+  auto& promise = Global::get().promise.add();
   auto judge = [&, caller]() -> bool {
     // Sums all dice
     int sums[6] = {0};

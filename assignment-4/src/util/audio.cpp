@@ -1,9 +1,8 @@
 #include "util/audio.h"
-#include "global/gameData.h"
+#include "global/global.h"
 
-Music::Music(const std::string name)
-    : music(Mix_LoadMUS(Gamedata::getInstance().getXmlStr(name).c_str())) {
-  if (music == NULL) throw("[audio/music] failed to initialize " + name);
+Music::Music(const std::string path) : music(Mix_LoadMUS(path.c_str())) {
+  if (music == NULL) throw("[audio/music] failed to initialize " + path);
 }
 
 Music::~Music() { Mix_FreeMusic(music); }
@@ -14,9 +13,8 @@ void Music::play() const {
   }
 }
 
-Chunk::Chunk(const std::string name)
-    : chunk(Mix_LoadWAV(Gamedata::getInstance().getXmlStr(name).c_str())) {
-  if (chunk == NULL) throw("[audio/chunk] failed to initialize " + name);
+Chunk::Chunk(const std::string path) : chunk(Mix_LoadWAV(path.c_str())) {
+  if (chunk == NULL) throw("[audio/chunk] failed to initialize " + path);
 }
 
 Chunk::~Chunk() { Mix_FreeChunk(chunk); }

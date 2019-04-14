@@ -1,6 +1,6 @@
 #pragma once
 #include "core/interface.h"
-#include "global/imageFactory.h"
+#include "global/global.h"
 #include "sprite/sprite.h"
 #include "util/vector2f.h"
 
@@ -37,9 +37,9 @@ class Die : public Drawable {
 };
 
 std::vector<Image*> Die::unhighlightedDice(
-    ImageFactory::getInstance().getImages("screens/game/dice"));
+    Global::get().imageFactory.getImages("screens/game/dice"));
 std::vector<Image*> Die::highlightedDice(
-    ImageFactory::getInstance().getImages("screens/game/highlighted-dice"));
+    Global::get().imageFactory.getImages("screens/game/highlighted-dice"));
 Sprite Die::hide("screens/game/hidden-dice");
 Sprite Die::gone("screens/game/invisible-dice");
 

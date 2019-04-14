@@ -1,7 +1,7 @@
 #include "screens/intro.h"
 #include <cmath>
 #include <iostream>
-#include "core/promise.h"
+#include "global/global.h"
 #include "screens/game/game.h"
 #include "screens/rules.h"
 #include "util/ioMod.h"
@@ -17,11 +17,11 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   }
   // Begin Game
   if (keystate[SDL_SCANCODE_RETURN]) {
-    auto& loading = Loading::getInstance();
-    auto& promise = PromiseScheduler::getInstance().add();
-    promise.then(loading.show)
+    auto loading = Global::get().widget.create<Loading>("Loading...");
+    auto& promise = Global::get().promise.add();
+    promise.then(loading->show())
         .sleep(1)
-        .then(loading.dismiss)
+        .then(loading->dismiss())
         .then([&]() -> bool {
           navigator.push<GameScreen>(players, bots, difficulty);
           return true;

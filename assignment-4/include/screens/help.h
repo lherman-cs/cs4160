@@ -1,5 +1,5 @@
 #pragma once
-#include "global/navigator.h"
+#include "global/global.h"
 #include "screens/screen.h"
 #include "util/world.h"
 
@@ -16,5 +16,5 @@ class HelpScreen : public Screen {
 
  private:
   const World helpBackground{"screens/help/background"};
-  Navigator& navigator{Navigator::getInstance()};
+  Navigator& navigator{Global::get().navigator};
 };

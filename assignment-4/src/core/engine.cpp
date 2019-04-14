@@ -5,10 +5,6 @@
 #include <random>
 #include <sstream>
 #include <string>
-#include "core/promise.h"
-#include "global/gameData.h"
-#include "global/mixer.h"
-#include "global/navigator.h"
 #include "screens/intro.h"
 #include "sprite/multisprite.h"
 #include "sprite/sprite.h"
@@ -20,12 +16,12 @@
 Engine::~Engine() { std::cout << "Terminating program" << std::endl; }
 
 Engine::Engine()
-    : rc(RenderContext::getInstance()),
-      mixer(Mixer::getInstance()),
-      clock(Clock::getInstance()),
-      navigator(Navigator::getInstance()),
-      promiseScheduler(PromiseScheduler::getInstance()),
-      loading(Loading::getInstance()),
+    : rc(Global::get().renderContext),
+      mixer(Global::get().mixer),
+      clock(Global::get().clock),
+      navigator(Global::get().navigator),
+      promiseScheduler(Global::get().promise),
+      widget(Global::get().widget),
       renderer(rc.getRenderer()) {
   navigator.push<IntroScreen>();
   std::cout << "Loading complete" << std::endl;
@@ -33,13 +29,14 @@ Engine::Engine()
 
 void Engine::draw() const {
   navigator.getCurrentScreen()->draw();
-  loading.draw();
+  widget.draw();
   SDL_RenderPresent(renderer);
 }
 
 void Engine::update(Uint32 ticks) {
+  promiseScheduler.update(ticks);
   navigator.getCurrentScreen()->update(ticks);
-  loading.update(ticks);
+  widget.update(ticks);
 }
 
 void Engine::forward(bool &done) {
@@ -83,7 +80,6 @@ void Engine::forward(bool &done) {
     clock.incrFrame();
     draw();
     update(ticks);
-    promiseScheduler.update(ticks);
   }
 }
 

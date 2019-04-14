@@ -1,12 +1,11 @@
 #include "sprite/multisprite.h"
-#include "global/gameData.h"
-#include "global/imageFactory.h"
+#include "global/global.h"
 
 MultiSprite::MultiSprite(const std::string& name)
-    : images(ImageFactory::getInstance().getImages(name)),
+    : images(Global::get().imageFactory.getImages(name)),
       currentFrame(0),
-      numberOfFrames(Gamedata::getInstance().getXmlInt(name + "/frames")),
-      interval(Gamedata::getInstance().getXmlInt(name + "/interval")) {}
+      numberOfFrames(Global::get().gamedata.getXmlInt(name + "/frames")),
+      interval(Global::get().gamedata.getXmlInt(name + "/interval")) {}
 
 void MultiSprite::draw() const { images[currentFrame]->draw(getPosition()); }
 

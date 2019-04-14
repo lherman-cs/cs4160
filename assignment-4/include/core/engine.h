@@ -1,15 +1,9 @@
 #include <SDL2/SDL.h>
 #include <memory>
 #include <unordered_map>
-#include "core/promise.h"
-#include "global/clock.h"
-#include "global/mixer.h"
-#include "global/navigator.h"
-#include "global/renderContext.h"
-#include "global/viewport.h"
+#include "global/global.h"
 #include "screens/screen.h"
 #include "util/world.h"
-#include "widget/loading.h"
 
 class Engine {
  public:
@@ -27,7 +21,7 @@ class Engine {
   Clock& clock;
   Navigator& navigator;
   PromiseScheduler& promiseScheduler;
-  Loading& loading;
+  WidgetController& widget;
 
   SDL_Renderer* const renderer;
 

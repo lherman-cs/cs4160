@@ -5,11 +5,6 @@
 #include <limits>
 #include <sstream>
 
-Gamedata& Gamedata::getInstance() {
-  static Gamedata gamedata;
-  return gamedata;
-}
-
 Gamedata::Gamedata(const string& fn)
     : parser(fn), gameData(parser.getXmlData()) {}
 

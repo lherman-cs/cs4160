@@ -4,9 +4,10 @@
 #include <list>
 #include <memory>
 #include <queue>
-#include "interface.h"
+#include "core/interface.h"
 
 class Engine;
+class Global;
 
 class Promise : public std::enable_shared_from_this<Promise> {
  private:
@@ -29,12 +30,12 @@ class Promise : public std::enable_shared_from_this<Promise> {
 class PromiseScheduler {
  private:
   friend class Engine;
+  friend class Global;
   std::list<std::shared_ptr<Promise>> promises;
+  PromiseScheduler() {}
   void update(Uint32 ticks);
 
  public:
-  static PromiseScheduler& getInstance();
-  PromiseScheduler() {}
   PromiseScheduler(const PromiseScheduler&) = delete;
   PromiseScheduler& operator=(const PromiseScheduler&) = delete;
   Promise& add();

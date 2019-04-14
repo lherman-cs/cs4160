@@ -5,9 +5,10 @@
 #include <unordered_map>
 #include "screens/screen.h"
 
+class Global;
+
 class Navigator {
  public:
-  static Navigator& getInstance();
   template <typename T,
             typename = typename std::enable_if<
                 std::is_base_of<Screen, T>::value, T>::type,
@@ -24,6 +25,7 @@ class Navigator {
   Navigator& operator=(const Navigator&) = delete;
 
  private:
+  friend class Global;
   Navigator();
   std::shared_ptr<Screen> currentScreen;
   std::stack<std::shared_ptr<Screen>> history;

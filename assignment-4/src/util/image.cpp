@@ -1,9 +1,8 @@
 #include "util/image.h"
-#include "global/renderContext.h"
-#include "global/viewport.h"
+#include "global/global.h"
 
 Image::Image(SDL_Surface* surf)
-    : renderer(RenderContext::getInstance().getRenderer()),
+    : renderer(Global::get().renderContext.getRenderer()),
       surface(surf),
       texture(nullptr),
       view{0, 0, surf->w, surf->h} {
@@ -12,7 +11,7 @@ Image::Image(SDL_Surface* surf)
 
 void Image::regenerateTexture() {
   if (texture != nullptr) SDL_DestroyTexture(texture);
-  RenderContext& renderContext = RenderContext::getInstance();
+  RenderContext& renderContext = Global::get().renderContext;
   texture = SDL_CreateTextureFromSurface(renderContext.getRenderer(), surface);
 }
 
@@ -21,8 +20,8 @@ void Image::draw(const Vector2f& pos) const { draw(pos[0], pos[1], 1.0f); }
 void Image::draw(int x, int y) const { draw(x, y, 1.0f); }
 
 void Image::draw(int x, int y, float scale) const {
-  x -= Viewport::getInstance().getX();
-  y -= Viewport::getInstance().getY();
+  x -= Global::get().viewport.getX();
+  y -= Global::get().viewport.getY();
   int tempHeight = scale * view.h;
   int tempWidth = scale * view.w;
   SDL_Rect dest = {x, y, tempWidth, tempHeight};

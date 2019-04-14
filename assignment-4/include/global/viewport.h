@@ -2,9 +2,10 @@
 #include "core/interface.h"
 #include "global/gameData.h"
 
+class Global;
+
 class Viewport {
  public:
-  static Viewport& getInstance();
   void draw() const;
   void update();
 
@@ -21,6 +22,7 @@ class Viewport {
   Viewport& operator=(const Viewport&) = delete;
 
  private:
+  friend class Global;
   const Gamedata& gdata;
   Vector2f viewPos;
   Vector2f msgPos;
@@ -33,5 +35,5 @@ class Viewport {
 
   const Trackable* objectToTrack;
 
-  Viewport();
+  Viewport(Gamedata& gamedata);
 };

@@ -1,11 +1,6 @@
 #include "global/navigator.h"
 #include <iostream>
 
-Navigator& Navigator::getInstance() {
-  static Navigator navigator;
-  return navigator;
-}
-
 Navigator::Navigator() : currentScreen(), history() {}
 
 void Navigator::pop() {

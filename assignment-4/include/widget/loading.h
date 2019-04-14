@@ -1,20 +1,16 @@
 #pragma once
-#include "sprite/multisprite.h"
-#include "sprite/sprite.h"
-#include "util/ioMod.h"
 #include "widget.h"
+
+class WidgetController;
 
 class Loading : public Widget {
  public:
-  Loading(const Loading&) = delete;
-  Loading& operator=(const Loading&) = delete;
   virtual void draw() const;
   virtual void update(Uint32 ticks);
-  Loading& create(std::string text);
-  static Loading& getInstance();
 
  private:
-  Loading();
+  friend class WidgetController;
+  Loading(std::string text);
   std::string text{"Loading..."};
   Sprite modal{"widget/modal"};
   MultiSprite loading{"widget/loading"};

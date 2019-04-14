@@ -3,10 +3,10 @@
 #include <string>
 
 class Engine;
+class Global;
 
 class Clock {
  public:
-  static Clock& getInstance();
   unsigned int getTicks() const;
   int getFps() const;
 
@@ -14,6 +14,7 @@ class Clock {
   Clock& operator=(const Clock&) = delete;
 
  private:
+  friend class Global;
   friend class Engine;
 
   bool started;
@@ -44,5 +45,5 @@ class Clock {
   void pause();
   void unpause();
 
-  Clock();
+  Clock(bool frameCapOn, int period);
 };

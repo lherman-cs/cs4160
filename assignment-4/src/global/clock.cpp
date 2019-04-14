@@ -5,22 +5,18 @@
 #include <string>
 #include "global/gameData.h"
 
-Clock& Clock::getInstance() {
-  static Clock clock;
-  return clock;
-}
-
-Clock::Clock()
+Clock::Clock(bool frameCapOn, int period)
     : started(false),
       paused(false),
-      FRAME_CAP_ON(Gamedata::getInstance().getXmlBool("frameCapOn")),
-      PERIOD(Gamedata::getInstance().getXmlInt("period")),
+      FRAME_CAP_ON(frameCapOn),
+      PERIOD(period),
       frames(0),
       timeAtStart(0),
       timeAtPause(0),
       currTicks(0),
       prevTicks(0),
       ticks(0) {
+  std::cout << "[clock] finished initializing" << std::endl;
   startClock();
 }
 

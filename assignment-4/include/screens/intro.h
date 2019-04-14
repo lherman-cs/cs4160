@@ -1,5 +1,5 @@
 #pragma once
-#include "global/navigator.h"
+#include "global/global.h"
 #include "screens/screen.h"
 #include "util/ioMod.h"
 #include "util/world.h"
@@ -25,5 +25,5 @@ class IntroScreen : public Screen {
   int difficulty = 0;
 
   IoMod menuWriter{70};
-  Navigator& navigator{Navigator::getInstance()};
+  Navigator& navigator{Global::get().navigator};
 };

@@ -2,11 +2,10 @@
 #include <cmath>
 #include <functional>
 #include <random>
-#include "global/gameData.h"
-#include "global/imageFactory.h"
+#include "global/global.h"
 
 Sprite::Sprite(const std::string& name)
-    : image(ImageFactory::getInstance().getImage(name)) {}
+    : image(Global::get().imageFactory.getImage(name)) {}
 
 void Sprite::draw() const { image->draw(getPosition()); }
 void Sprite::draw(const Vector2f& pos) const { image->draw(pos); }

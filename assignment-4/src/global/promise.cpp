@@ -1,10 +1,5 @@
-#include "core/promise.h"
+#include "global/promise.h"
 #include <memory>
-
-PromiseScheduler& PromiseScheduler::getInstance() {
-  static PromiseScheduler instance;
-  return instance;
-}
 
 Promise& PromiseScheduler::add() {
   std::shared_ptr<Promise> promise(new Promise());

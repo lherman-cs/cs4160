@@ -6,9 +6,10 @@
 #include "util/image.h"
 #include "util/spriteSheet.h"
 
+class Global;
+
 class ImageFactory {
  public:
-  static ImageFactory& getInstance();
   ~ImageFactory();
 
   Image* getImage(const std::string&);
@@ -18,6 +19,7 @@ class ImageFactory {
   ImageFactory& operator=(const ImageFactory&) = delete;
 
  private:
+  friend class Global;
   const Gamedata& gdata;
 
   std::map<std::string, SDL_Surface*> surfaces;
@@ -28,12 +30,5 @@ class ImageFactory {
   std::map<std::string, std::vector<SDL_Texture*> > multiTextures;
   std::map<std::string, std::vector<Image*> > multiImages;
 
-  ImageFactory()
-      : gdata(Gamedata::getInstance()),
-        surfaces(),
-        textures(),
-        images(),
-        multiSurfaces(),
-        multiTextures(),
-        multiImages() {}
+  ImageFactory(Gamedata& gamedata);
 };

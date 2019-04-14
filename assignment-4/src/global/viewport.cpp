@@ -4,13 +4,8 @@
 
 const std::string NAME = "Lukas Herman & Gabrielle Stewart";
 
-Viewport& Viewport::getInstance() {
-  static Viewport viewport;
-  return viewport;
-}
-
-Viewport::Viewport()
-    : gdata(Gamedata::getInstance()),
+Viewport::Viewport(Gamedata& gamedata)
+    : gdata(gamedata),
       viewPos(0, 0),
       msgPos(Vector2f(gdata.getXmlInt("view/loc/x"),
                       gdata.getXmlInt("view/loc/y"))),
@@ -20,7 +15,9 @@ Viewport::Viewport()
       viewHeight(gdata.getXmlInt("view/height")),
       objWidth(0),
       objHeight(0),
-      objectToTrack(NULL) {}
+      objectToTrack(NULL) {
+  std::cout << "[viewport] finished initializing" << std::endl;
+}
 
 void Viewport::setObjectToTrack(const Trackable* obj) {
   objectToTrack = obj;

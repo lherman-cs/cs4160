@@ -4,9 +4,10 @@
 #include "util/parseXML.h"
 #include "util/vector2f.h"
 
+class Global;
+
 class Gamedata {
  public:
-  static Gamedata& getInstance();
   void displayData() const;
 
   bool getXmlBool(const std::string&) const;
@@ -21,6 +22,7 @@ class Gamedata {
   Gamedata& operator=(const Gamedata&) = delete;
 
  private:
+  friend class Global;
   ParseXML parser;
   const map<std::string, std::string> gameData;
 

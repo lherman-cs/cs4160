@@ -1,7 +1,6 @@
 #include "util/ioMod.h"
 #include <SDL2/SDL_image.h>
-#include "global/gameData.h"
-#include "global/renderContext.h"
+#include "global/global.h"
 
 IoMod::~IoMod() {
   TTF_CloseFont(font);
@@ -10,8 +9,8 @@ IoMod::~IoMod() {
 
 IoMod::IoMod(int size)
     : init(TTF_Init()),
-      renderer(RenderContext::getInstance().getRenderer()),
-      font(TTF_OpenFont(Gamedata::getInstance().getXmlStr("font/file").c_str(),
+      renderer(Global::get().renderContext.getRenderer()),
+      font(TTF_OpenFont(Global::get().gamedata.getXmlStr("font/file").c_str(),
                         size)) {
   if (init == -1) {
     throw std::string("error: Couldn't init font");
