@@ -101,4 +101,10 @@
       <transparency>true</transparency>
     </modal>
   </widget>
+
+  <mixer>
+    <music>
+      <background>assets/music/background.mp3</background>
+    </music>
+  </mixer>
 </GameData>

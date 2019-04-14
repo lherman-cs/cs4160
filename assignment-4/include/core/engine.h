@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "core/promise.h"
 #include "global/clock.h"
+#include "global/mixer.h"
 #include "global/navigator.h"
 #include "global/renderContext.h"
 #include "global/viewport.h"
@@ -22,6 +23,7 @@ class Engine {
 
  private:
   const RenderContext& rc;
+  const Mixer& mixer;
   Clock& clock;
   Navigator& navigator;
   PromiseScheduler& promiseScheduler;

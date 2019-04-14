@@ -7,6 +7,7 @@
 #include <string>
 #include "core/promise.h"
 #include "global/gameData.h"
+#include "global/mixer.h"
 #include "global/navigator.h"
 #include "screens/intro.h"
 #include "sprite/multisprite.h"
@@ -20,6 +21,7 @@ Engine::~Engine() { std::cout << "Terminating program" << std::endl; }
 
 Engine::Engine()
     : rc(RenderContext::getInstance()),
+      mixer(Mixer::getInstance()),
       clock(Clock::getInstance()),
       navigator(Navigator::getInstance()),
       promiseScheduler(PromiseScheduler::getInstance()),
@@ -96,11 +98,15 @@ void loop(void *data) {
   }
 }
 
-void Engine::play() { emscripten_set_main_loop_arg(loop, (void *)this, 60, 1); }
+void Engine::play() {
+  mixer.background.play();
+  emscripten_set_main_loop_arg(loop, (void *)this, 60, 1);
+}
 
 #else
 void Engine::play() {
   bool done = false;
+  mixer.background.play();
   while (!done) {
     forward(done);
   }

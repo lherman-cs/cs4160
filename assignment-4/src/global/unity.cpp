@@ -1,6 +1,7 @@
 #include "clock.cpp"
 #include "gameData.cpp"
 #include "imageFactory.cpp"
+#include "mixer.cpp"
 #include "navigator.cpp"
 #include "renderContext.cpp"
 #include "viewport.cpp"

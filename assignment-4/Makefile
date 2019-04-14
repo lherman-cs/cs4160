@@ -16,7 +16,7 @@ ifeq "$(ENV)" "prod"
 else
 	CXXFLAGS += -g -O0 -W -Wall -Weffc++ -Wextra -pedantic -DDEBUG
 endif
-LDFLAGS = `sdl2-config --libs` -lm -lSDL2_ttf -lSDL2_image -lexpat
+LDFLAGS = `sdl2-config --libs` -lm -lSDL2_ttf -lSDL2_image -lSDL2_mixer -lexpat
 # User space
 CXXFLAGS += -I$(PROJECT_DIR)/include
 

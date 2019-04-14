@@ -1,5 +1,6 @@
 #include "screens/game/game.h"
 #include <algorithm>
+#include <chrono>
 #include <functional>
 #include <iostream>
 #include <random>

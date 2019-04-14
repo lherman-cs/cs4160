@@ -3,7 +3,7 @@
 
 RenderContext::RenderContext()
     : window(nullptr), renderer(nullptr), factory(ImageFactory::getInstance()) {
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     throw(std::string("Could not init SDL: ") + SDL_GetError());
   }
   window = initWindow();
