@@ -4,7 +4,7 @@
 Music::Music(const std::string path) : music(Mix_LoadMUS(path.c_str())) {
   if (music == NULL) {
     auto err = "[audio/music] failed to initialize " + path;
-    std::cout << Mix_GetError() << std::endl;
+    // std::cout << Mix_GetError() << std::endl;
     std::cout << err << std::endl;
     throw(err);
   }

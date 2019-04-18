@@ -1,13 +1,14 @@
 #!/bin/bash
 
 SRCS=`ls src/**/unity.cpp`
-CXXFLAGS=(-O3 -std=c++17 -Iinclude -I/vendor/include/expat)
+CXXFLAGS=(-O3 -std=c++17 -Iinclude -I/vendor/include/expat -I/vendor/include/SDL)
 LDFLAGS=(-L/vendor/lib/expat -lexpat)
 EMFLAGS=(
     -s TOTAL_MEMORY=1GB
     -s USE_SDL=2
     -s USE_SDL_TTF=2
     -s USE_SDL_IMAGE=2
+    -s USE_SDL_MIXER=2
     -s SDL2_IMAGE_FORMATS='["bmp","png"]'
     --preload-file assets
     --closure 1
