@@ -2,7 +2,7 @@
 <GameData>
   <!-- screenTitle is also used to identify you and your animation. 
      So make sure to include your name as part of the screenTitle -->
-  <title>The Tracker Framework</title>
+  <title>Liar's Dice</title>
   <maxStringSize>50</maxStringSize>
 
   <frameCapOn>true</frameCapOn>
@@ -104,7 +104,7 @@
 
   <mixer>
     <music>
-      <background>assets/music/background.mp3</background>
+      <background>assets/music/background.ogg</background>
     </music>
   </mixer>
 </GameData>
