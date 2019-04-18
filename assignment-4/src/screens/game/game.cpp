@@ -11,6 +11,7 @@
 #include "screens/game/human.h"
 #include "screens/help.h"
 #include "util/ioMod.h"
+#include "widget/loading.h"
 
 using namespace std::placeholders;
 
@@ -57,6 +58,19 @@ void GameScreen::onDone() {
   for (auto player : temp) {
     if (player->callLiar(bet)) return onCallLiar(player);
   }
+
+  state = State::TurnTransition;
+  auto& promise = Global::get().promise.add();
+  auto loading =
+      Global::get().widget.create<Loading>(players[turn]->name + "'s turn");
+
+  promise.then(loading->show())
+      .sleep(2)
+      .then(loading->dismiss())
+      .then([&]() -> bool {
+        state = State::Ongoing;
+        return true;
+      });
 }
 
 int GameScreen::getNumDice() const { return diceOnTable; }
@@ -102,6 +116,7 @@ void GameScreen::draw() const {
                        secondaryColor);
 
   for (const auto player : players) player->draw();
+  if (state == State::TurnTransition) return;
 
   if (state == State::Ongoing) {
     auto player = players[turn];
