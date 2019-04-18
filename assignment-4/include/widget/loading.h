@@ -10,11 +10,12 @@ class Loading : public Widget {
 
  private:
   friend class WidgetController;
-  Loading(std::string text);
+  Loading(std::string text, int size = 45);
   std::string text{"Loading..."};
   Sprite modal{"widget/modal"};
   MultiSprite loading{"widget/loading"};
 
-  IoMod writer{45};
+  IoMod writer;
+  Vector2f textPos;
   SDL_Color loadingColor{182, 148, 103, 255};
 };
