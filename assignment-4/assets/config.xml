@@ -106,5 +106,9 @@
     <music>
       <background>assets/music/background.ogg</background>
     </music>
+    <chunk>
+      <keystroke>assets/chunk/keystroke.ogg</keystroke>
+      <transition>assets/chunk/transition.ogg</transition>
+    </chunk>
   </mixer>
 </GameData>

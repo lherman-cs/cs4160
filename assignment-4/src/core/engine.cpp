@@ -61,6 +61,13 @@ void Engine::forward(bool &done) {
         return;
       }
 
+      if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP] ||
+          keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN] ||
+          keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT] ||
+          keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) {
+        mixer.keystroke.play();
+      }
+
       if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
         done = true;
         return;

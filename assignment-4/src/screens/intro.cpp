@@ -19,6 +19,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_RETURN]) {
     auto loading = Global::get().widget.create<Loading>("Loading...");
     auto& promise = Global::get().promise.add();
+    Global::get().mixer.transition.play();
     promise.then(loading->show())
         .sleep(1)
         .then(loading->dismiss())

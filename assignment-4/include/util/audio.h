@@ -22,6 +22,7 @@ class Music {
 class Chunk {
  public:
   ~Chunk();
+  void play() const;
 
  private:
   friend class Mixer;

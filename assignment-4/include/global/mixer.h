@@ -9,6 +9,8 @@ class Mixer {
   Mixer &operator=(const Mixer &) = delete;
 
   const Music background;
+  const Chunk keystroke;
+  const Chunk transition;
 
  private:
   friend class Global;

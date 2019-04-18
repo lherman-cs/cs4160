@@ -22,4 +22,10 @@ Chunk::Chunk(const std::string path) : chunk(Mix_LoadWAV(path.c_str())) {
   if (chunk == NULL) throw("[audio/chunk] failed to initialize " + path);
 }
 
+void Chunk::play() const {
+  // no need to check an error here. Even if it fails, it's just a sound effect,
+  // not a big deal. No need to crash.
+  Mix_PlayChannel(-1, chunk, 0);
+}
+
 Chunk::~Chunk() { Mix_FreeChunk(chunk); }
