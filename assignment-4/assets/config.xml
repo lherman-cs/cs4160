@@ -109,6 +109,7 @@
     <chunk>
       <keystroke>assets/chunk/keystroke.ogg</keystroke>
       <transition>assets/chunk/transition.ogg</transition>
+      <enter-bet>assets/chunk/enter-bet.ogg</enter-bet>
     </chunk>
   </mixer>
 </GameData>

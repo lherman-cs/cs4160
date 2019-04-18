@@ -8,6 +8,7 @@ bool Human::decide(const Uint8* const keystate, std::shared_ptr<Bet> bet) {
   // Stop the human's turn if they hit enter
   if (keystate[SDL_SCANCODE_RETURN] || keystate[SDL_SCANCODE_B]) {
     bet->submit();
+    Global::get().mixer.enterBet.play();
     return true;
   }
 

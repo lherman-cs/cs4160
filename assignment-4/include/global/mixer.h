@@ -11,6 +11,7 @@ class Mixer {
   const Music background;
   const Chunk keystroke;
   const Chunk transition;
+  const Chunk enterBet;
 
  private:
   friend class Global;
