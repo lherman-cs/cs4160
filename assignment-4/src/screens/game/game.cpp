@@ -65,7 +65,7 @@ void GameScreen::onDone() {
       Global::get().widget.create<Loading>(players[turn]->name + "'s turn");
 
   promise.then(loading->show())
-      .sleep(2000)
+      .sleep(1300)
       .then(loading->dismiss())
       .then([&]() -> bool {
         state = State::Ongoing;
@@ -94,7 +94,9 @@ void GameScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void GameScreen::update(Uint32 ticks) {
-  if (state == State::CallingLiar || state == State::Finish) return;
+  if (state == State::CallingLiar || state == State::Finish ||
+      state == State::TurnTransition)
+    return;
 
   bool done = players[turn]->decide(ticks, bet);
   if (done) onDone();
