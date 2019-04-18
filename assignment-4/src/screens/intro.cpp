@@ -21,7 +21,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
     auto& promise = Global::get().promise.add();
     Global::get().mixer.transition.play();
     promise.then(loading->show())
-        .sleep(1)
+        .sleep(1000)
         .then(loading->dismiss())
         .then([&]() -> bool {
           navigator.push<GameScreen>(players, bots, difficulty);

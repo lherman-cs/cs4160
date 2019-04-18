@@ -65,7 +65,7 @@ void GameScreen::onDone() {
       Global::get().widget.create<Loading>(players[turn]->name + "'s turn");
 
   promise.then(loading->show())
-      .sleep(2)
+      .sleep(2000)
       .then(loading->dismiss())
       .then([&]() -> bool {
         state = State::Ongoing;
@@ -179,9 +179,9 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
   };
 
 #ifdef DEBUG
-  promise.sleep(1).then(judge).sleep(1).then(reset);
+  promise.sleep(1000).then(judge).sleep(1000).then(reset);
 #else
-  promise.sleep(3).then(judge).sleep(2).then(reset);
+  promise.sleep(3000).then(judge).sleep(2000).then(reset);
 #endif
 }
 

@@ -23,10 +23,10 @@ Promise& Promise::then(Action a) {
   return *this;
 }
 
-Promise& Promise::sleep(uint32_t seconds) {
-  auto a = [&, seconds]() -> bool {
+Promise& Promise::sleep(uint32_t ms) {
+  auto a = [&, ms]() -> bool {
     // elapsed is in miliseconds
-    return elapsed > seconds * 1000;
+    return elapsed > ms;
   };
   actions.push(a);
   return *this;

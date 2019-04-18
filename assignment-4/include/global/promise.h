@@ -24,7 +24,7 @@ class Promise : public std::enable_shared_from_this<Promise> {
   Promise(const Promise&) = delete;
   Promise& operator=(const Promise&) = delete;
   Promise& then(Action);
-  Promise& sleep(uint32_t seconds);
+  Promise& sleep(uint32_t ms);
 };
 
 class PromiseScheduler {
