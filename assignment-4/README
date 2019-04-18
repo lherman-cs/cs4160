@@ -112,7 +112,6 @@ Together:
 * Forest Background: https://images.pexels.com/photos/1054196/pexels-photo-1054196.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
 * "warning: base class ‘class std::enable_shared_from_this<GameScreen>’ has accessible non-virtual destructor"
   - https://stackoverflow.com/questions/2571850/why-does-enable-shared-from-this-have-a-non-virtual-destructor
-* Background Music: https://opengameart.org/content/magical-theme
 
 ## Assets
 
@@ -130,3 +129,12 @@ Together:
 
   Liar's Dice Sign (all pages)
     https://d2yal1mtmg1ts6.cloudfront.net/zLVRBgHavbLmikIWVCQByhJoKxsHi-seHF81RboLw_8cbi-7fCe5rbYIQzo-6_WtHK-V=w100
+
+  Background Music
+    https://opengameart.org/content/magical-theme
+
+  Keystroke Sound Effect
+    https://opengameart.org/content/interface-sounds-starter-pack
+
+  Transition Sound Effect
+    https://opengameart.org/content/ui-sounds
