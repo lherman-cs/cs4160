@@ -1,7 +1,26 @@
 Project from Gabrielle Stewart and Lukas Herman
 
+How to compile
+
+  Interactive version
+
+    ENV=prod make -j  
+
+    ENV=prod
+      This tells the makefile to build the production version, where you are able to play the game
+
+    -j 
+      This makes compilation in parallel
+
+  Testing version
+
+    make -j
+
+      This allows you to watch the bots play against eachother
+
 Check it out on the web
   https://game.lukas-coding.us/project-4/
+  * if the sound does not work, reload the page
 
 # Emscripten
 
@@ -106,10 +125,6 @@ Together:
 
 * https://emscripten.org/docs/getting_started/FAQ.html#why-doesn-t-my-sdl-app-work
 * https://stackoverflow.com/questions/29335510/using-sdl2-renderdraw-functions-with-emscripten
-* Font: https://www.fontspace.com/joannavu/blackpearl
-* Liar's Dice Logo: https://is3-ssl.mzstatic.com/image/thumb/Purple62/v4/d2/1d/f8/d21df8ea-77d3-1699-29ee-1aa1234fce32/source/512x512bb.jpg
-* Wood Pattern for Round Table: https://images.pexels.com/photos/164005/pexels-photo-164005.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260
-* Forest Background: https://images.pexels.com/photos/1054196/pexels-photo-1054196.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
 * "warning: base class ‘class std::enable_shared_from_this<GameScreen>’ has accessible non-virtual destructor"
   - https://stackoverflow.com/questions/2571850/why-does-enable-shared-from-this-have-a-non-virtual-destructor
 
@@ -128,7 +143,7 @@ Together:
     https://www.fontspace.com/joannavu/blackpearl
 
   Liar's Dice Sign (all pages)
-    https://d2yal1mtmg1ts6.cloudfront.net/zLVRBgHavbLmikIWVCQByhJoKxsHi-seHF81RboLw_8cbi-7fCe5rbYIQzo-6_WtHK-V=w100
+    https://is3-ssl.mzstatic.com/image/thumb/Purple62/v4/d2/1d/f8/d21df8ea-77d3-1699-29ee-1aa1234fce32/source/512x512bb.jpg
 
   Background Music
     https://opengameart.org/content/magical-theme

@@ -18,7 +18,6 @@ Vector2f getTextPos(const std::string &text, int size) {
 
 Loading::Loading(std::string text, int size)
     : text(text), writer(size), textPos(getTextPos(text, size)) {
-  std::cout << "[loading] finished initializing" << std::endl;
   loading.setPosition(Vector2f(470, 300));
 }
 
