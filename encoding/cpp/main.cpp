@@ -10,7 +10,7 @@ int main() {
   table["age"] = "23";
 
   auto out = encode(table);
-  assert(out == "age:23\rname:Lukas\r\n");
+  assert(out == "age:23\rname:Lukas\r");
 
   auto table_2 = decode(out);
   for (const auto& it : table) {

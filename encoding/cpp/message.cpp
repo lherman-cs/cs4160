@@ -2,14 +2,12 @@
 #include <sstream>
 
 static const char MSGSEP = '\r';
-static const char MSGEND = '\n';
 static const char MSGEQ = ':';
 
 // encode
 std::string encode(const std::unordered_map<std::string, std::string> &table) {
   std::stringstream ss;
   for (const auto &it : table) ss << it.first << MSGEQ << it.second << MSGSEP;
-  ss << MSGEND;
   return ss.str();
 }
 
