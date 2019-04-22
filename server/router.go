@@ -1,15 +1,14 @@
 package main
 
 import (
-	"net"
+	"io"
 	"strconv"
 
 	"github.com/google/uuid"
-
 	log "github.com/sirupsen/logrus"
 )
 
-func handle(conn net.Conn) {
+func handle(conn io.ReadWriteCloser) {
 	defer conn.Close()
 
 	msg := make(map[string]string)
@@ -42,7 +41,7 @@ func handle(conn net.Conn) {
 
 // requires:
 //	- name: room's name
-func createRoom(conn net.Conn, msg map[string]string) {
+func createRoom(conn io.ReadWriter, msg map[string]string) {
 	log.Info("[router] handle createRoom command")
 
 	name, ok := msg["name"]
@@ -63,7 +62,7 @@ func createRoom(conn net.Conn, msg map[string]string) {
 // listRooms will reply with the following format
 // <id_1>:<room_name_1>\t
 // <id_2>:<room_name_2>\t\n
-func listRooms(conn net.Conn) {
+func listRooms(conn io.ReadWriter) {
 	log.Info("[router] handle listRooms command")
 
 	msg := make(map[string]string)
@@ -88,7 +87,7 @@ func listRooms(conn net.Conn) {
 // response:
 //	- name: room's name
 //	- num_players: the number of players who have joined
-func detailRoom(conn net.Conn, msg map[string]string) {
+func detailRoom(conn io.ReadWriter, msg map[string]string) {
 	log.Info("[router] handle detailRoom command")
 
 	id, ok := msg["id"]
