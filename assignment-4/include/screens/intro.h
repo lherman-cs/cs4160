@@ -27,10 +27,10 @@ class IntroScreen : public Screen {
   // Text Positiong
   const int ystart = 530;
   const int ystep = 120;
-  const int xstart = 330;
-  const int xstep = 200;
+  const int xstart = 300;
+  const int xstep = 220;
   const World introBackground{"screens/intro/background"};
   // Text Rendering
   const SDL_Color normalColor{52, 44, 42, 255};
-  const SDL_Color hoverColor{52, 44, 42, 255};
+  const SDL_Color hoverColor{255, 255, 0, 255};
 };

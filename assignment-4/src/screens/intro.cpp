@@ -27,22 +27,22 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
         .then(loading->dismiss())
         .then([&]() -> bool {
           if (col == 0)
-            navigator.push<CreateScreen>(difficulty);
-          else
             navigator.push<LobbyScreen>(difficulty, false);
+          else
+            navigator.push<CreateScreen>(difficulty);
           return true;
         });
   }
   // Selection
   if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP] ||
       keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) {
-    row != row;
+    row = !row;
   }
 
   if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) {
     switch (row) {
       case 0:
-        col != col;
+        col = !col;
         break;
       case 1:
         difficulty--;
@@ -54,7 +54,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) {
     switch (row) {
       case 0:
-        col != col;
+        col = !col;
         break;
       case 1:
         difficulty = (difficulty + 1) % 3;
