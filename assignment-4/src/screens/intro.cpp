@@ -64,7 +64,6 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void IntroScreen::draw() const {
-  std::cout << row << ", " << col << ", " << difficulty << std::endl;
   // World
   introBackground.draw();
   // Current data
