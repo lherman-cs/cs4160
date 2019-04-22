@@ -9,113 +9,97 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+type handlerFunc func(conn io.ReadWriter, msg map[string]string)
+
+var routerLogger = log.WithFields(log.Fields{
+	"file": "router.go",
+})
+
+var routes = map[string]handlerFunc{
+	"create-room": createRoom,
+	"join-room":   joinRoom,
+	"list-rooms":  listRooms,
+	"detail-room": detailRoom,
+}
+
+func routerRecover(conn io.ReadWriter) {
+	if err := recover(); err != nil {
+		reason := err.(string)
+		resp := map[string]string{"error": reason}
+		routerLogger.Error(reason)
+		newEncoder(conn).encode(resp)
+	}
+}
+
 func handle(conn io.ReadWriteCloser) {
 	defer conn.Close()
+	defer routerRecover(conn)
 
 	msg := make(map[string]string)
 	err := newDecoder(conn).decode(msg)
 	if err != nil {
-		log.Error("[router] received a malformed message")
-		return
+		panic("received a malformed message")
 	}
 
-	log.Debug("[router] received ", msg)
 	cmd, ok := msg["command"]
 	if !ok {
-		log.Error("[router] command doesn't exist in message")
-		return
+		panic("command doesn't exist in message")
 	}
-	log.Debug("[router] received command ", cmd)
 
-	switch cmd {
-	case "create-room":
-		createRoom(conn, msg)
-	case "join-room":
-		joinRoom(conn, msg)
-	case "list-rooms":
-		listRooms(conn)
-	case "detail-room":
-		detailRoom(conn, msg)
-	default:
-		log.Error("[router] received invalid command")
-		return
+	handle, ok := routes[cmd]
+	if !ok {
+		panic("received invalid command")
 	}
+	handle(conn, msg)
 }
 
 // requires:
 //	- name: room's name
-// response:
-//	- error: ok | <reason>
 func createRoom(conn io.ReadWriter, msg map[string]string) {
-	log.Info("[router] handle createRoom command")
-
 	resp := make(map[string]string)
-	defer newEncoder(conn).encode(resp)
-	resp["error"] = "ok"
 	name, ok := msg["name"]
 	if !ok {
-		err := "name is missing"
-		resp["error"] = err
-		log.Error("[router] ", err)
-		return
+		panic("name is missing")
 	}
 
 	id, err := uuid.NewRandom()
 	if err != nil {
-		log.Error("[router] ", err)
-		return
+		panic(err.Error())
 	}
 
 	room := newRoom(name)
 	room.join(conn)
 	rooms.Store(id.String(), room)
+	newEncoder(conn).encode(resp)
 }
 
 // requires:
 //	- id: room's id
-// response:
-//	- error: ok | <reason>
 func joinRoom(conn io.ReadWriter, msg map[string]string) {
-	log.Info("[router] handle createRoom command")
-
 	resp := make(map[string]string)
-	defer newEncoder(conn).encode(resp)
-	resp["error"] = "ok"
 	id, ok := msg["id"]
 	if !ok {
-		err := "id is missing"
-		resp["error"] = err
-		log.Error("[router] ", err)
-		return
+		panic("id is missing")
 	}
 
 	value, ok := rooms.Load(id)
 	if !ok {
-		err := "room doesn't exist"
-		resp["error"] = err
-		log.Error("[router] ", err)
-		return
+		panic("room doesn't exist")
 	}
 
 	room := value.(*room)
 	err := room.join(conn)
 	if err != nil {
-		resp["error"] = err.Error()
-		log.Error("[router] ", err.Error())
-		return
+		panic(err.Error())
 	}
+	newEncoder(conn).encode(resp)
 }
 
-// listRooms will reply with the following format
-// <id_1>:<room_name_1>\t
-// <id_2>:<room_name_2>\t\n
-// error: ok | <reason>
-func listRooms(conn io.ReadWriter) {
-	log.Info("[router] handle listRooms command")
-
+// Response:
+// 	-	<id_1>:<room_name_1>
+// 	-	<id_2>:<room_name_2>
+func listRooms(conn io.ReadWriter, msg map[string]string) {
 	resp := make(map[string]string)
-	defer newEncoder(conn).encode(resp)
-	resp["error"] = "ok"
 	rooms.Range(func(key interface{}, value interface{}) bool {
 		k := key.(string)
 		v := value.(*room)
@@ -123,7 +107,7 @@ func listRooms(conn io.ReadWriter) {
 		return true
 	})
 
-	log.Debug("[router] ", resp)
+	newEncoder(conn).encode(resp)
 }
 
 // requires:
@@ -131,32 +115,22 @@ func listRooms(conn io.ReadWriter) {
 // response:
 //	- name: room's name
 //	- num_players: the number of players who have joined
-//	- error: ok | <reason>
 func detailRoom(conn io.ReadWriter, msg map[string]string) {
-	log.Info("[router] handle detailRoom command")
-
 	resp := make(map[string]string)
 	defer newEncoder(conn).encode(resp)
 	id, ok := msg["id"]
 	if !ok {
-		err := "id is required"
-		resp["error"] = err
-		log.Error("[router] ", err)
-		return
+		panic("id is required")
 	}
 
 	value, ok := rooms.Load(id)
 	if !ok {
-		err := "room doesn't exist"
-		resp["error"] = err
-		log.Error("[router] ", err)
-		return
+		panic("room doesn't exist")
 	}
 	room := value.(*room)
 	players := room.joinedPlayers()
 	resp["name"] = room.name
 	resp["players"] = strings.Join(players, ",")
 	resp["num_players"] = strconv.Itoa(len(players))
-	resp["error"] = "ok"
-	log.Debug("[router] ", msg)
+	newEncoder(conn).encode(resp)
 }
