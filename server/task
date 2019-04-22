@@ -13,4 +13,4 @@ do
 done
 
 echo "$task"
-echo -e "$task" | nc localhost 8080
+echo -e "$task" | nc localhost 8081
