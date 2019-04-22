@@ -20,9 +20,8 @@ using namespace std::placeholders;
 //  responds to 'B' bet, 'L' call liar, and 'H' help
 //              ← → ↑ ↓ for selection of face and quantity
 
-GameScreen::GameScreen(int players, int bots, int difficulty)
+GameScreen::GameScreen(int difficulty, int bots)
     : bet(std::make_shared<Bet>(this)) {
-  (void)players;
   (void)difficulty;
 
 #ifdef DEBUG
