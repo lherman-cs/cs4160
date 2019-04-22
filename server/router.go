@@ -30,6 +30,8 @@ func handle(conn io.ReadWriteCloser) {
 	switch cmd {
 	case "create-room":
 		createRoom(conn, msg)
+	case "join-room":
+		joinRoom(conn, msg)
 	case "list-rooms":
 		listRooms(conn)
 	case "detail-room":
@@ -47,9 +49,14 @@ func handle(conn io.ReadWriteCloser) {
 func createRoom(conn io.ReadWriter, msg map[string]string) {
 	log.Info("[router] handle createRoom command")
 
+	resp := make(map[string]string)
+	defer newEncoder(conn).encode(resp)
+	resp["error"] = "ok"
 	name, ok := msg["name"]
 	if !ok {
-		log.Error("[router] name is missing")
+		err := "name is missing"
+		resp["error"] = err
+		log.Error("[router] ", err)
 		return
 	}
 
@@ -62,9 +69,41 @@ func createRoom(conn io.ReadWriter, msg map[string]string) {
 	room := newRoom(name)
 	room.join(conn)
 	rooms.Store(id.String(), room)
-	newEncoder(conn).encode(map[string]string{
-		"error": "ok",
-	})
+}
+
+// requires:
+//	- id: room's id
+// response:
+//	- error: ok | <reason>
+func joinRoom(conn io.ReadWriter, msg map[string]string) {
+	log.Info("[router] handle createRoom command")
+
+	resp := make(map[string]string)
+	defer newEncoder(conn).encode(resp)
+	resp["error"] = "ok"
+	id, ok := msg["id"]
+	if !ok {
+		err := "id is missing"
+		resp["error"] = err
+		log.Error("[router] ", err)
+		return
+	}
+
+	value, ok := rooms.Load(id)
+	if !ok {
+		err := "room doesn't exist"
+		resp["error"] = err
+		log.Error("[router] ", err)
+		return
+	}
+
+	room := value.(*room)
+	err := room.join(conn)
+	if err != nil {
+		resp["error"] = err.Error()
+		log.Error("[router] ", err.Error())
+		return
+	}
 }
 
 // listRooms will reply with the following format

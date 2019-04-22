@@ -1,10 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"sync"
 
 	"github.com/Pallinder/go-randomdata"
+)
+
+const (
+	maxPlayers = 5
 )
 
 type room struct {
@@ -19,12 +24,17 @@ func newRoom(name string) *room {
 	}
 }
 
-func (r *room) join(conn io.ReadWriter) {
+func (r *room) join(conn io.ReadWriter) error {
 	r.m.Lock()
 	defer r.m.Unlock()
 
+	if len(r.players) == maxPlayers {
+		return fmt.Errorf("room is already full")
+	}
+
 	human := newHuman(conn, randomdata.SillyName())
 	r.players = append(r.players, human)
+	return nil
 }
 
 // joinedPlayers get names who have joined
