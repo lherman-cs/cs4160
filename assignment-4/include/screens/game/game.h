@@ -23,7 +23,7 @@ class Bet;
 //              ← → ↑ ↓ for selection of type and quantity
 class GameScreen : public Screen {
  public:
-  GameScreen(int players, int bots, int difficulty);
+  GameScreen(int difficulty, int bots = 4);
   ~GameScreen();
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;

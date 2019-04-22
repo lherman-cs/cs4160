@@ -35,6 +35,24 @@
       </background>
     </intro>
 
+    <create>
+      <background>
+        <file>assets/img/create.png</file>
+        <transparency>false</transparency>
+      </background>
+    </create>
+
+    <lobby>
+      <background>
+        <file>assets/img/lobby.png</file>
+        <transparency>false</transparency>
+      </background>
+      <enterable>
+        <file>assets/img/enterable.png</file>
+        <transparency>false</transparency>
+      </enterable>
+    </lobby>
+
     <game>
       <background>
         <file>assets/img/game.png</file>

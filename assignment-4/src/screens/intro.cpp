@@ -2,7 +2,9 @@
 #include <cmath>
 #include <iostream>
 #include "global/global.h"
+#include "screens/create.h"
 #include "screens/game/game.h"
+#include "screens/lobby.h"
 #include "screens/rules.h"
 #include "util/ioMod.h"
 #include "widget/loading.h"
@@ -11,7 +13,7 @@ IntroScreen::IntroScreen() {}
 IntroScreen::~IntroScreen() {}
 
 void IntroScreen::onKeyDown(const Uint8* const keystate) {
-  // Rules Explination Screen
+  // Rules Explanation Screen
   if (keystate[SDL_SCANCODE_H]) {
     navigator.push<RulesScreen>();
   }
@@ -24,22 +26,25 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
         .sleep(1000)
         .then(loading->dismiss())
         .then([&]() -> bool {
-          navigator.push<GameScreen>(players, bots, difficulty);
+          if (col == 0)
+            navigator.push<LobbyScreen>(difficulty, false);
+          else
+            navigator.push<CreateScreen>(difficulty);
           return true;
         });
   }
   // Selection
-  if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) {
-    row--;
-    if (row < 0) row = 2;
-  }
-  if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) {
-    row = (row + 1) % 3;
+  if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP] ||
+      keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) {
+    row = !row;
   }
 
   if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) {
     switch (row) {
-      case 2:
+      case 0:
+        col = !col;
+        break;
+      case 1:
         difficulty--;
         if (difficulty < 0) difficulty = 2;
         break;
@@ -48,7 +53,10 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
 
   if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) {
     switch (row) {
-      case 2:
+      case 0:
+        col = !col;
+        break;
+      case 1:
         difficulty = (difficulty + 1) % 3;
         break;
     }
@@ -56,33 +64,28 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void IntroScreen::draw() const {
-  auto normalColor = SDL_Color({52, 44, 42, 255});
-  auto hoverColor = SDL_Color({255, 255, 0, 255});
-
+  std::cout << row << ", " << col << ", " << difficulty << std::endl;
   // World
   introBackground.draw();
-
   // Current data
-  int ystart = 500;
-  int ystep = 75;
-  int xstart = 630;
-
-  menuWriter.writeText(std::to_string(players), xstart, ystart,
-                       row == 0 ? hoverColor : normalColor);
-  menuWriter.writeText(std::to_string(bots), xstart, ystart + ystep,
-                       row == 1 ? hoverColor : normalColor);
-  auto color = row == 2 ? hoverColor : normalColor;
+  menuWriter.writeText("Join", xstart, ystart,
+                       row == 0 && col == 0 ? hoverColor : normalColor);
+  menuWriter.writeText("Start", xstart + xstep, ystart,
+                       row == 0 && col == 1 ? hoverColor : normalColor);
+  std::string difficultyChar;
   switch (difficulty) {
     case 0:
-      menuWriter.writeText("E", xstart, ystart + 2 * ystep, color);
+      difficultyChar = "E";
       break;
     case 1:
-      menuWriter.writeText("M", xstart, ystart + 2 * ystep, color);
+      difficultyChar = "M";
       break;
     case 2:
-      menuWriter.writeText("H", xstart, ystart + 2 * ystep, color);
+      difficultyChar = "H";
       break;
   }
+  menuWriter.writeText(difficultyChar, xstart + xstep * 1.5, ystart + ystep,
+                       row == 1 ? hoverColor : normalColor);
 }
 
 void IntroScreen::update(Uint32 ticks) { (void)ticks; }
