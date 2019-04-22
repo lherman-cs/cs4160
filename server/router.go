@@ -56,7 +56,6 @@ func handle(conn io.ReadWriteCloser) {
 // requires:
 //	- name: room's name
 func create(conn io.ReadWriter, msg map[string]string) {
-	resp := make(map[string]string)
 	name, ok := msg["name"]
 	if !ok {
 		panic("name is missing")
@@ -68,15 +67,13 @@ func create(conn io.ReadWriter, msg map[string]string) {
 	}
 
 	room := newGame(name)
-	room.join(conn)
 	rooms.Store(id.String(), room)
-	newEncoder(conn).encode(resp)
+	room.join(conn)
 }
 
 // requires:
 //	- id: room's id
 func join(conn io.ReadWriter, msg map[string]string) {
-	resp := make(map[string]string)
 	id, ok := msg["id"]
 	if !ok {
 		panic("id is missing")
@@ -92,7 +89,6 @@ func join(conn io.ReadWriter, msg map[string]string) {
 	if err != nil {
 		panic(err.Error())
 	}
-	newEncoder(conn).encode(resp)
 }
 
 // Response:

@@ -7,10 +7,11 @@ import (
 )
 
 type human struct {
-	conn io.ReadWriter
-	name string
+	conn    io.ReadWriter
+	name    string
+	channel chan<- map[string]string
 }
 
-func newHuman(conn io.ReadWriter) *human {
-	return &human{conn: conn, name: randomdata.SillyName()}
+func newHuman(conn io.ReadWriter, channel chan<- map[string]string) *human {
+	return &human{conn: conn, name: randomdata.SillyName(), channel: channel}
 }
