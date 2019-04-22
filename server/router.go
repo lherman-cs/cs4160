@@ -3,6 +3,7 @@ package main
 import (
 	"io"
 	"strconv"
+	"strings"
 
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
@@ -56,7 +57,9 @@ func createRoom(conn io.ReadWriter, msg map[string]string) {
 		return
 	}
 
-	rooms.Store(id.String(), newRoom(name))
+	room := newRoom(name)
+	room.join(conn)
+	rooms.Store(id.String(), room)
 }
 
 // listRooms will reply with the following format
@@ -103,8 +106,10 @@ func detailRoom(conn io.ReadWriter, msg map[string]string) {
 	}
 	room := value.(*room)
 	resp := make(map[string]string)
+	players := room.joinedPlayers()
 	resp["name"] = room.name
-	resp["num_players"] = strconv.Itoa(len(room.players))
+	resp["players"] = strings.Join(players, ",")
+	resp["num_players"] = strconv.Itoa(len(players))
 
 	err := newEncoder(conn).encode(resp)
 	if err != nil {

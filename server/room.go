@@ -1,13 +1,15 @@
 package main
 
 import (
-	"net"
+	"io"
 	"sync"
+
+	"github.com/Pallinder/go-randomdata"
 )
 
 type room struct {
 	name    string
-	players []net.Conn
+	players []*human
 	m       sync.Mutex
 }
 
@@ -17,9 +19,23 @@ func newRoom(name string) *room {
 	}
 }
 
-func (r *room) join(conn net.Conn) {
+func (r *room) join(conn io.ReadWriter) {
 	r.m.Lock()
 	defer r.m.Unlock()
 
-	r.players = append(r.players, conn)
+	human := newHuman(conn, randomdata.SillyName())
+	r.players = append(r.players, human)
+}
+
+// joinedPlayers get names who have joined
+func (r *room) joinedPlayers() []string {
+	r.m.Lock()
+	defer r.m.Unlock()
+
+	players := make([]string, 0, len(r.players))
+	for _, p := range r.players {
+		players = append(players, p.name)
+	}
+
+	return players
 }
