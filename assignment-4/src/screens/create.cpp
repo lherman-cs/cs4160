@@ -21,7 +21,7 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
   }
   // Delete character
   if (keystate[SDL_SCANCODE_BACKSPACE]) {
-    if (name.size() <= 0) return;
+    if (name.size() <= 1) return;
     name.pop_back();
   }
   // Add character
@@ -37,3 +37,5 @@ void CreateScreen::draw() const {
   createBackground.draw();
   menuWriter.writeText(name, xstart, ystart, normalColor);
 }
+
+void CreateScreen::update(Uint32 ticks) { (void)ticks; }

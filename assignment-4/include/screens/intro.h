@@ -18,16 +18,16 @@ class IntroScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  int row = 0;
-  int col = 0;
+  bool row = 0;
+  bool col = 0;
   int difficulty = 0;
   IoMod menuWriter{70};
   Navigator& navigator{Global::get().navigator};
 
   // Text Positiong
-  const int ystart = 500;
-  const int ystep = 75;
-  const int xstart = 630;
+  const int ystart = 530;
+  const int ystep = 120;
+  const int xstart = 330;
   const int xstep = 200;
   const World introBackground{"screens/intro/background"};
   // Text Rendering

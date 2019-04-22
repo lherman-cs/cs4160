@@ -1,6 +1,8 @@
 #include "game/unity.cpp"
+#include "create.cpp"
 #include "help.cpp"
 #include "intro.cpp"
+#include "lobby.cpp"
 #include "playerInfo.cpp"
 #include "rules.cpp"
 #include "screen.cpp"

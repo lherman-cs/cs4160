@@ -64,12 +64,12 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void IntroScreen::draw() const {
+  std::cout << row << ", " << col << ", " << difficulty << std::endl;
   // World
   introBackground.draw();
-
   // Current data
   menuWriter.writeText("Join", xstart, ystart,
-                       row == 0 && col == 1 ? hoverColor : normalColor);
+                       row == 0 && col == 0 ? hoverColor : normalColor);
   menuWriter.writeText("Start", xstart + xstep, ystart,
                        row == 0 && col == 1 ? hoverColor : normalColor);
   std::string difficultyChar;
@@ -84,7 +84,7 @@ void IntroScreen::draw() const {
       difficultyChar = "H";
       break;
   }
-  menuWriter.writeText(difficultyChar, xstart, ystart + ystep,
+  menuWriter.writeText(difficultyChar, xstart + xstep * 1.5, ystart + ystep,
                        row == 1 ? hoverColor : normalColor);
 }
 

@@ -5,7 +5,7 @@
 LobbyScreen::LobbyScreen(int difficulty, bool isOwner)
     : difficulty(difficulty), isOwner(isOwner) {
   names.emplace_back(isOwner ? "You" : "You (Not Owner)");
-  for (int i = 1; i <= 5; i++) {
+  for (int i = 1; i < 5; i++) {
     names.emplace_back("Bot " + std::to_string(i));
   }
 }
@@ -36,3 +36,5 @@ void LobbyScreen::draw() const {
     menuWriter.writeText(names[i], xstart, ystart + i * ystep, normalColor);
   }
 }
+
+void LobbyScreen::update(Uint32 ticks) { (void)ticks; }

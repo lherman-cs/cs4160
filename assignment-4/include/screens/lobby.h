@@ -29,9 +29,9 @@ class LobbyScreen : public Screen {
   Navigator& navigator{Global::get().navigator};
 
   // Text Positiong
-  const int ystart = 300;
-  const int ystep = 40;
-  const int xstart = 500;
+  const int ystart = 30;
+  const int ystep = 127;
+  const int xstart = 230;
   // Text Rendering
   const SDL_Color normalColor{52, 44, 42, 255};
 };
