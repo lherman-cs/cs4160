@@ -18,19 +18,19 @@ class IntroScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World introBackground{"screens/intro/background"};
-  const SDL_Color normalColor{52, 44, 42, 255};
-  const SDL_Color hoverColor{52, 44, 42, 255};
   int row = 0;
   int col = 0;
   int difficulty = 0;
+  IoMod menuWriter{70};
+  Navigator& navigator{Global::get().navigator};
 
   // Text Positiong
   const int ystart = 500;
   const int ystep = 75;
   const int xstart = 630;
   const int xstep = 200;
-
-  IoMod menuWriter{70};
-  Navigator& navigator{Global::get().navigator};
+  const World introBackground{"screens/intro/background"};
+  // Text Rendering
+  const SDL_Color normalColor{52, 44, 42, 255};
+  const SDL_Color hoverColor{52, 44, 42, 255};
 };
