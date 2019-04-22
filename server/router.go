@@ -42,6 +42,8 @@ func handle(conn io.ReadWriteCloser) {
 
 // requires:
 //	- name: room's name
+// response:
+//	- error: ok | <reason>
 func createRoom(conn io.ReadWriter, msg map[string]string) {
 	log.Info("[router] handle createRoom command")
 
@@ -60,29 +62,29 @@ func createRoom(conn io.ReadWriter, msg map[string]string) {
 	room := newRoom(name)
 	room.join(conn)
 	rooms.Store(id.String(), room)
+	newEncoder(conn).encode(map[string]string{
+		"error": "ok",
+	})
 }
 
 // listRooms will reply with the following format
 // <id_1>:<room_name_1>\t
 // <id_2>:<room_name_2>\t\n
+// error: ok | <reason>
 func listRooms(conn io.ReadWriter) {
 	log.Info("[router] handle listRooms command")
 
-	msg := make(map[string]string)
+	resp := make(map[string]string)
+	defer newEncoder(conn).encode(resp)
+	resp["error"] = "ok"
 	rooms.Range(func(key interface{}, value interface{}) bool {
 		k := key.(string)
 		v := value.(*room)
-		msg[k] = v.name
+		resp[k] = v.name
 		return true
 	})
 
-	err := newEncoder(conn).encode(msg)
-	if err != nil {
-		log.Error("[router] failed in encoding message")
-		return
-	}
-
-	log.Debug("[router] ", msg)
+	log.Debug("[router] ", resp)
 }
 
 // requires:
@@ -90,32 +92,32 @@ func listRooms(conn io.ReadWriter) {
 // response:
 //	- name: room's name
 //	- num_players: the number of players who have joined
+//	- error: ok | <reason>
 func detailRoom(conn io.ReadWriter, msg map[string]string) {
 	log.Info("[router] handle detailRoom command")
 
+	resp := make(map[string]string)
+	defer newEncoder(conn).encode(resp)
 	id, ok := msg["id"]
 	if !ok {
-		log.Error("[router] id is required")
+		err := "id is required"
+		resp["error"] = err
+		log.Error("[router] ", err)
 		return
 	}
 
 	value, ok := rooms.Load(id)
 	if !ok {
-		log.Error("[router] room doesn't exist")
+		err := "room doesn't exist"
+		resp["error"] = err
+		log.Error("[router] ", err)
 		return
 	}
 	room := value.(*room)
-	resp := make(map[string]string)
 	players := room.joinedPlayers()
 	resp["name"] = room.name
 	resp["players"] = strings.Join(players, ",")
 	resp["num_players"] = strconv.Itoa(len(players))
-
-	err := newEncoder(conn).encode(resp)
-	if err != nil {
-		log.Error("[router] failed in encoding message")
-		return
-	}
-
+	resp["error"] = "ok"
 	log.Debug("[router] ", msg)
 }
