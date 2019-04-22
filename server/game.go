@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io"
 	"sync"
-
-	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -40,10 +38,11 @@ func (g *game) join(conn io.ReadWriter) error {
 		return fmt.Errorf("game is already full")
 	}
 
-	g.players = append(g.players, newHuman(conn, g.mailbox))
+	h := newHuman(g, conn)
+	g.players = append(g.players, h)
 	newEncoder(conn).encode(map[string]string{})
 	g.m.Unlock()
-	<-g.done
+	h.loop()
 	return nil
 }
 
@@ -63,7 +62,6 @@ func (g *game) joinedPlayers() []string {
 func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
 	defer close(done)
 	for {
-		msg := <-mailbox
-		log.Info(msg)
+		<-mailbox
 	}
 }
