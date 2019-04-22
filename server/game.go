@@ -22,25 +22,25 @@ func newGame(name string) *game {
 	}
 }
 
-func (r *game) join(conn io.ReadWriter) error {
-	r.m.Lock()
-	defer r.m.Unlock()
+func (g *game) join(conn io.ReadWriter) error {
+	g.m.Lock()
+	defer g.m.Unlock()
 
-	if len(r.players) == maxPlayers {
+	if len(g.players) == maxPlayers {
 		return fmt.Errorf("game is already full")
 	}
 
-	r.players = append(r.players, newHuman(conn))
+	g.players = append(g.players, newHuman(conn))
 	return nil
 }
 
 // joinedPlayers get names who have joined
-func (r *game) joinedPlayers() []string {
-	r.m.Lock()
-	defer r.m.Unlock()
+func (g *game) joinedPlayers() []string {
+	g.m.Lock()
+	defer g.m.Unlock()
 
-	players := make([]string, 0, len(r.players))
-	for _, p := range r.players {
+	players := make([]string, 0, len(g.players))
+	for _, p := range g.players {
 		players = append(players, p.name)
 	}
 
