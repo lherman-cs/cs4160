@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io"
 	"sync"
-
-	"github.com/Pallinder/go-randomdata"
 )
 
 const (
@@ -32,8 +30,7 @@ func (r *game) join(conn io.ReadWriter) error {
 		return fmt.Errorf("game is already full")
 	}
 
-	human := newHuman(conn, randomdata.SillyName())
-	r.players = append(r.players, human)
+	r.players = append(r.players, newHuman(conn))
 	return nil
 }
 
