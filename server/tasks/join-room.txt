@@ -1,1 +1,0 @@
-command:join-room	id:{0}

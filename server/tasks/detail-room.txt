@@ -1,1 +1,0 @@
-command:detail-room	id:{0}	

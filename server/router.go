@@ -16,10 +16,10 @@ var routerLogger = log.WithFields(log.Fields{
 })
 
 var routes = map[string]handlerFunc{
-	"create-room": createRoom,
-	"join-room":   joinRoom,
-	"list-rooms":  listRooms,
-	"detail-room": detailRoom,
+	"create": create,
+	"join":   join,
+	"list":   list,
+	"detail": detail,
 }
 
 func routerRecover(conn io.ReadWriter) {
@@ -55,7 +55,7 @@ func handle(conn io.ReadWriteCloser) {
 
 // requires:
 //	- name: room's name
-func createRoom(conn io.ReadWriter, msg map[string]string) {
+func create(conn io.ReadWriter, msg map[string]string) {
 	resp := make(map[string]string)
 	name, ok := msg["name"]
 	if !ok {
@@ -67,7 +67,7 @@ func createRoom(conn io.ReadWriter, msg map[string]string) {
 		panic(err.Error())
 	}
 
-	room := newRoom(name)
+	room := newGame(name)
 	room.join(conn)
 	rooms.Store(id.String(), room)
 	newEncoder(conn).encode(resp)
@@ -75,7 +75,7 @@ func createRoom(conn io.ReadWriter, msg map[string]string) {
 
 // requires:
 //	- id: room's id
-func joinRoom(conn io.ReadWriter, msg map[string]string) {
+func join(conn io.ReadWriter, msg map[string]string) {
 	resp := make(map[string]string)
 	id, ok := msg["id"]
 	if !ok {
@@ -87,7 +87,7 @@ func joinRoom(conn io.ReadWriter, msg map[string]string) {
 		panic("room doesn't exist")
 	}
 
-	room := value.(*room)
+	room := value.(*game)
 	err := room.join(conn)
 	if err != nil {
 		panic(err.Error())
@@ -98,12 +98,12 @@ func joinRoom(conn io.ReadWriter, msg map[string]string) {
 // Response:
 // 	-	<id_1>:<room_name_1>
 // 	-	<id_2>:<room_name_2>
-func listRooms(conn io.ReadWriter, msg map[string]string) {
+func list(conn io.ReadWriter, msg map[string]string) {
 	resp := make(map[string]string)
 	rooms.Range(func(key interface{}, value interface{}) bool {
 		k := key.(string)
-		v := value.(*room)
-		resp[k] = v.name
+		room := value.(*game)
+		resp[k] = room.name
 		return true
 	})
 
@@ -115,9 +115,8 @@ func listRooms(conn io.ReadWriter, msg map[string]string) {
 // response:
 //	- name: room's name
 //	- num_players: the number of players who have joined
-func detailRoom(conn io.ReadWriter, msg map[string]string) {
+func detail(conn io.ReadWriter, msg map[string]string) {
 	resp := make(map[string]string)
-	defer newEncoder(conn).encode(resp)
 	id, ok := msg["id"]
 	if !ok {
 		panic("id is required")
@@ -127,7 +126,7 @@ func detailRoom(conn io.ReadWriter, msg map[string]string) {
 	if !ok {
 		panic("room doesn't exist")
 	}
-	room := value.(*room)
+	room := value.(*game)
 	players := room.joinedPlayers()
 	resp["name"] = room.name
 	resp["players"] = strings.Join(players, ",")

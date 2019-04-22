@@ -12,24 +12,24 @@ const (
 	maxPlayers = 5
 )
 
-type room struct {
+type game struct {
 	name    string
 	players []*human
 	m       sync.Mutex
 }
 
-func newRoom(name string) *room {
-	return &room{
+func newGame(name string) *game {
+	return &game{
 		name: name,
 	}
 }
 
-func (r *room) join(conn io.ReadWriter) error {
+func (r *game) join(conn io.ReadWriter) error {
 	r.m.Lock()
 	defer r.m.Unlock()
 
 	if len(r.players) == maxPlayers {
-		return fmt.Errorf("room is already full")
+		return fmt.Errorf("game is already full")
 	}
 
 	human := newHuman(conn, randomdata.SillyName())
@@ -38,7 +38,7 @@ func (r *room) join(conn io.ReadWriter) error {
 }
 
 // joinedPlayers get names who have joined
-func (r *room) joinedPlayers() []string {
+func (r *game) joinedPlayers() []string {
 	r.m.Lock()
 	defer r.m.Unlock()
 
