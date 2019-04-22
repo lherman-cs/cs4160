@@ -5,12 +5,24 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 const (
 	msgsep = "\t"
 	msgeq  = ":"
 )
+
+var encodingLogger = log.WithFields(log.Fields{
+	"file": "encoding.go",
+	"mode": "encoding",
+})
+
+var decodingLogger = log.WithFields(log.Fields{
+	"file": "encoding.go",
+	"mode": "decoding",
+})
 
 type encoder struct {
 	w *bufio.Writer
@@ -22,6 +34,7 @@ func newEncoder(w io.Writer) *encoder {
 
 // encode formats a map and returns a string
 func (e *encoder) encode(table map[string]string) error {
+	encodingLogger.Debug(table)
 	for k, v := range table {
 		_, err := e.w.WriteString(k + msgeq + v + msgsep)
 		if err != nil {
@@ -42,10 +55,11 @@ func newDecoder(r io.Reader) *decoder {
 // decode parses a string expression and returns a map
 func (d *decoder) decode(table map[string]string) error {
 	if !d.r.Scan() {
-		return fmt.Errorf("[encoding] invalid message format")
+		return fmt.Errorf("invalid message format")
 	}
 
 	msg := d.r.Text()
+	decodingLogger.Debug(msg)
 	lines := strings.Split(msg, msgsep)
 	for _, line := range lines {
 		splits := strings.SplitN(line, msgeq, 2)
