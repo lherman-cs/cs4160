@@ -29,7 +29,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
           if (col == 0)
             navigator.push<CreateScreen>(difficulty);
           else
-            navigator.push<LobbyScreen>(difficulty);
+            navigator.push<LobbyScreen>(difficulty, false);
           return true;
         });
   }

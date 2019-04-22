@@ -15,7 +15,7 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
         .sleep(1000)
         .then(loading->dismiss())
         .then([&]() -> bool {
-          navigator.push<LobbyScreen>();
+          navigator.push<LobbyScreen>(difficulty, true);
           return true;
         });
   }
