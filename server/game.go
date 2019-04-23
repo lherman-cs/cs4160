@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"sync"
+	"time"
 )
 
 const (
@@ -61,7 +62,30 @@ func (g *game) joinedPlayers() []string {
 
 func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
 	defer close(done)
+
+	broadcast := func(resp map[string]string) {
+		dones := make([]chan struct{}, len(g.players))
+		for i, p := range g.players {
+			dones[i] = make(chan struct{})
+			go func(done chan<- struct{}, p *human) {
+				newEncoder(p.conn).encode(resp)
+				close(done)
+			}(dones[i], p)
+		}
+
+		for i := range g.players {
+			select {
+			case <-dones[i]:
+			case <-time.After(time.Second * 10):
+				// TODO! Remove player from the game
+			}
+		}
+	}
+
 	for {
-		<-mailbox
+		msg := <-mailbox
+
+		// broadcast
+		broadcast(msg) // TODO! this is just echoing
 	}
 }
