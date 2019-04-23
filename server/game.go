@@ -5,6 +5,8 @@ import (
 	"io"
 	"sync"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -16,16 +18,21 @@ type game struct {
 	players []*human
 	mailbox chan<- map[string]string
 	done    <-chan struct{}
+	log     *logrus.Entry
 	m       sync.Mutex
 }
 
 func newGame(name string) *game {
 	mailbox := make(chan map[string]string, 64)
 	done := make(chan struct{})
+	log := logrus.WithFields(logrus.Fields{
+		"room": name,
+	})
 	game := game{
 		name:    name,
 		mailbox: mailbox,
 		done:    done,
+		log:     log,
 	}
 	go game.loop(mailbox, done)
 
@@ -41,6 +48,7 @@ func (g *game) join(conn io.ReadWriter) error {
 
 	h := newHuman(g, conn)
 	g.players = append(g.players, h)
+	g.log.Info(h.name, " joined")
 	newEncoder(conn).encode(map[string]string{})
 	g.m.Unlock()
 	h.loop()
