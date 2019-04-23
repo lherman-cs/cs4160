@@ -54,6 +54,8 @@ loop:
 }
 
 func (h *human) handle(msg map[string]string) {
+	// embed player's name
+	msg["player"] = h.name
 	// TODO! do verification first before sending it to the game
 	h.g.mailbox <- msg
 }

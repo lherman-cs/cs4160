@@ -95,19 +95,78 @@ func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
 	}
 
 	for {
-		<-mailbox // TODO! handle msg
+		msg := <-mailbox // TODO! handle msg
+		changed := g.handle(msg)
 
-		broadcast() // update players with current state
+		if changed {
+			broadcast() // update players with current state
+		}
 	}
+}
+
+func (g *game) handle(msg map[string]string) (changed bool) {
+	before := g.state
+	defer func() {
+		if err := recover(); err != nil {
+			reason := err.(string)
+			g.log.WithField("player", msg["player"]).Error(reason)
+			// rollback state
+			g.state = before
+			changed = false
+		}
+	}()
+
+	cmd, ok := msg["command"]
+	if !ok {
+		panic("command is required")
+	}
+
+	switch cmd {
+	case "game-bet":
+		g.bet(msg)
+	default:
+		panic("invalid command")
+	}
+
+	return true
+}
+
+// requires:
+//	- command:game-bet
+//	- quantity:<number>
+//	- face:<number>
+func (g *game) bet(msg map[string]string) {
+	quantityStr := msg["quantity"]
+	faceStr := msg["face"]
+
+	quantity, err := strconv.Atoi(quantityStr)
+	if err != nil {
+		panic("quantity is not an integer")
+	}
+
+	face, err := strconv.Atoi(faceStr)
+	if err != nil {
+		panic("face is not an integer")
+	}
+
+	g.lastBet.quantity = quantity
+	g.lastBet.face = face
 }
 
 type status uint8
 
+type bet struct {
+	quantity int
+	face     int
+}
+
 type state struct {
-	players  []*human
-	turn     int
-	round    int
-	numDices int
+	lastBet    bet
+	players    []*human
+	turn       int
+	round      int
+	numDices   int
+	calledLiar bool // to protect multiple people call liar at the same turn
 }
 
 func (s *state) encode() map[string]string {

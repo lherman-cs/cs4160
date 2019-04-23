@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Scenario Runner
+
+ENDPOINT="localhost 8081"
+
+nc $ENDPOINT < ./scenario/player1.txt &
+sleep 1
+id=`./task list | cut -d':' -f1`
+
+
+for i in `seq 0 10`
+do
+    ./task join "$id" &
+done
+
+sleep 1
+./task detail "$id"
+
+wait
