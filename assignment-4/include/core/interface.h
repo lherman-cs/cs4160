@@ -35,11 +35,11 @@ class Trackable : public Drawable, public Updatable, public Moveable {
 class Reader {
  public:
   virtual ~Reader() {}
-  virtual char* read() const = 0;
+  virtual char* read() = 0;
 };
 
 class Writer {
  public:
   virtual ~Writer() {}
-  virtual void write(const char*) const = 0;
+  virtual void write(const char*) = 0;
 };

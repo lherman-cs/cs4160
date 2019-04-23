@@ -87,8 +87,8 @@ void TCPSocket::listen_and_serve(int max_clients,
   }
 }
 
-void TCPSocket::serve(void (*handler)(TCPSocket *socket,
-                                      int server_socket_fd)) {
+void TCPSocket::serve(
+    std::function<void(TCPSocket *socket, int server_socket_fd)> handler) {
   handler(this, this->socket_fd);
 }
 
