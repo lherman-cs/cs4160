@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"io"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -14,8 +16,8 @@ const (
 )
 
 type game struct {
+	state
 	name    string
-	players []*human
 	mailbox chan<- map[string]string
 	done    <-chan struct{}
 	log     *logrus.Entry
@@ -71,12 +73,14 @@ func (g *game) joinedPlayers() []string {
 func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
 	defer close(done)
 
-	broadcast := func(resp map[string]string) {
+	broadcast := func() {
+		currentState := g.encode()
+
 		dones := make([]chan struct{}, len(g.players))
 		for i, p := range g.players {
 			dones[i] = make(chan struct{})
 			go func(done chan<- struct{}, p *human) {
-				newEncoder(p.conn).encode(resp)
+				newEncoder(p.conn).encode(currentState)
 				close(done)
 			}(dones[i], p)
 		}
@@ -91,9 +95,31 @@ func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
 	}
 
 	for {
-		msg := <-mailbox
+		<-mailbox // TODO! handle msg
 
-		// broadcast
-		broadcast(msg) // TODO! this is just echoing
+		broadcast() // update players with current state
+	}
+}
+
+type status uint8
+
+type state struct {
+	players  []*human
+	turn     int
+	round    int
+	numDices int
+}
+
+func (s *state) encode() map[string]string {
+	players := make([]string, 0, len(s.players))
+	for _, p := range s.players {
+		players = append(players, p.name)
+	}
+
+	return map[string]string{
+		"players":   strings.Join(players, ","),
+		"turn":      strconv.Itoa(s.turn),
+		"round":     strconv.Itoa(s.round),
+		"num_dices": strconv.Itoa(s.numDices),
 	}
 }
