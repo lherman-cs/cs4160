@@ -49,7 +49,7 @@ func startWSService() {
 
 	http.Handle("/", websocket.Handler(func(ws *websocket.Conn) {
 		log.Info("[ws] received a connection from ", ws.RemoteAddr().String())
-		go handle(ws)
+		handle(ws)
 	}))
 	err := http.ListenAndServe(wsAddr, nil)
 	if err != nil {
