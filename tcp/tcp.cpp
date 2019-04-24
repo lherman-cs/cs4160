@@ -47,7 +47,7 @@ static struct pollfd initSocket(const std::string &address) {
 
   struct pollfd fd;
   fd.fd = sockfd;
-  fd.events = POLL_IN;
+  fd.events = POLLIN;
   return fd;
 }
 
