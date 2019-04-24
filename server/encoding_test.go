@@ -17,8 +17,8 @@ func TestEncode(t *testing.T) {
 		t.Error(err)
 	}
 
-	expected1 := "age:23\tname:Lukas\t"
-	expected2 := "name:Lukas\tage:23\t"
+	expected1 := "age:23\tname:Lukas\t\n"
+	expected2 := "name:Lukas\tage:23\t\n"
 	got := b.String()
 	if !(got == expected1 || got == expected2) {
 		t.Error("expected1:", expected1, "expected2:", expected2, "got:", got)

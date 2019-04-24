@@ -28,6 +28,7 @@ func (e *encoder) encode(table map[string]string) error {
 			return err
 		}
 	}
+	e.w.WriteRune('\n')
 	return e.w.Flush()
 }
 
