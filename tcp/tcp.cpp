@@ -1,12 +1,14 @@
 #include "tcp.h"
 #include <fcntl.h>
 #include <netdb.h>
+#include <stdio.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <iostream>
 #include <sstream>
 #include "encoder.h"
+#define BUFFSIZE 1024
 
 static struct pollfd initSocket(const std::string &address) {
   std::string _address = address;
@@ -45,7 +47,7 @@ static struct pollfd initSocket(const std::string &address) {
 
   struct pollfd fd;
   fd.fd = sockfd;
-  fd.events = POLL_IN | POLL_OUT;
+  fd.events = POLL_IN;
   return fd;
 }
 
@@ -81,5 +83,22 @@ bool TCP::read(std::unordered_map<std::string, std::string> &table) {
 }
 
 bool TCP::write(const std::unordered_map<std::string, std::string> &resp) {
+  if (outPtr == nullptr) {
+    auto stream = encode(resp) << '\n';
+    out = stream.str();
+    outSize = out.size();
+    outPtr = out.c_str();
+  }
+
+  int length = 0;
+  length = send(fd.fd, (void *)outPtr, outSize, 0);
+  outPtr += length;
+  outSize -= length;
+
+  if (length == -1) throw std::runtime_error(strerror(errno));
+  if (outSize > 0) return false;
+
+  outSize = 0;
+  outPtr = nullptr;
   return true;
 }

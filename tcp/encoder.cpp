@@ -2,10 +2,11 @@
 #include <sstream>
 
 // encode
-std::string encode(const std::unordered_map<std::string, std::string> &table) {
+std::stringstream encode(
+    const std::unordered_map<std::string, std::string> &table) {
   std::stringstream ss;
   for (const auto &it : table) ss << it.first << MSGEQ << it.second << MSGSEP;
-  return ss.str();
+  return ss;
 }
 
 void decode(const std::string &msg,
