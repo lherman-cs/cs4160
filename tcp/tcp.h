@@ -10,7 +10,6 @@ class TCP {
   TCP(const std::string &address);
   ~TCP();
   // return true, if it's accepted message.
-  bool connected();
   bool read(std::unordered_map<std::string, std::string> &table);
   bool write(const std::unordered_map<std::string, std::string> &resp);
 

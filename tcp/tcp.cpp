@@ -7,6 +7,8 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <algorithm>
+#include <cstring>
 #include <iostream>
 #include <sstream>
 #include "encoder.h"
@@ -45,23 +47,8 @@ static struct pollfd initSocket(const std::string &address) {
   fcntl(sockfd, F_SETFL, O_NONBLOCK);
   error = connect(sockfd, res->ai_addr, res->ai_addrlen);
   freeaddrinfo(res);
-  if (error == -1) {
-    if (errno == EINPROGRESS) {
-      // /* Wait for connection to complete */
-      // fd_set sockets;
-      // FD_ZERO(&sockets);
-      // FD_SET(sockfd, &sockets);
-      // struct timeval timeout = {4, 0};
-      // /* You should probably do other work instead of busy waiting on this...
-      //    or set a timeout or something */
-      // while (select(sockfd + 1, nullptr, &sockets, nullptr, &timeout) <= 0) {
-      //   std::cout << "trying to connect " << strerror(errno) << std::endl;
-      //   sleep(1);
-      // }
-
-    } else {
-      throw std::runtime_error("connection failed");
-    }
+  if (error == -1 && errno != EINPROGRESS) {
+    throw std::runtime_error("connection failed");
   }
 
   struct pollfd fd;
@@ -73,15 +60,6 @@ static struct pollfd initSocket(const std::string &address) {
 TCP::TCP(const std::string &address) : fd(initSocket(address)) {}
 
 TCP::~TCP() { close(fd.fd); }
-
-bool TCP::connected() {
-  int error = 0;
-  socklen_t len = sizeof(error);
-  int retval = getsockopt(fd.fd, SOL_SOCKET, SO_ERROR, &error, &len);
-  std::cout << "[connected]: " << retval << ' ' << strerror(errno) << std::endl;
-  std::cout << (errno != EINPROGRESS) << std::endl;
-  return errno != EINPROGRESS;
-}
 
 bool TCP::read(std::unordered_map<std::string, std::string> &table) {
   int rv = poll(&fd, 1, timeout);
@@ -112,21 +90,21 @@ bool TCP::read(std::unordered_map<std::string, std::string> &table) {
 
 bool TCP::write(const std::unordered_map<std::string, std::string> &resp) {
   if (outPtr == nullptr) {
-    auto stream = encode(resp) << '\n';
+    auto stream = encode(resp);
     out = stream.str();
     outSize = out.size();
     outPtr = out.c_str();
   }
 
   int length = 0;
-  length = send(fd.fd, (void *)outPtr, outSize, 0);
+  length = send(fd.fd, reinterpret_cast<const void *>(outPtr), outSize, 0);
   if (length == -1) {
-    if (errno == ENOTCONN) return false;
+    if (errno == ENOTCONN || errno == EAGAIN) return false;
     throw std::runtime_error(strerror(errno));
   }
 
   outPtr += length;
-  outSize -= length;
+  outSize -= static_cast<size_t>(length);
 
   if (outSize > 0) return false;
 

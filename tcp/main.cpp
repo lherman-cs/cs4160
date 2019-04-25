@@ -6,7 +6,7 @@
 #include <emscripten.h>
 #endif
 
-TCP *tcp = nullptr;
+TCP* tcp = nullptr;
 bool receiving = false;
 
 void loop() {
@@ -37,14 +37,16 @@ int main() {
     tcp = &_tcp;
 
 #ifdef __EMSCRIPTEN__
-    emscripten_set_main_loop(loop, 1, 1);
+    emscripten_set_main_loop(loop, 60, 1);
 #else
     while (1) {
       loop();
       sleep(1);
     }
 #endif
-  } catch (std::runtime_error err) {
+  } catch (std::runtime_error& err) {
     std::cout << err.what() << std::endl;
+  } catch (...) {
+    std::cout << "EXCEPTION" << std::endl;
   }
 }

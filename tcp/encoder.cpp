@@ -6,6 +6,7 @@ std::stringstream encode(
     const std::unordered_map<std::string, std::string> &table) {
   std::stringstream ss;
   for (const auto &it : table) ss << it.first << MSGEQ << it.second << MSGSEP;
+  ss << '\n';
   return ss;
 }
 
