@@ -1,1 +1,0 @@
-command:detail	id:{0}	

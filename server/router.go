@@ -2,8 +2,6 @@ package main
 
 import (
 	"io"
-	"strconv"
-	"strings"
 
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
@@ -16,10 +14,9 @@ var routerLogger = log.WithFields(log.Fields{
 })
 
 var routes = map[string]handlerFunc{
-	"create": create,
-	"join":   join,
-	"list":   list,
-	"detail": detail,
+	"create":    create,
+	"join":      join,
+	"subscribe": subscribe,
 }
 
 func routerRecover(conn io.ReadWriter) {
@@ -92,10 +89,7 @@ func join(conn io.ReadWriter, msg map[string]string) {
 	}
 }
 
-// Response:
-// 	-	<id_1>:<room_name_1>
-// 	-	<id_2>:<room_name_2>
-func list(conn io.ReadWriter, msg map[string]string) {
+func subscribe(conn io.ReadWriter, msg map[string]string) {
 	respChan := make(chan map[string]string)
 	mainLobby.subscribe(respChan)
 
@@ -106,28 +100,4 @@ func list(conn io.ReadWriter, msg map[string]string) {
 			panic(err.Error())
 		}
 	}
-}
-
-// requires:
-//	- id: room's id
-// response:
-//	- name: room's name
-//	- num_players: the number of players who have joined
-func detail(conn io.ReadWriter, msg map[string]string) {
-	resp := make(map[string]string)
-	id, ok := msg["id"]
-	if !ok {
-		panic("id is required")
-	}
-
-	value, ok := rooms.Load(id)
-	if !ok {
-		panic("room doesn't exist")
-	}
-	room := value.(*game)
-	players := room.joinedPlayers()
-	resp["name"] = room.name
-	resp["players"] = strings.Join(players, ",")
-	resp["num_players"] = strconv.Itoa(len(players))
-	newEncoder(conn).encode(resp)
 }
