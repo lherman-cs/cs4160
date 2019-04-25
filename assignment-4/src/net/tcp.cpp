@@ -89,6 +89,14 @@ bool TCP::read(std::unordered_map<std::string, std::string> &table) {
 }
 
 bool TCP::write(const std::unordered_map<std::string, std::string> &resp) {
+  int rv = poll(&fd, 1, timeout);
+  if (rv == -1) {
+    throw std::runtime_error(strerror(errno));
+  }
+
+  // timeout
+  if (rv == 0) return false;
+
   if (outPtr == nullptr) {
     auto stream = encode(resp);
     out = stream.str();
