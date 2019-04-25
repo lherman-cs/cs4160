@@ -53,8 +53,15 @@ func (g *game) join(conn io.ReadWriter) error {
 	g.log.Info(h.name, " joined")
 	newEncoder(conn).encode(map[string]string{})
 	g.m.Unlock()
+	mainLobby.notifyAll()
 	h.loop()
 	return nil
+}
+
+// info gives the game's detail in the following format:
+// <name>,<num_players>
+func (g *game) info() string {
+	return g.name + "," + strconv.Itoa(len(g.players))
 }
 
 // joinedPlayers get names who have joined

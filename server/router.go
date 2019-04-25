@@ -68,6 +68,7 @@ func create(conn io.ReadWriter, msg map[string]string) {
 
 	room := newGame(name)
 	rooms.Store(id.String(), room)
+	mainLobby.notifyAll()
 	room.join(conn)
 }
 
@@ -95,15 +96,16 @@ func join(conn io.ReadWriter, msg map[string]string) {
 // 	-	<id_1>:<room_name_1>
 // 	-	<id_2>:<room_name_2>
 func list(conn io.ReadWriter, msg map[string]string) {
-	resp := make(map[string]string)
-	rooms.Range(func(key interface{}, value interface{}) bool {
-		k := key.(string)
-		room := value.(*game)
-		resp[k] = room.name
-		return true
-	})
+	respChan := make(chan map[string]string)
+	mainLobby.subscribe(respChan)
 
-	newEncoder(conn).encode(resp)
+	for {
+		resp := <-respChan
+		err := newEncoder(conn).encode(resp)
+		if err != nil {
+			panic(err.Error())
+		}
+	}
 }
 
 // requires:
