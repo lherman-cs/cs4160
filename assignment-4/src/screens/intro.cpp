@@ -4,7 +4,7 @@
 #include "global/global.h"
 #include "screens/create.h"
 #include "screens/game/game.h"
-#include "screens/lobby.h"
+#include "screens/room.h"
 #include "screens/rules.h"
 #include "util/ioMod.h"
 #include "widget/loading.h"
@@ -27,7 +27,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
         .then(loading->dismiss())
         .then([&]() -> bool {
           if (col == 0)
-            navigator.push<LobbyScreen>(difficulty, false);
+            navigator.push<RoomScreen>(difficulty, false);
           else
             navigator.push<CreateScreen>(difficulty);
           return true;

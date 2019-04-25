@@ -2,7 +2,7 @@
 #include "create.cpp"
 #include "help.cpp"
 #include "intro.cpp"
-#include "lobby.cpp"
 #include "playerInfo.cpp"
+#include "room.cpp"
 #include "rules.cpp"
 #include "screen.cpp"

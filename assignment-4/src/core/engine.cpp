@@ -55,12 +55,6 @@ void Engine::forward(bool &done) {
       keystate = SDL_GetKeyboardState(NULL);
       navigator.getCurrentScreen()->onKeyDown(keystate);
 
-      if (keystate[SDL_SCANCODE_R]) {
-        navigator.reset();
-        navigator.push<IntroScreen>();
-        return;
-      }
-
       if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP] ||
           keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN] ||
           keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT] ||
@@ -68,15 +62,9 @@ void Engine::forward(bool &done) {
         mixer.keystroke.play();
       }
 
-      if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
+      if (keystate[SDL_SCANCODE_ESCAPE]) {
         done = true;
         return;
-      }
-      if (keystate[SDL_SCANCODE_Z]) {
-        if (clock.isPaused())
-          clock.unpause();
-        else
-          clock.pause();
       }
     }
   }

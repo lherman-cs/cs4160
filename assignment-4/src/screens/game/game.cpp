@@ -10,6 +10,7 @@
 #include "screens/game/dice.h"
 #include "screens/game/human.h"
 #include "screens/help.h"
+#include "screens/intro.h"
 #include "util/ioMod.h"
 #include "widget/loading.h"
 
@@ -77,6 +78,12 @@ int GameScreen::getNumDice() const { return diceOnTable; }
 void GameScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_H]) {
     navigator.push<HelpScreen>();
+  }
+
+  if (keystate[SDL_SCANCODE_R]) {
+    navigator.reset();
+    navigator.push<IntroScreen>();
+    return;
   }
 
   if (state == State::CallingLiar || state == State::Finish) return;

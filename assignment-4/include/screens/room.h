@@ -5,14 +5,14 @@
 #include "util/ioMod.h"
 #include "util/world.h"
 
-// lobby screen for waiting for networked players to join
+// room screen for waiting for networked players to join
 //  accepts enter
 //  responds to 'enter' start game
 
-class LobbyScreen : public Screen {
+class RoomScreen : public Screen {
  public:
-  virtual ~LobbyScreen();
-  LobbyScreen(int difficulty, bool isOwner);
+  virtual ~RoomScreen();
+  RoomScreen(int difficulty, bool isOwner);
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
   virtual void update(Uint32 ticks);

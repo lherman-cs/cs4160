@@ -1,5 +1,5 @@
 #include "screens/create.h"
-#include "screens/lobby.h"
+#include "screens/room.h"
 #include "widget/loading.h"
 
 CreateScreen::CreateScreen(int difficulty) : difficulty(difficulty) {}
@@ -15,7 +15,7 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
         .sleep(1000)
         .then(loading->dismiss())
         .then([&]() -> bool {
-          navigator.push<LobbyScreen>(difficulty, true);
+          navigator.push<RoomScreen>(difficulty, true);
           return true;
         });
   }
@@ -23,7 +23,15 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_BACKSPACE]) {
     if (name.size() <= 1) return;
     name.pop_back();
+    return;
   }
+
+  if (keystate[SDL_SCANCODE_SPACE]) {
+    if (name.size() >= maxChar) return;
+    name.push_back(' ');
+    return;
+  }
+
   // Add character
   for (uint ch = SDL_A; ch <= SDL_Z; ch++) {
     if (keystate[ch]) {
