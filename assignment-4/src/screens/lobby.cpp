@@ -4,6 +4,11 @@
 LobbyScreen::LobbyScreen() {}
 
 void LobbyScreen::onKeyDown(const Uint8* const keystate) {
+  if (keystate[SDL_SCANCODE_Q]) {
+    Global::get().navigator.pop();
+    return;
+  }
+
   if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) {
     row = std::max((row - 1), 0);
     return;
