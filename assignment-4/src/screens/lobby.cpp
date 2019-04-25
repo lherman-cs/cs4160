@@ -20,13 +20,21 @@ void LobbyScreen::draw() const {
   if (offline) return;
   modal.draw();
 
-  auto x = 150;
+  auto x = 200;
   auto y = 150;
   auto dy = 80;
   auto count = 0;
   for (const auto& it : rooms) {
     if (count == maxRows) return;
-    writer.writeText(it.second, x, y, count == row ? hoverColor : normalColor);
+    auto info = it.second;
+    std::replace(info.begin(), info.end(), ',', ' ');
+    std::stringstream iss(info);
+    std::string name;
+    std::string numPlayers;
+    iss >> name >> numPlayers;
+    auto text = name + " (" + numPlayers + "/5)";
+
+    writer.writeText(text, x, y, count == row ? hoverColor : normalColor);
     y += dy;
     count++;
   }
