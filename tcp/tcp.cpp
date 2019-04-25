@@ -1,7 +1,9 @@
 #include "tcp.h"
+#include <errno.h>
 #include <fcntl.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -40,9 +42,26 @@ static struct pollfd initSocket(const std::string &address) {
     throw std::runtime_error("failed to create socket");
   }
 
+  fcntl(sockfd, F_SETFL, O_NONBLOCK);
   error = connect(sockfd, res->ai_addr, res->ai_addrlen);
+  freeaddrinfo(res);
   if (error == -1) {
-    throw std::runtime_error("failed to connect to server");
+    if (errno == EINPROGRESS) {
+      // /* Wait for connection to complete */
+      // fd_set sockets;
+      // FD_ZERO(&sockets);
+      // FD_SET(sockfd, &sockets);
+      // struct timeval timeout = {4, 0};
+      // /* You should probably do other work instead of busy waiting on this...
+      //    or set a timeout or something */
+      // while (select(sockfd + 1, nullptr, &sockets, nullptr, &timeout) <= 0) {
+      //   std::cout << "trying to connect " << strerror(errno) << std::endl;
+      //   sleep(1);
+      // }
+
+    } else {
+      throw std::runtime_error("connection failed");
+    }
   }
 
   struct pollfd fd;
@@ -54,6 +73,15 @@ static struct pollfd initSocket(const std::string &address) {
 TCP::TCP(const std::string &address) : fd(initSocket(address)) {}
 
 TCP::~TCP() { close(fd.fd); }
+
+bool TCP::connected() {
+  int error = 0;
+  socklen_t len = sizeof(error);
+  int retval = getsockopt(fd.fd, SOL_SOCKET, SO_ERROR, &error, &len);
+  std::cout << "[connected]: " << retval << ' ' << strerror(errno) << std::endl;
+  std::cout << (errno != EINPROGRESS) << std::endl;
+  return errno != EINPROGRESS;
+}
 
 bool TCP::read(std::unordered_map<std::string, std::string> &table) {
   int rv = poll(&fd, 1, timeout);
@@ -92,10 +120,14 @@ bool TCP::write(const std::unordered_map<std::string, std::string> &resp) {
 
   int length = 0;
   length = send(fd.fd, (void *)outPtr, outSize, 0);
+  if (length == -1) {
+    if (errno == ENOTCONN) return false;
+    throw std::runtime_error(strerror(errno));
+  }
+
   outPtr += length;
   outSize -= length;
 
-  if (length == -1) throw std::runtime_error(strerror(errno));
   if (outSize > 0) return false;
 
   outSize = 0;
