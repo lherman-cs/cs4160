@@ -27,6 +27,11 @@
   </font>
 
   <!-- new config -->
+  <net>
+    <wasm>127.0.0.1:8080</wasm>
+    <native>127.0.0.1:8081</native>
+  </net>
+
   <screens>
     <intro>
       <background>

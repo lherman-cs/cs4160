@@ -5,8 +5,8 @@
 static const char MSGSEP = '\t';
 static const char MSGEQ = ':';
 
-char *encode(const std::unordered_map<std::string, std::string> &table);
+std::stringstream encode(
+    const std::unordered_map<std::string, std::string> &table);
 
-std::unordered_map<std::string, std::string> decode(const char *);
-
-std::unordered_map<std::string, std::string> decode(const std::string &);
+void decode(const std::string &msg,
+            std::unordered_map<std::string, std::string> &table);

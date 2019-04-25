@@ -1,17 +1,35 @@
-// singleton?
 #pragma once
-#include "core/interface.h"
-#include "net/inaddr/ipv4.h"
-#include "net/socket/tcp.h"
 
-class TCP : public Reader, public Writer {
+#include <poll.h>
+#include <sstream>
+#include <string>
+#include <unordered_map>
+#include "global/global.h"
+
+#ifdef __EMSCRIPTEN__
+static const std::string endpoint =
+    Global::get().gamedata.getXmlStr("net/wasm");
+#else
+static const std::string endpoint =
+    Global::get().gamedata.getXmlStr("net/native");
+#endif
+
+class TCP {
  public:
-  virtual ~TCP();
-  TCP();
-  virtual char* read();
-  virtual void write(const char*);
+  TCP(const std::string &address = endpoint);
+  ~TCP();
+  TCP(const TCP &) = delete;
+  TCP &operator=(const TCP &) = delete;
+
+  // return true, if it's accepted message.
+  bool read(std::unordered_map<std::string, std::string> &table);
+  bool write(const std::unordered_map<std::string, std::string> &resp);
 
  private:
-  InetAddressV4 addr{"localhost", 8004};
-  TCPSocket sock{addr};
-}
+  struct pollfd fd;
+  const int timeout = 1000;  // in miliseconds
+  std::stringstream in;
+  std::string out;
+  const char *outPtr = nullptr;
+  size_t outSize = 0;
+};
