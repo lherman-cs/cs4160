@@ -89,14 +89,6 @@ bool TCP::read(std::unordered_map<std::string, std::string> &table) {
 }
 
 bool TCP::write(const std::unordered_map<std::string, std::string> &resp) {
-  int rv = poll(&fd, 1, timeout);
-  if (rv == -1) {
-    throw std::runtime_error(strerror(errno));
-  }
-
-  // timeout
-  if (rv == 0) return false;
-
   if (outPtr == nullptr) {
     auto stream = encode(resp);
     out = stream.str();
@@ -109,6 +101,10 @@ bool TCP::write(const std::unordered_map<std::string, std::string> &resp) {
   if (length == -1) {
     if (errno == ENOTCONN || errno == EAGAIN) return false;
     throw std::runtime_error(strerror(errno));
+  }
+
+  if (length == 0 && errno == EPIPE) {
+    return false;
   }
 
   outPtr += length;

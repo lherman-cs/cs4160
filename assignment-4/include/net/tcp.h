@@ -27,7 +27,7 @@ class TCP {
 
  private:
   struct pollfd fd;
-  const int timeout = 1000;  // in miliseconds
+  const int timeout = 100;  // in miliseconds
   std::stringstream in;
   std::string out;
   const char *outPtr = nullptr;
