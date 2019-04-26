@@ -31,3 +31,15 @@ class Trackable : public Drawable, public Updatable, public Moveable {
   virtual ~Trackable() {}
   virtual const Image* getImage() const = 0;
 };
+
+class Reader {
+ public:
+  virtual ~Reader() {}
+  virtual char* read() = 0;
+};
+
+class Writer {
+ public:
+  virtual ~Writer() {}
+  virtual void write(const char*) = 0;
+};

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+TASKS_DIR="./tasks"
+MAX_PARAMS=20
+
+task=$(cat "$TASKS_DIR/$1.txt")
+shift
+
+for i in $(seq 0 $MAX_PARAMS)
+do
+    task=$(echo "$task" | sed "s/{$i}/$1/g")
+    shift
+done
+
+echo -e "$task" | nc localhost 8081

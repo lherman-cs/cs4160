@@ -27,6 +27,17 @@
   </font>
 
   <!-- new config -->
+  <net>
+    <dev>
+      <wasm>127.0.0.1:8080</wasm>
+      <native>127.0.0.1:8081</native>
+    </dev>
+    <prod>
+      <wasm>23.120.83.79:8080</wasm>
+      <native>23.120.83.79:8081</native>
+    </prod>
+  </net>
+
   <screens>
     <intro>
       <background>
@@ -34,6 +45,28 @@
         <transparency>false</transparency>
       </background>
     </intro>
+
+    <create>
+      <background>
+        <file>assets/img/create.png</file>
+        <transparency>false</transparency>
+      </background>
+    </create>
+
+    <lobby>
+      <background>
+        <file>assets/img/lobby/background.png</file>
+        <transparency>false</transparency>
+      </background>
+      <enterable>
+        <file>assets/img/enterable.png</file>
+        <transparency>false</transparency>
+      </enterable>
+      <modal>
+        <file>assets/img/lobby.png</file>
+        <transparency>true</transparency>
+      </modal>
+    </lobby>
 
     <game>
       <background>

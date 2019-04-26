@@ -6,8 +6,8 @@
 
 // intro screen
 //  accepts # of players, # of bots, and difficulty
-//  responds to 'h' rules and 'enter' start game
-//              ← → ↑ ↓ for selection of players and bots
+//  responds to 'h' (rules/help) and 'enter'
+//              ← →  for selection
 
 class IntroScreen : public Screen {
  public:
@@ -18,12 +18,19 @@ class IntroScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World introBackground{"screens/intro/background"};
-  int row = 0;
-  int players = 5;
-  int bots = 4;
+  bool row = 0;
+  bool col = 0;
   int difficulty = 0;
-
   IoMod menuWriter{70};
   Navigator& navigator{Global::get().navigator};
+
+  // Text Positiong
+  const int ystart = 530;
+  const int ystep = 120;
+  const int xstart = 300;
+  const int xstep = 220;
+  const World introBackground{"screens/intro/background"};
+  // Text Rendering
+  const SDL_Color normalColor{52, 44, 42, 255};
+  const SDL_Color hoverColor{255, 255, 0, 255};
 };
