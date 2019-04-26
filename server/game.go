@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"strconv"
 	"strings"
 	"sync"
@@ -41,17 +40,16 @@ func newGame(name string) *game {
 	return &game
 }
 
-func (g *game) join(conn io.ReadWriter) error {
+func (g *game) join(h *human) error {
 	g.m.Lock()
 	if len(g.players) == maxPlayers {
 		g.m.Unlock()
 		return fmt.Errorf("game is already full")
 	}
 
-	h := newHuman(g, conn)
 	g.players = append(g.players, h)
 	g.log.Info(h.name, " joined")
-	newEncoder(conn).encode(map[string]string{})
+	newEncoder(h.conn).encode(map[string]string{})
 	g.m.Unlock()
 	mainLobby.notifyAll()
 	h.loop()

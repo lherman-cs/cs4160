@@ -8,19 +8,21 @@ import (
 )
 
 type human struct {
-	g    *game
-	conn io.ReadWriter
-	name string
-	log  *logrus.Entry
+	g     *game
+	conn  io.ReadWriter
+	name  string
+	owner bool
+	log   *logrus.Entry
 }
 
-func newHuman(g *game, conn io.ReadWriter) *human {
+func newHuman(g *game, conn io.ReadWriter, owner bool) *human {
 	name := randomdata.SillyName()
 	log := logrus.WithFields(logrus.Fields{
 		"player": name,
 		"room":   g.name,
+		"owner":  owner,
 	})
-	h := human{g: g, conn: conn, name: name, log: log}
+	h := human{g: g, conn: conn, name: name, owner: owner, log: log}
 	return &h
 }
 

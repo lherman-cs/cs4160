@@ -67,7 +67,8 @@ func create(conn io.ReadWriter, msg map[string]string) {
 	room := newGame(name)
 	rooms.Store(id.String(), room)
 	mainLobby.notifyAll()
-	room.join(conn)
+	h := newHuman(room, conn, true)
+	room.join(h)
 }
 
 // requires:
@@ -84,7 +85,8 @@ func join(conn io.ReadWriter, msg map[string]string) {
 	}
 
 	room := value.(*game)
-	err := room.join(conn)
+	h := newHuman(room, conn, false)
+	err := room.join(h)
 	if err != nil {
 		panic(err.Error())
 	}
