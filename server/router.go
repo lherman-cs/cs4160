@@ -38,6 +38,7 @@ func handle(conn io.ReadWriteCloser) {
 		panic("received a malformed message")
 	}
 
+	routerLogger.Debug("received ", msg)
 	cmd, ok := msg["command"]
 	if !ok {
 		panic("command doesn't exist in message")
