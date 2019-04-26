@@ -93,6 +93,10 @@ func join(conn io.ReadWriter, msg map[string]string) {
 func subscribe(conn io.ReadWriter, msg map[string]string) {
 	respChan := make(chan map[string]string)
 	mainLobby.subscribe(respChan)
+	err := newEncoder(conn).encode(mainLobby.getLastResp())
+	if err != nil {
+		panic(err.Error())
+	}
 
 	for {
 		resp := <-respChan

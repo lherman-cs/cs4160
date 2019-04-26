@@ -7,6 +7,7 @@ import (
 
 type lobby struct {
 	subscribers []chan<- map[string]string
+	lastResp    map[string]string
 	m           sync.Mutex
 }
 
@@ -15,6 +16,12 @@ func (l *lobby) subscribe(subscriber chan<- map[string]string) {
 	defer l.m.Unlock()
 
 	l.subscribers = append(l.subscribers, subscriber)
+}
+
+func (l *lobby) getLastResp() map[string]string {
+	l.m.Lock()
+	defer l.m.Unlock()
+	return l.lastResp
 }
 
 func (l *lobby) notifyAll() {
@@ -28,6 +35,7 @@ func (l *lobby) notifyAll() {
 		resp[k] = room.info()
 		return true
 	})
+	l.lastResp = resp
 
 	filtered := make([]chan<- map[string]string, 0)
 	for _, subscriber := range l.subscribers {
