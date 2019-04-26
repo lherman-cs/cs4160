@@ -87,7 +87,7 @@ func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
 		for i, p := range g.players {
 			dones[i] = make(chan struct{})
 			go func(done chan<- struct{}, p *human) {
-				newEncoder(p.conn).encode(currentState)
+				newEncoder(p).encode(currentState)
 				close(done)
 			}(dones[i], p)
 		}

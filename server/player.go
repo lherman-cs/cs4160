@@ -8,8 +8,8 @@ import (
 )
 
 type human struct {
+	io.ReadWriter
 	g    *game
-	conn io.ReadWriter
 	name string
 	log  *logrus.Entry
 }
@@ -20,7 +20,7 @@ func newHuman(g *game, conn io.ReadWriter) *human {
 		"player": name,
 		"room":   g.name,
 	})
-	h := human{g: g, conn: conn, name: name, log: log}
+	h := human{g: g, ReadWriter: conn, name: name, log: log}
 	return &h
 }
 
@@ -31,7 +31,7 @@ func (h *human) loop() {
 		var err error
 		for {
 			msg := make(map[string]string)
-			err = newDecoder(h.conn).decode(msg)
+			err = newDecoder(h).decode(msg)
 			if err != nil {
 				h.log.Error(err)
 				break
