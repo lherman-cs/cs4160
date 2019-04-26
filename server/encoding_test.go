@@ -28,8 +28,8 @@ func TestEncode(t *testing.T) {
 func TestEncodeReflect(t *testing.T) {
 	table := struct {
 		Players []string `msg:"name"`
-		Ages    []int    `msg:"age"`
-	}{Players: []string{"Lukas", "Poop"}, Ages: []int{23, 30}}
+		Ages    []string `msg:"age"`
+	}{Players: []string{"Lukas", "Poop"}, Ages: []string{"23", "30"}}
 
 	var b bytes.Buffer
 
@@ -61,5 +61,31 @@ func TestDecode(t *testing.T) {
 		if v != decoded[k] {
 			t.Error("expected:", v, "got:", decoded[k])
 		}
+	}
+}
+
+func TestDecodeReflect(t *testing.T) {
+	encoded := "name:Lukas\tage:23\t"
+	var b bytes.Buffer
+	b.WriteString(encoded)
+
+	type data struct {
+		Name string `msg:"name"`
+		Age  string `msg:"age"`
+	}
+	var actual data
+
+	err := newDecoder(&b).decode(&actual)
+	if err != nil {
+		t.Error(err)
+	}
+	expected := data{Name: "Lukas", Age: "23"}
+
+	if actual.Name != expected.Name {
+		t.Error("expected:", expected.Name, "got:", actual.Name)
+	}
+
+	if actual.Age != expected.Age {
+		t.Error("expected:", expected.Age, "got:", actual.Age)
 	}
 }

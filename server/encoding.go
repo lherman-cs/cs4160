@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/spf13/cast"
 	"io"
 	"reflect"
 	"strings"
@@ -20,21 +19,6 @@ type encoder struct {
 
 func newEncoder(w io.Writer) *encoder {
 	return &encoder{w: bufio.NewWriter(w)}
-}
-
-func (e *encoder) toString(v interface{}) string {
-	value := reflect.ValueOf(v)
-	kind := value.Kind()
-	switch kind {
-	case reflect.Slice:
-		slice := make([]string, 0, value.Len())
-		for i := 0; i < value.Len(); i++ {
-			slice = append(slice, cast.ToString(value.Index(i).Interface()))
-		}
-		return strings.Join(slice, ",")
-	default:
-		return cast.ToString(value.Interface())
-	}
 }
 
 // encode formats a map and returns a string
@@ -61,7 +45,20 @@ func (e *encoder) encode(v interface{}) error {
 			if !ok {
 				continue
 			}
-			valueStr := e.toString(value.Field(i).Interface())
+
+			valueField := value.Field(i)
+			kind = valueField.Kind()
+			valueStr := ""
+			switch kind {
+			case reflect.String:
+				valueStr = valueField.String()
+			case reflect.Slice:
+				slice, ok := valueField.Interface().([]string)
+				if !ok {
+					return fmt.Errorf("doesn't support slice other than []string")
+				}
+				valueStr = strings.Join(slice, ",")
+			}
 			e.w.WriteString(alias + msgeq + valueStr + msgsep)
 		}
 	default:
@@ -81,20 +78,63 @@ func newDecoder(r io.Reader) *decoder {
 }
 
 // decode parses a string expression and returns a map
-func (d *decoder) decode(table map[string]string) error {
+func (d *decoder) decode(v interface{}) error {
 	if !d.r.Scan() {
 		return fmt.Errorf("invalid message format/stream has ended")
 	}
 
+	handle := func(msg string, table map[string]string) {
+		lines := strings.Split(msg, msgsep)
+		for _, line := range lines {
+			splits := strings.SplitN(line, msgeq, 2)
+			if len(splits) < 2 {
+				continue
+			}
+			k, v := splits[0], splits[1]
+			table[k] = v
+		}
+	}
+
 	msg := d.r.Text()
-	lines := strings.Split(msg, msgsep)
-	for _, line := range lines {
-		splits := strings.SplitN(line, msgeq, 2)
-		if len(splits) < 2 {
+	value := reflect.ValueOf(v)
+	kind := value.Kind()
+
+	table, ok := v.(map[string]string)
+	if ok {
+		handle(msg, table)
+		return nil
+	}
+
+	table = make(map[string]string)
+	handle(msg, table)
+	value = value.Elem()
+	kind = value.Kind()
+	if kind != reflect.Struct {
+		return fmt.Errorf("can't support %s", kind.String())
+	}
+
+	st := value.Type()
+	for i := 0; i < st.NumField(); i++ {
+		typeField := st.Field(i)
+		alias, ok := typeField.Tag.Lookup("msg")
+		if !ok {
 			continue
 		}
-		k, v := splits[0], splits[1]
-		table[k] = v
+
+		rawValue, ok := table[alias]
+		if !ok {
+			return fmt.Errorf("%s doesn't exist", alias)
+		}
+
+		valueField := value.Field(i)
+		valueKind := valueField.Kind()
+		switch valueKind {
+		case reflect.String:
+			valueField.SetString(rawValue)
+		default:
+			return fmt.Errorf("decode doesn't support non string struct fields")
+		}
 	}
+
 	return nil
 }
