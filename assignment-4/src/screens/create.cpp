@@ -1,4 +1,5 @@
 #include "screens/create.h"
+#include "net/tcp.h"
 #include "screens/room.h"
 #include "widget/loading.h"
 
@@ -15,7 +16,8 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
         .sleep(1000)
         .then(loading->dismiss())
         .then([&]() -> bool {
-          navigator.push<RoomScreen>(difficulty, true);
+          auto session = std::make_shared<TCP>();
+          navigator.push<RoomScreen>(session, difficulty, true);
           return true;
         });
   }

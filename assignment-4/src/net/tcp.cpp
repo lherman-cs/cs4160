@@ -61,7 +61,7 @@ TCP::TCP(const std::string &address) : fd(initSocket(address)) {}
 
 TCP::~TCP() { close(fd.fd); }
 
-bool TCP::read(std::unordered_map<std::string, std::string> &table) {
+bool TCP::read(net::message &table) {
   int rv = poll(&fd, 1, timeout);
   if (rv == -1) {
     throw std::runtime_error(strerror(errno));
@@ -88,7 +88,7 @@ bool TCP::read(std::unordered_map<std::string, std::string> &table) {
   return true;
 }
 
-bool TCP::write(const std::unordered_map<std::string, std::string> &resp) {
+bool TCP::write(const net::message &resp) {
   if (outPtr == nullptr) {
     auto stream = encode(resp);
     out = stream.str();

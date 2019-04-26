@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "global/global.h"
+#include "net/tcp.h"
 #include "screens/screen.h"
 #include "util/ioMod.h"
 #include "util/world.h"
@@ -12,7 +13,7 @@
 class RoomScreen : public Screen {
  public:
   virtual ~RoomScreen();
-  RoomScreen(int difficulty, bool isOwner);
+  RoomScreen(std::shared_ptr<TCP> session, int difficulty, bool isOwner);
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
   virtual void update(Uint32 ticks);
@@ -20,10 +21,13 @@ class RoomScreen : public Screen {
  private:
   const World lobbyBackground{"screens/lobby/background"};   // TODO
   const World enterNotification{"screens/lobby/enterable"};  // TODO
+  std::shared_ptr<TCP> session;
+  const std::string id;
   bool isOwner;
   int difficulty;
   int bots;
   std::vector<std::string> names;
+  bool connected = false;
 
   IoMod menuWriter{70};
   Navigator& navigator{Global::get().navigator};

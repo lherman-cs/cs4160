@@ -16,6 +16,7 @@ class LobbyScreen : public Screen {
   bool offline = false;
   IoMod writer{50};
   bool subscribed = false;
+  bool joining = false;
   std::unordered_map<std::string, std::string> rooms{};
   int row = 0;
   int maxRows = 5;

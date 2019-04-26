@@ -49,7 +49,7 @@
 
     <lobby>
       <background>
-        <file>assets/img/lobby.png</file>
+        <file>assets/img/lobby/background.png</file>
         <transparency>false</transparency>
       </background>
       <enterable>

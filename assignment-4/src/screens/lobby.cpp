@@ -4,9 +4,49 @@
 LobbyScreen::LobbyScreen() {}
 
 void LobbyScreen::onKeyDown(const Uint8* const keystate) {
+  if (joining) return;
+
   if (keystate[SDL_SCANCODE_Q]) {
     Global::get().navigator.pop();
     return;
+  }
+
+  if (keystate[SDL_SCANCODE_RETURN]) {
+    auto count = 0;
+    for (const auto& it : rooms) {
+      if (count == row) {
+        auto id = it.first;
+        auto& promise = Global::get().promise.add();
+        auto gameSession = std::make_shared<TCP>();
+        auto req = net::join(id);
+        auto resp = std::make_shared<net::message>();
+        joining = true;
+
+        auto requesting = [&, gameSession, req, resp]() {
+          auto done = gameSession->write(*req);
+          return done;
+        };
+
+        auto confirming = [&, gameSession, req, resp]() {
+          auto done = gameSession->read(*resp);
+          if (!done) return false;
+
+          if (resp->find("error") != resp->end()) {
+            joining = false;
+            return true;
+          }
+
+          auto& navigator = Global::get().navigator;
+          navigator.pop();
+          navigator.push<RoomScreen>(gameSession, 0, false);
+          return true;
+        };
+
+        promise.then(requesting).then(confirming);
+        return;
+      }
+      count++;
+    }
   }
 
   if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) {
@@ -15,7 +55,7 @@ void LobbyScreen::onKeyDown(const Uint8* const keystate) {
   }
 
   if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) {
-    row = std::min((row + 1), static_cast<int>(rooms.size()) - 1);
+    row = std::min((row + 1), maxRows - 1);
     return;
   }
 }
@@ -47,6 +87,7 @@ void LobbyScreen::draw() const {
 
 void LobbyScreen::update(Uint32 ticks) {
   if (offline) return;
+  if (joining) return;
 
   if (!subscribed) {
     std::unordered_map<std::string, std::string> req;
