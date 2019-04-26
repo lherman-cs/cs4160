@@ -6,12 +6,22 @@
 #include <unordered_map>
 #include "global/global.h"
 
+#ifdef DEBUG
 #ifdef __EMSCRIPTEN__
 static const std::string endpoint =
-    Global::get().gamedata.getXmlStr("net/wasm");
+    Global::get().gamedata.getXmlStr("net/dev/wasm");
 #else
 static const std::string endpoint =
-    Global::get().gamedata.getXmlStr("net/native");
+    Global::get().gamedata.getXmlStr("net/dev/native");
+#endif
+#else
+#ifdef __EMSCRIPTEN__
+static const std::string endpoint =
+    Global::get().gamedata.getXmlStr("net/prod/wasm");
+#else
+static const std::string endpoint =
+    Global::get().gamedata.getXmlStr("net/prod/native");
+#endif
 #endif
 
 namespace net {
