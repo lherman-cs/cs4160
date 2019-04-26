@@ -11,16 +11,35 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
   if (keystate[SDL_SCANCODE_RETURN]) {
     auto loading = Global::get().widget.create<Loading>("Loading...");
     auto& promise = Global::get().promise.add();
+    auto gameSession = std::make_shared<TCP>();
+    auto req = net::create(name);
+    auto resp = std::make_shared<net::message>();
+
+    auto requesting = [=]() {
+      auto done = gameSession->write(*req);
+      return done;
+    };
+
+    auto confirming = [=]() {
+      auto done = gameSession->read(*resp);
+      if (!done) return false;
+
+      if (resp->find("error") != resp->end()) {
+        return true;
+      }
+
+      navigator.push<RoomScreen>(gameSession, difficulty, true);
+      return true;
+    };
+
     Global::get().mixer.transition.play();
     promise.then(loading->show())
-        .sleep(1000)
-        .then(loading->dismiss())
-        .then([&]() -> bool {
-          auto session = std::make_shared<TCP>();
-          navigator.push<RoomScreen>(session, difficulty, true);
-          return true;
-        });
+        .then(requesting)
+        .then(confirming)
+        .then(loading->dismiss());
+    return;
   }
+
   // Delete character
   if (keystate[SDL_SCANCODE_BACKSPACE]) {
     if (name.size() <= 1) return;

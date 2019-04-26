@@ -1,5 +1,6 @@
 #include "screens/lobby.h"
 #include <algorithm>
+#include "screens/room.h"
 
 LobbyScreen::LobbyScreen() {}
 
@@ -55,7 +56,7 @@ void LobbyScreen::onKeyDown(const Uint8* const keystate) {
   }
 
   if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN]) {
-    row = std::min((row + 1), maxRows - 1);
+    row = std::min((row + 1), std::min(maxRows - 1, (int)rooms.size() - 1));
     return;
   }
 }

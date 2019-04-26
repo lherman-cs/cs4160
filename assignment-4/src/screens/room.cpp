@@ -5,7 +5,7 @@
 
 RoomScreen::RoomScreen(std::shared_ptr<TCP> session, int difficulty,
                        bool isOwner)
-    : session(session), id(id), difficulty(difficulty), isOwner(isOwner) {
+    : session(session), difficulty(difficulty), isOwner(isOwner) {
   names.emplace_back(isOwner ? "You" : "You (Not Owner)");
   for (int i = 1; i < 5; i++) {
     names.emplace_back("Bot " + std::to_string(i));
