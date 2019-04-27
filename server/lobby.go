@@ -1,6 +1,7 @@
 package main
 
 import (
+	log "github.com/sirupsen/logrus"
 	"sync"
 	"time"
 )
@@ -20,6 +21,7 @@ func (l *lobby) subscribe(subscriber chan<- map[string]string) {
 	l.m.Lock()
 	defer l.m.Unlock()
 	l.subscribers = append(l.subscribers, subscriber)
+	log.Info("Got ", len(l.subscribers), " subscribers")
 }
 
 func (l *lobby) getLastInfos() map[string]string {
