@@ -28,10 +28,10 @@ class GameScreen : public Screen {
  private:
   enum State { Ongoing, CallingLiar, Finish, TurnTransition };
   World background{"screens/game/background"};
-  int turn = 0;
-  int round = 1;
+  int turn{0};
+  int round{1};
   std::vector<std::shared_ptr<Player>> players{};
-  int diceOnTable = 25;
+  int diceOnTable{25};
   std::shared_ptr<Bet> bet;
 
   IoMod menuWriter{60};
