@@ -25,10 +25,12 @@ func (s *state) encode() *respState {
 	}
 
 	return &respState{
-		Players:  players,
-		Started:  s.started,
-		Turn:     s.turn,
-		Round:    s.round,
-		NumDices: s.numDices,
+		Players:      players,
+		Started:      s.started,
+		Turn:         s.turn,
+		Round:        s.round,
+		NumDices:     s.numDices,
+		LastQuantity: s.lastBet.quantity,
+		LastFace:     s.lastBet.face,
 	}
 }

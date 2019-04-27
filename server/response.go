@@ -6,12 +6,14 @@ type respJoin struct {
 }
 
 type respState struct {
-	Type     string   `msg:"type" default:"state"`
-	Started  bool     `msg:"started"` // true or false
-	Players  []string `msg:"players"`
-	Turn     int      `msg:"turn"`
-	Round    int      `msg:"round"`
-	NumDices int      `msg:"num_dices"`
+	Type         string   `msg:"type" default:"state"`
+	Started      bool     `msg:"started"` // true or false
+	Players      []string `msg:"players"`
+	Turn         int      `msg:"turn"`
+	Round        int      `msg:"round"`
+	NumDices     int      `msg:"num_dices"`
+	LastQuantity int      `msg:"last_quantity"`
+	LastFace     int      `msg:"last_face"`
 }
 
 type respStart struct {
