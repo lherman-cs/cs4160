@@ -96,6 +96,9 @@ func (h *human) handle(msg map[string]string) {
 		}
 
 		e = &eventBet{&event{from: h}, quantity, face}
+	case "game-leave":
+		reason := msg["reason"]
+		e = &eventLeave{&event{from: h}, reason}
 	default:
 		panic("invalid command")
 	}
