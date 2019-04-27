@@ -26,6 +26,11 @@ func (e *encoder) encode(v interface{}) error {
 	value := reflect.ValueOf(v)
 	kind := value.Kind()
 
+	if kind == reflect.Ptr {
+		value = value.Elem()
+		kind = value.Kind()
+	}
+
 	switch kind {
 	case reflect.Map:
 		iter := value.MapRange()
@@ -38,7 +43,7 @@ func (e *encoder) encode(v interface{}) error {
 			}
 		}
 	case reflect.Struct:
-		st := reflect.TypeOf(v)
+		st := value.Type()
 		for i := 0; i < st.NumField(); i++ {
 			typeField := st.Field(i)
 			alias, ok := typeField.Tag.Lookup("msg")
