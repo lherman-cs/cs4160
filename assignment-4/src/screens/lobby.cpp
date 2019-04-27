@@ -13,50 +13,51 @@ void LobbyScreen::onKeyDown(const Uint8* const keystate) {
   }
 
   if (keystate[SDL_SCANCODE_RETURN]) {
+    auto it = rooms.begin();
     auto count = 0;
-    for (const auto& it : rooms) {
-      if (count == row) {
-        auto id = it.first;
-        auto& promise = Global::get().promise.add();
-        auto gameSession = std::make_shared<TCP>();
-        auto req = net::join(id);
-        auto resp = std::make_shared<net::message>();
-        joining = true;
-
-        auto requesting = [=]() {
-          // if write fails, just return, dont keep looping. Probably give some
-          //   feedback to the user
-          if (gameSession->isOffline()) return true;
-          auto done = gameSession->write(*req);
-          return done;
-        };
-
-        auto confirming = [=]() {
-          // if write fails, just return, dont keep looping. Probably give some
-          //   feedback to the user
-          if (gameSession->isOffline()) {
-            joining = false;
-            return true;
-          }
-          auto done = gameSession->read(*resp);
-          if (!done) return false;
-
-          if (resp->find("error") != resp->end()) {
-            joining = false;
-            return true;
-          }
-
-          auto& navigator = Global::get().navigator;
-          navigator.pop();
-          navigator.push<RoomScreen>(gameSession, 0, false);
-          return true;
-        };
-
-        promise.then(requesting).then(confirming);
-        return;
-      }
-      count++;
+    while (count != row) {
+      if (it == rooms.end()) return;
+      it++;
     }
+
+    auto id = it->first;
+    auto& promise = Global::get().promise.add();
+    auto gameSession = std::make_shared<TCP>();
+    auto req = net::join(id);
+    auto resp = std::make_shared<net::message>();
+    joining = true;
+
+    auto requesting = [=]() {
+      // if write fails, just return, dont keep looping. Probably give some
+      //   feedback to the user
+      if (gameSession->isOffline()) return true;
+      auto done = gameSession->write(*req);
+      return done;
+    };
+
+    auto confirming = [=]() {
+      // if write fails, just return, dont keep looping. Probably give some
+      //   feedback to the user
+      if (gameSession->isOffline()) {
+        joining = false;
+        return true;
+      }
+      auto done = gameSession->read(*resp);
+      if (!done) return false;
+
+      if (resp->find("error") != resp->end()) {
+        joining = false;
+        return true;
+      }
+
+      auto& navigator = Global::get().navigator;
+      navigator.pop();
+      navigator.push<RoomScreen>(gameSession, 0, false);
+      return true;
+    };
+
+    promise.then(requesting).then(confirming);
+    return;
   }
 
   if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_UP]) {
