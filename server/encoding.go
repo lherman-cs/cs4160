@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -64,6 +65,12 @@ func (e *encoder) encode(v interface{}) error {
 						return fmt.Errorf("doesn't support slice other than []string")
 					}
 					valueStr = strings.Join(slice, ",")
+				case reflect.Bool:
+					valueStr = strconv.FormatBool(valueField.Bool())
+				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+					valueStr = strconv.FormatInt(valueField.Int(), 10)
+				case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+					valueStr = strconv.FormatUint(valueField.Uint(), 10)
 				default:
 					return fmt.Errorf("doesn't support %s", kind.String())
 				}

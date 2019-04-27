@@ -1,9 +1,5 @@
 package main
 
-import (
-	"strconv"
-)
-
 type status uint8
 
 type bet struct {
@@ -30,9 +26,9 @@ func (s *state) encode() *respState {
 
 	return &respState{
 		Players:  players,
-		Started:  strconv.FormatBool(s.started),
-		Turn:     strconv.Itoa(s.turn),
-		Round:    strconv.Itoa(s.round),
-		NumDices: strconv.Itoa(s.numDices),
+		Started:  s.started,
+		Turn:     s.turn,
+		Round:    s.round,
+		NumDices: s.numDices,
 	}
 }

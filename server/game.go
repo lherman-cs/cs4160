@@ -189,7 +189,7 @@ func (g *game) handleJoin(e *eventJoin) {
 	var err error
 	timeout := 2 * time.Second
 	select {
-	case err = <-send(from, &respJoin{Index: strconv.Itoa(len(g.players))}):
+	case err = <-send(from, &respJoin{Index: len(g.players)}):
 	case <-time.After(timeout):
 		err = fmt.Errorf("%s failed to receive in %d seconds", from.name, timeout)
 	}
