@@ -17,6 +17,7 @@ const (
 
 type game struct {
 	state
+	l       *lobby
 	id      string
 	name    string
 	mailbox chan<- eventer
@@ -24,7 +25,7 @@ type game struct {
 	log     *logrus.Entry
 }
 
-func newGame(name string) (*game, error) {
+func newGame(l *lobby, name string) (*game, error) {
 	mailbox := make(chan eventer, 64)
 	done := make(chan struct{})
 	log := logrus.WithFields(logrus.Fields{
@@ -38,6 +39,7 @@ func newGame(name string) (*game, error) {
 	}
 
 	game := game{
+		l:       l,
 		id:      id.String(),
 		name:    name,
 		mailbox: mailbox,
@@ -45,7 +47,7 @@ func newGame(name string) (*game, error) {
 		log:     log,
 	}
 	go game.loop(mailbox, done)
-	mainLobby.add(&game)
+	l.add(&game)
 	return &game, nil
 }
 
@@ -163,10 +165,10 @@ func (g *game) handleLeave(e *eventLeave) {
 
 	if len(g.players) == 0 {
 		g.finished = true
-		mainLobby.close(g)
+		g.l.close(g)
 		return
 	}
-	mainLobby.update(g)
+	g.l.update(g)
 }
 
 func (g *game) handleJoin(e *eventJoin) {
@@ -202,12 +204,12 @@ func (g *game) handleJoin(e *eventJoin) {
 
 	g.players = append(g.players, from)
 	g.log.Info(from.name, " joined")
-	mainLobby.update(g)
+	g.l.update(g)
 }
 
 func (g *game) handleStart(e *eventStart) {
 	g.started = true
 	resp := respStart{}
 	g.broadcast(&resp)
-	mainLobby.close(g)
+	g.l.close(g)
 }

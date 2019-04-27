@@ -58,7 +58,7 @@ func create(conn io.ReadWriter, msg map[string]string) {
 		panic("name is missing")
 	}
 
-	room, err := newGame(name)
+	room, err := newGame(mainLobby, name)
 	if err != nil {
 		panic(err.Error())
 	}
