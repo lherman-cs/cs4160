@@ -1,14 +1,14 @@
 package main
 
 type eventer interface {
-	From() *human
+	From() Entity
 }
 
 type event struct {
-	from *human
+	from Entity
 }
 
-func (e *event) From() *human {
+func (e *event) From() Entity {
 	return e.from
 }
 

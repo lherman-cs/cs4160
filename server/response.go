@@ -20,6 +20,15 @@ type respStart struct {
 	Type string `msg:"type" default:"start"`
 }
 
+type respRoll struct {
+	Type  string   `msg:"type" default:"roll"`
+	Zero  []string `msg:"0"`
+	One   []string `msg:"1"`
+	Two   []string `msg:"2"`
+	Three []string `msg:"3"`
+	Four  []string `msg:"4"`
+}
+
 type respError struct {
 	Type   string `msg:"type" default:"error"`
 	Reason string `msg:"reason"`

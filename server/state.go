@@ -11,7 +11,7 @@ type state struct {
 	started    bool
 	finished   bool
 	lastBet    bet
-	players    []*human
+	players    []Entity
 	turn       int
 	round      int
 	numDices   int
@@ -21,7 +21,7 @@ type state struct {
 func (s *state) encode() *respState {
 	players := make([]string, 0, len(s.players))
 	for _, p := range s.players {
-		players = append(players, p.name)
+		players = append(players, p.Name())
 	}
 
 	return &respState{

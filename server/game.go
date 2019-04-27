@@ -61,7 +61,7 @@ func (g *game) join(conn io.ReadWriter) error {
 		return err
 	}
 
-	h.loop()
+	h.Loop()
 	return nil
 }
 
@@ -84,7 +84,7 @@ func (g *game) broadcast(v interface{}) {
 		select {
 		case err = <-dones[i]:
 		case <-time.After(timeout):
-			err = fmt.Errorf("%s doesn't receive in %d seconds", p.name, timeout)
+			err = fmt.Errorf("%s doesn't receive in %d seconds", p.Name(), timeout)
 		}
 
 		if err != nil {
@@ -118,7 +118,7 @@ func (g *game) handle(e eventer) (changed bool) {
 		if err := recover(); err != nil {
 			reason := err.(string)
 			from := e.From()
-			g.log.WithField("player", from.name).Error(reason)
+			g.log.WithField("player", from.Name()).Error(reason)
 			send(from, respError{Reason: reason})
 			// rollback state
 			g.state = before
@@ -144,6 +144,11 @@ func (g *game) handle(e eventer) (changed bool) {
 	return true
 }
 
+// randomize existing dices
+func (g *game) roll() {
+
+}
+
 func (g *game) handleBet(e *eventBet) {
 	g.lastBet.quantity = e.quantity
 	g.lastBet.face = e.face
@@ -166,7 +171,7 @@ func (g *game) handleLeave(e *eventLeave) {
 	}
 
 	g.players = append(g.players[:idx], g.players[idx+1:]...)
-	g.log.Info(e.From().name, " leaving because ", e.reason)
+	g.log.Info(e.From().Name(), " leaving because ", e.reason)
 
 	if len(g.players) == 0 {
 		g.finished = true
@@ -200,7 +205,7 @@ func (g *game) handleJoin(e *eventJoin) {
 	select {
 	case err = <-send(from, &respJoin{Index: len(g.players)}):
 	case <-time.After(timeout):
-		err = fmt.Errorf("%s failed to receive in %d seconds", from.name, timeout)
+		err = fmt.Errorf("%s failed to receive in %d seconds", from.Name(), timeout)
 	}
 
 	if err != nil {
@@ -208,7 +213,7 @@ func (g *game) handleJoin(e *eventJoin) {
 	}
 
 	g.players = append(g.players, from)
-	g.log.Info(from.name, " joined")
+	g.log.Info(from.Name(), " joined")
 	g.l.update(g)
 }
 
