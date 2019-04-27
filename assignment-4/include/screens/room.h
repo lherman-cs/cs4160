@@ -7,7 +7,6 @@
 #include "util/world.h"
 
 // room screen for waiting for networked players to join
-//  accepts enter
 //  responds to 'enter' start game
 
 class RoomScreen : public Screen {
@@ -19,23 +18,27 @@ class RoomScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World lobbyBackground{"screens/lobby/background"};   // TODO
-  const World enterNotification{"screens/lobby/enterable"};  // TODO
+  // Networking
   std::shared_ptr<TCP> session;
   const std::string id;
   bool isOwner;
+  std::vector<std::string> names;
+
+  // Game Data
   int difficulty;
   int bots;
-  std::vector<std::string> names;
-  bool connected = false;
 
+  // Drawing
   IoMod menuWriter{70};
   Navigator& navigator{Global::get().navigator};
+  const World lobbyBackground{"screens/lobby/background"};   // TODO
+  const World enterNotification{"screens/lobby/enterable"};  // TODO
 
   // Text Positiong
   const int ystart = 30;
   const int ystep = 127;
   const int xstart = 230;
+
   // Text Rendering
   const SDL_Color normalColor{52, 44, 42, 255};
 };

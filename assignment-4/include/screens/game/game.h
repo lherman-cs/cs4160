@@ -3,16 +3,11 @@
 #include <vector>
 #include "const.h"
 #include "core/event.h"
-#include "core/observable.h"
 #include "global/global.h"
 #include "player.h"
 #include "screens/screen.h"
 #include "util/ioMod.h"
 #include "util/world.h"
-
-namespace GameEvent {
-class CallLiar : public Event {};
-}  // namespace GameEvent
 
 class Player;
 class Bet;

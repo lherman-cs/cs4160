@@ -5,7 +5,6 @@
 #include "util/world.h"
 
 // create screen
-//  accepts # of players, # of bots, and difficulty
 //  responds to name inputting and 'enter' (start game)
 
 class CreateScreen : public Screen {
@@ -17,9 +16,11 @@ class CreateScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  const World createBackground{"screens/create/background"};  // todo
-  const uint maxChar{11};
+  // Room Name Input
   std::string name{" "};
+  const uint maxChar{11};
+
+  // Game Data
   int difficulty;
 
   // 4-29 is A-Z for SDL input (no case)
@@ -28,12 +29,15 @@ class CreateScreen : public Screen {
   // 65-90 is ascii A-Z (uppercase)
   const uint ASCII_A = 65;
 
+  // Drawing
   IoMod menuWriter{60};
   Navigator& navigator{Global::get().navigator};
+  const World createBackground{"screens/create/background"};  // todo
 
   // Text Positiong
   const int ystart = 250;
   const int xstart = 300;
+
   // Text Rendering
   const SDL_Color normalColor{52, 44, 42, 255};
 };

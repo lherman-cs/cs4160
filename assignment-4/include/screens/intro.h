@@ -18,9 +18,12 @@ class IntroScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
+  // Game Data
   bool row = 0;
   bool col = 0;
   int difficulty = 0;
+
+  // Drawing
   IoMod menuWriter{70};
   Navigator& navigator{Global::get().navigator};
 
@@ -30,6 +33,7 @@ class IntroScreen : public Screen {
   const int xstart = 300;
   const int xstep = 220;
   const World introBackground{"screens/intro/background"};
+
   // Text Rendering
   const SDL_Color normalColor{52, 44, 42, 255};
   const SDL_Color hoverColor{255, 255, 0, 255};
