@@ -72,8 +72,7 @@ func (h *human) handle(msg map[string]string) {
 	defer func() {
 		if err := recover(); err != nil {
 			reason := err.(string)
-			resp := map[string]string{"error": reason}
-			newEncoder(h).encode(resp)
+			send(h, &respError{Reason: reason})
 		}
 	}()
 
@@ -82,8 +81,14 @@ func (h *human) handle(msg map[string]string) {
 	var e eventer
 	switch cmd {
 	case "game-bet":
-		quantityStr := msg["quantity"]
-		faceStr := msg["face"]
+		quantityStr, ok := msg["quantity"]
+		if !ok {
+			panic("quantity is required")
+		}
+		faceStr, ok := msg["face"]
+		if !ok {
+			panic("face is required")
+		}
 
 		quantity, err := strconv.Atoi(quantityStr)
 		if err != nil {
@@ -101,6 +106,8 @@ func (h *human) handle(msg map[string]string) {
 		e = &eventLeave{&event{from: h}, reason}
 	case "game-start":
 		e = &eventStart{&event{from: h}}
+	case "game-call":
+		e = &eventCall{&event{from: h}}
 	default:
 		panic("invalid command")
 	}

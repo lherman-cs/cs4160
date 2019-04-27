@@ -30,6 +30,11 @@ type eventStart struct {
 	*event
 }
 
+// command: game-call
+type eventCall struct {
+	*event
+}
+
 type eventJoin struct {
 	*event
 	errChan chan<- error

@@ -19,3 +19,8 @@ type respState struct {
 type respStart struct {
 	Type string `msg:"type" default:"start"`
 }
+
+type respError struct {
+	Type   string `msg:"type" default:"error"`
+	Reason string `msg:"reason"`
+}

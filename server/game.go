@@ -117,7 +117,9 @@ func (g *game) handle(e eventer) (changed bool) {
 	defer func() {
 		if err := recover(); err != nil {
 			reason := err.(string)
-			g.log.WithField("player", e.From().name).Error(reason)
+			from := e.From()
+			g.log.WithField("player", from.name).Error(reason)
+			send(from, respError{Reason: reason})
 			// rollback state
 			g.state = before
 			changed = false
@@ -133,6 +135,8 @@ func (g *game) handle(e eventer) (changed bool) {
 		g.handleJoin(v)
 	case *eventStart:
 		g.handleStart(v)
+	case *eventCall:
+		g.handleCall(v)
 	default:
 		panic("invalid command")
 	}
@@ -145,6 +149,7 @@ func (g *game) handleBet(e *eventBet) {
 	g.lastBet.face = e.face
 	g.turn = (g.turn + 1) % len(g.players)
 	g.round++
+	g.calledLiar = false
 }
 
 func (g *game) handleLeave(e *eventLeave) {
@@ -209,7 +214,17 @@ func (g *game) handleJoin(e *eventJoin) {
 
 func (g *game) handleStart(e *eventStart) {
 	g.started = true
+	g.calledLiar = true // set this true, so that nobody can call liar
 	resp := respStart{}
 	g.broadcast(&resp)
 	g.l.close(g)
+}
+
+func (g *game) handleCall(e *eventCall) {
+	if g.calledLiar {
+		panic("somebody has called liar in last turn")
+	}
+
+	// TODO! Decide who'll lose a dice here
+	g.calledLiar = true
 }
