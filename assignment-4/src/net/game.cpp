@@ -26,12 +26,15 @@ NetGameScreen::NetGameScreen(int difficulty)
   (void)difficulty;
 
   // wait for start messsage from the server
-  //      start message gets list of players and index of you
+  //  start message gets list of players and index of you
 
   // for testing set index
   index = 0;
   // for testing player names
   std::vector<std::string> n = [ "Me", "p1", "p2", "p3", "p4" ];
+
+  // wait for roll message from the server
+  //  has the dice faces
 
   for (int i = 0; i < NUMPLAYERS; i++) {
     this->players.emplace_back(
@@ -43,3 +46,46 @@ NetGameScreen::NetGameScreen(int difficulty)
 }
 
 NetGameScreen::~NetGameScreen() {}
+
+// parses a comma-seperated string into array of strings
+const std::vector<std::string> tostr(const std::string& in) {
+  stringstream ss(in);
+  vector<std::string> result;
+
+  while (ss.good()) {
+    std::string substr;
+    getline(ss, substr, ',');
+    result.push_back(substr);
+  }
+}
+
+// parses a comma-seperated string into array on ints
+const std::vector<int> toint(std::string) {
+  stringstream ss(in);
+  vector<std::string> result;
+
+  while (ss.good()) {
+    std::string substr;
+    getline(ss, substr, ',');
+    result.push_back(std::stoi(substr));
+  }
+}
+
+// called when we recieved a state from the server
+void NetGameScreen::updateState(
+    const std::unordered_map<std::string, std::string>& update) {
+  // players
+  auto p = tostr(update["players"]);
+  for (int i = 0; i < NUMPLAYERS; i++) {
+    players[i]->name = p[i];
+  }
+
+  // turn
+  turn = std::stoi(update["turn"]);
+
+  // round
+  round = std::stoi(update["round"]);
+
+  // num_dices
+  diceOnTable = std::stoi(update["num_dices"]);
+}
