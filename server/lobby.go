@@ -55,6 +55,14 @@ func (l *lobby) update(g *game) {
 	l.notifyAll()
 }
 
+func (l *lobby) close(g *game) {
+	l.m.Lock()
+	defer l.m.Unlock()
+	delete(l.rooms, g.id)
+	delete(l.infos, g.id)
+	l.notifyAll()
+}
+
 // notifyAll should be only used within lobby
 func (l *lobby) notifyAll() {
 	copy := make(map[string]string)

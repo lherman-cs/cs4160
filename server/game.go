@@ -148,6 +148,12 @@ func (g *game) handleLeave(e *eventLeave) {
 
 	g.players = append(g.players[:idx], g.players[idx+1:]...)
 	g.log.Info(e.From().name, " leaving because ", e.reason)
+
+	if len(g.players) == 0 {
+		g.log.Info("Nobody is in the room. Closing...")
+		mainLobby.close(g)
+		return
+	}
 	mainLobby.update(g)
 }
 
