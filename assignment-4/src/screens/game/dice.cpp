@@ -46,3 +46,14 @@ void Dice::remove() {
 }
 
 const std::vector<Die>& Dice::getDice() const { return dice; }
+
+void Dice::set(const std::vector<int>& faces) {
+  auto it = dice.begin();
+  for (int i = 0; i < faces.size(); i++) {
+    dice[i].set(faces[i]);
+    it++;
+  }
+  if (it != dice.end()) {
+    dice.erase(it);
+  }
+}
