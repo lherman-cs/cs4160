@@ -43,6 +43,4 @@ class GameScreen : public Screen {
   void onCallLiar(std::shared_ptr<Player> caller);
   void removeLosers();
   State state{Ongoing};
-
-  void updateState();
 };

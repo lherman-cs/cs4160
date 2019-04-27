@@ -16,7 +16,7 @@ class Bet;
 class Player : public Drawable {
  public:
   virtual ~Player();
-  const std::string name;
+  std::string name;
   const uint type;
   virtual void draw() const;
   virtual bool decide(Uint32 ticks, std::shared_ptr<Bet> bet) {
