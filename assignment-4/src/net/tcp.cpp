@@ -12,9 +12,13 @@
 #include <iostream>
 #include <sstream>
 #include "net/encoder.h"
-#define BUFFSIZE 1024
 
-static struct pollfd initSocket(const std::string &address) {
+void TCP::panic(const std::string &error) {
+  this->error = error;
+  this->offline = true;
+}
+
+TCP::TCP(const std::string &address) : fd() {
   std::string _address = address;
   std::replace(_address.begin(), _address.end(), ':', ' ');
   std::stringstream ss(_address);
@@ -23,11 +27,13 @@ static struct pollfd initSocket(const std::string &address) {
   std::string port;
 
   if (!(ss >> host)) {
-    throw std::runtime_error("address is <host>:<port>");
+    panic("address is <host>:<port>");
+    return;
   }
 
   if (!(ss >> port)) {
-    throw std::runtime_error("address is <host>:<port>");
+    panic("address is <host>:<port>");
+    return;
   }
 
   struct addrinfo hints, *res;
@@ -36,35 +42,36 @@ static struct pollfd initSocket(const std::string &address) {
   hints.ai_socktype = SOCK_STREAM;
   int error = getaddrinfo(host.c_str(), port.c_str(), &hints, &res);
   if (error) {
-    throw std::runtime_error(gai_strerror(error));
+    panic(gai_strerror(error));
+    return;
   }
 
   int sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
   if (sockfd == -1) {
-    throw std::runtime_error("failed to create socket");
+    panic("failed to create socket");
+    return;
   }
 
   fcntl(sockfd, F_SETFL, O_NONBLOCK);
   error = connect(sockfd, res->ai_addr, res->ai_addrlen);
   freeaddrinfo(res);
   if (error == -1 && errno != EINPROGRESS) {
-    throw std::runtime_error("connection failed");
+    panic("connection failed");
+    return;
   }
 
-  struct pollfd fd;
   fd.fd = sockfd;
   fd.events = POLLIN;
-  return fd;
 }
-
-TCP::TCP(const std::string &address) : fd(initSocket(address)) {}
 
 TCP::~TCP() { close(fd.fd); }
 
 bool TCP::read(net::message &table) {
+  if (offline) return false;
   int rv = poll(&fd, 1, timeout);
   if (rv == -1) {
-    throw std::runtime_error(strerror(errno));
+    panic(strerror(errno));
+    return false;
   }
 
   // timeout
@@ -89,6 +96,7 @@ bool TCP::read(net::message &table) {
 }
 
 bool TCP::write(const net::message &resp) {
+  if (offline) return false;
   if (outPtr == nullptr) {
     auto stream = encode(resp);
     out = stream.str();
@@ -100,7 +108,8 @@ bool TCP::write(const net::message &resp) {
   length = send(fd.fd, reinterpret_cast<const void *>(outPtr), outSize, 0);
   if (length == -1) {
     if (errno == ENOTCONN || errno == EAGAIN) return false;
-    throw std::runtime_error(strerror(errno));
+    panic(strerror(errno));
+    return false;
   }
 
   if (length == 0 && errno == EPIPE) {

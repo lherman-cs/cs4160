@@ -57,9 +57,14 @@ class TCP {
   // return true, if it's accepted message.
   bool read(net::message &table);
   bool write(const net::message &resp);
+  inline bool isOffline() const { return offline; };
+  inline std::string getError() const { return error; };
 
  private:
+  void panic(const std::string &error);
   struct pollfd fd;
+  bool offline = false;
+  std::string error = "";
   const int timeout = 100;  // in miliseconds
   std::stringstream in;
   std::string out;

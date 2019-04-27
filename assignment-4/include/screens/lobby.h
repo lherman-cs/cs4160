@@ -13,7 +13,6 @@ class LobbyScreen : public Screen {
 
  private:
   TCP session{};
-  bool offline = false;
   IoMod writer{50};
   bool subscribed = false;
   bool joining = false;

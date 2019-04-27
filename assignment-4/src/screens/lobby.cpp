@@ -23,12 +23,12 @@ void LobbyScreen::onKeyDown(const Uint8* const keystate) {
         auto resp = std::make_shared<net::message>();
         joining = true;
 
-        auto requesting = [&, gameSession, req, resp]() {
+        auto requesting = [=]() {
           auto done = gameSession->write(*req);
           return done;
         };
 
-        auto confirming = [&, gameSession, req, resp]() {
+        auto confirming = [=]() {
           auto done = gameSession->read(*resp);
           if (!done) return false;
 
@@ -63,7 +63,7 @@ void LobbyScreen::onKeyDown(const Uint8* const keystate) {
 
 void LobbyScreen::draw() const {
   background.draw();
-  if (offline) return;
+  if (session.isOffline()) return;
   modal.draw();
 
   auto x = 200;
@@ -87,30 +87,20 @@ void LobbyScreen::draw() const {
 }
 
 void LobbyScreen::update(Uint32 ticks) {
-  if (offline) return;
+  if (session.isOffline()) return;
   if (joining) return;
 
   if (!subscribed) {
     std::unordered_map<std::string, std::string> req;
     req["command"] = "subscribe";
-    try {
-      subscribed = session.write(req);
-    } catch (...) {
-      std::cout << "error occured in connecting. Make it offline" << std::endl;
-      offline = true;
-    }
+    subscribed = session.write(req);
   } else {
     std::unordered_map<std::string, std::string> newRooms;
-    try {
-      auto done = session.read(newRooms);
-      if (done) rooms = newRooms;
-    } catch (...) {
-      std::cout << "error occured in connecting. Make it offline" << std::endl;
-      offline = true;
-    }
+    auto done = session.read(newRooms);
+    if (done) rooms = newRooms;
   }
 
-  if (offline) {
+  if (session.isOffline()) {
     auto loading = Global::get().widget.create<Loading>("You're offline");
     auto redirecting = Global::get().widget.create<Loading>("Going back");
     auto goBack = []() {
