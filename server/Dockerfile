@@ -1,9 +1,8 @@
-FROM golang as builder
+FROM golang:1.12 as builder
 
 WORKDIR /go/src/app
 COPY . .
-RUN go get -v ./...
-RUN CGO_ENABLED=0 go build
+RUN GO111MODULE=on CGO_ENABLED=0 go build
 
 FROM python:alpine
 
@@ -12,7 +11,7 @@ RUN apk add make automake gcc g++ subversion python3-dev git && \
     cd websockify && \
     python setup.py install
 
-COPY --from=builder /go/src/app/app /
+COPY --from=builder /go/src/app/server /
 EXPOSE 8080
 EXPOSE 8081
-CMD (websockify 8080 localhost:8081 &) && /app
+CMD (websockify 8080 localhost:8081 &) && /server
