@@ -18,14 +18,14 @@ const (
 type game struct {
 	state
 	name    string
-	mailbox chan<- map[string]string
+	mailbox chan<- eventer
 	done    <-chan struct{}
 	log     *logrus.Entry
 	m       sync.Mutex
 }
 
 func newGame(name string) *game {
-	mailbox := make(chan map[string]string, 64)
+	mailbox := make(chan eventer, 64)
 	done := make(chan struct{})
 	log := logrus.WithFields(logrus.Fields{
 		"room": name,
@@ -61,6 +61,8 @@ func (g *game) join(conn io.ReadWriter) error {
 // info gives the game's detail in the following format:
 // <name>,<num_players>
 func (g *game) info() string {
+	g.m.Lock()
+	defer g.m.Unlock()
 	return g.name + "," + strconv.Itoa(len(g.players))
 }
 
@@ -77,7 +79,7 @@ func (g *game) joinedPlayers() []string {
 	return players
 }
 
-func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
+func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
 	defer close(done)
 
 	broadcast := func() {
@@ -102,8 +104,8 @@ func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
 	}
 
 	for {
-		msg := <-mailbox // TODO! handle msg
-		changed := g.handle(msg)
+		e := <-mailbox
+		changed := g.handle(e)
 
 		if changed {
 			broadcast() // update players with current state
@@ -111,26 +113,23 @@ func (g *game) loop(mailbox <-chan map[string]string, done chan<- struct{}) {
 	}
 }
 
-func (g *game) handle(msg map[string]string) (changed bool) {
+func (g *game) handle(e eventer) (changed bool) {
 	before := g.state
 	defer func() {
 		if err := recover(); err != nil {
 			reason := err.(string)
-			g.log.WithField("player", msg["player"]).Error(reason)
+			g.log.WithField("player", e.From().name).Error(reason)
 			// rollback state
 			g.state = before
 			changed = false
 		}
 	}()
 
-	cmd, ok := msg["command"]
-	if !ok {
-		panic("command is required")
-	}
-
-	switch cmd {
-	case "game-bet":
-		g.bet(msg)
+	switch v := e.(type) {
+	case *eventBet:
+		g.bet(v)
+	case *eventLeave:
+		g.leave(v)
 	default:
 		panic("invalid command")
 	}
@@ -138,26 +137,26 @@ func (g *game) handle(msg map[string]string) (changed bool) {
 	return true
 }
 
-// requires:
-//	- command:game-bet
-//	- quantity:<number>
-//	- face:<number>
-func (g *game) bet(msg map[string]string) {
-	quantityStr := msg["quantity"]
-	faceStr := msg["face"]
+func (g *game) bet(e *eventBet) {
+	g.lastBet.quantity = e.quantity
+	g.lastBet.face = e.face
+}
 
-	quantity, err := strconv.Atoi(quantityStr)
-	if err != nil {
-		panic("quantity is not an integer")
+func (g *game) leave(e *eventLeave) {
+	idx := -1
+	for i, p := range g.players {
+		if p == e.From() {
+			idx = i
+			break
+		}
 	}
 
-	face, err := strconv.Atoi(faceStr)
-	if err != nil {
-		panic("face is not an integer")
+	if idx == -1 {
+		return
 	}
 
-	g.lastBet.quantity = quantity
-	g.lastBet.face = face
+	g.players = append(g.players[:idx], g.players[idx+1:]...)
+	mainLobby.notifyAll()
 }
 
 type status uint8
