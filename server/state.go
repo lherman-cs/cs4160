@@ -21,16 +21,16 @@ type state struct {
 	calledLiar bool // to protect multiple people call liar at the same turn
 }
 
-func (s *state) encode() map[string]string {
+func (s *state) encode() *respState {
 	players := make([]string, 0, len(s.players))
 	for _, p := range s.players {
 		players = append(players, p.name)
 	}
 
-	return map[string]string{
-		"players":   strings.Join(players, ","),
-		"turn":      strconv.Itoa(s.turn),
-		"round":     strconv.Itoa(s.round),
-		"num_dices": strconv.Itoa(s.numDices),
+	return &respState{
+		Players:  strings.Join(players, ","),
+		Turn:     strconv.Itoa(s.turn),
+		Round:    strconv.Itoa(s.round),
+		NumDices: strconv.Itoa(s.numDices),
 	}
 }

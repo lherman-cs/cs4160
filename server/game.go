@@ -75,19 +75,21 @@ func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
 	broadcast := func() {
 		currentState := g.encode()
 
-		dones := make([]chan struct{}, len(g.players))
-		for i, p := range g.players {
-			dones[i] = make(chan struct{})
-			go func(done chan<- struct{}, p *human) {
-				newEncoder(p).encode(currentState)
-				close(done)
-			}(dones[i], p)
+		dones := make([]<-chan error, 0, len(g.players))
+		for _, p := range g.players {
+			dones = append(dones, send(p, currentState))
 		}
 
-		for i := range g.players {
+		timeout := 10 * time.Second
+		var err error
+		for i, p := range g.players {
 			select {
-			case <-dones[i]:
-			case <-time.After(time.Second * 10):
+			case err = <-dones[i]:
+			case <-time.After(timeout):
+				err = fmt.Errorf("%s doesn't receive in %d seconds", p.name, timeout)
+			}
+
+			if err != nil {
 				// TODO! Remove player from the game
 			}
 		}
