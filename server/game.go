@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"strconv"
@@ -158,14 +159,33 @@ func (g *game) handleLeave(e *eventLeave) {
 }
 
 func (g *game) handleJoin(e *eventJoin) {
+	defer func() {
+		if err := recover(); err != nil {
+			reason := err.(string)
+			g.log.Info(reason)
+			e.errChan <- errors.New(reason)
+			return
+		}
+		e.errChan <- nil
+	}()
+
 	if len(g.players) >= maxPlayers {
-		e.errChan <- fmt.Errorf("game is already full")
-		return
+		panic("game is already full")
 	}
 	from := e.From()
+	var err error
+	timeout := 2 * time.Second
+	select {
+	case err = <-send(from, &respJoin{Index: strconv.Itoa(len(g.players))}):
+	case <-time.After(timeout):
+		err = fmt.Errorf("%s failed to receive in %d seconds", from.name, timeout)
+	}
+
+	if err != nil {
+		panic(err.Error())
+	}
+
 	g.players = append(g.players, from)
 	g.log.Info(from.name, " joined")
-	newEncoder(from).encode(map[string]string{})
 	mainLobby.update(g)
-	e.errChan <- nil
 }
