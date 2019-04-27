@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math/rand"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -146,7 +148,23 @@ func (g *game) handle(e eventer) (changed bool) {
 
 // randomize existing dices
 func (g *game) roll() {
+	// TODO! probably replace this with struct instead
+	resp := make(map[string]string)
+	resp["type"] = "roll"
+	for idx, p := range g.players {
+		dice := p.Dice()
+		diceStr := make([]string, 0, len(dice))
 
+		for i := 0; i < len(dice); i++ {
+			dice[i] = rand.Int() % 6
+			diceStr = append(diceStr, strconv.Itoa(dice[i]))
+		}
+
+		idx := strconv.Itoa(idx)
+		encoded := strings.Join(diceStr, ",")
+		resp[idx] = encoded
+	}
+	g.broadcast(resp)
 }
 
 func (g *game) handleBet(e *eventBet) {
@@ -222,6 +240,7 @@ func (g *game) handleStart(e *eventStart) {
 	g.calledLiar = true // set this true, so that nobody can call liar
 	resp := respStart{}
 	g.broadcast(&resp)
+	g.roll()
 	g.l.close(g)
 }
 
@@ -231,5 +250,6 @@ func (g *game) handleCall(e *eventCall) {
 	}
 
 	// TODO! Decide who'll lose a dice here
+	g.roll()
 	g.calledLiar = true
 }

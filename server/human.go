@@ -22,7 +22,7 @@ func newHuman(g *game, conn io.ReadWriter) *human {
 	})
 	h := human{
 		ReadWriter: conn,
-		Player:     &Player{g, name, nil},
+		Player:     &Player{g, name, make([]int, 5)},
 		log:        log,
 	}
 	return &h
