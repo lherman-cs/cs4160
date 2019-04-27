@@ -27,11 +27,6 @@
 #include "util/ioMod.h"           // for drawing text to screen
 #include "util/world.h"           // for drawing background
 
-// game screen
-//  accepts type and quantity (of dice for betting)
-//  responds to 'B' bet, 'L' call liar, and 'H' help
-//              ← → ↑ ↓ for selection of type and quantity
-
 class Player;
 class Bet;
 
@@ -39,10 +34,11 @@ class Bet;
 //  accepts type and quantity (of dice for betting)
 //  responds to 'B' bet, 'L' call liar, and 'H' help
 //              ← → ↑ ↓ for selection of type and quantity
-class GameScreen : public Screen {
+
+class NetGameScreen : public Screen {
  public:
-  GameScreen(int difficulty, int bots = 4);
-  ~GameScreen();
+  NetGameScreen(int difficulty);
+  ~NetGameScreen();
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
   virtual void update(Uint32 ticks);
@@ -53,11 +49,13 @@ class GameScreen : public Screen {
   const std::string id;
 
   // Game Data
-  enum State { Ongoing, CallingLiar, Finish, TurnTransition };
-  int turn = 0;
-  int round = 1;
+  // for UI and interaction
+  //   enum State { Ongoing, CallingLiar, Finish, TurnTransition };
+  int index;
+  int turn{0};
+  int round{1};
   std::vector<std::shared_ptr<Player>> players{};
-  int diceOnTable = 25;
+  int diceOnTable{25};
   std::shared_ptr<Bet> bet;
 
   // Drawing
