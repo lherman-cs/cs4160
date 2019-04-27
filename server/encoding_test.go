@@ -27,9 +27,9 @@ func TestEncode(t *testing.T) {
 
 func TestEncodeReflect(t *testing.T) {
 	table := struct {
-		Players []string `msg:"name"`
+		Players []string `msg:"name" default:"Lukas,Poop"`
 		Ages    []string `msg:"age"`
-	}{Players: []string{"Lukas", "Poop"}, Ages: []string{"23", "30"}}
+	}{Ages: []string{"23", "30"}}
 
 	var b bytes.Buffer
 

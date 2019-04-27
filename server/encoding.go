@@ -46,18 +46,22 @@ func (e *encoder) encode(v interface{}) error {
 				continue
 			}
 
-			valueField := value.Field(i)
-			kind = valueField.Kind()
-			valueStr := ""
-			switch kind {
-			case reflect.String:
-				valueStr = valueField.String()
-			case reflect.Slice:
-				slice, ok := valueField.Interface().([]string)
-				if !ok {
-					return fmt.Errorf("doesn't support slice other than []string")
+			valueStr, ok := typeField.Tag.Lookup("default")
+			if !ok {
+				valueField := value.Field(i)
+				kind = valueField.Kind()
+				switch kind {
+				case reflect.String:
+					valueStr = valueField.String()
+				case reflect.Slice:
+					slice, ok := valueField.Interface().([]string)
+					if !ok {
+						return fmt.Errorf("doesn't support slice other than []string")
+					}
+					valueStr = strings.Join(slice, ",")
+				default:
+					return fmt.Errorf("doesn't support %s", kind.String())
 				}
-				valueStr = strings.Join(slice, ",")
 			}
 			e.w.WriteString(alias + msgeq + valueStr + msgsep)
 		}
