@@ -25,6 +25,11 @@ type eventLeave struct {
 	reason string
 }
 
+// command: game-start
+type eventStart struct {
+	*event
+}
+
 type eventJoin struct {
 	*event
 	errChan chan<- error

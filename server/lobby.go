@@ -21,7 +21,7 @@ func (l *lobby) subscribe(subscriber chan<- map[string]string) {
 	l.m.Lock()
 	defer l.m.Unlock()
 	l.subscribers = append(l.subscribers, subscriber)
-	log.Info("Got ", len(l.subscribers), " subscribers")
+	log.Info("got ", len(l.subscribers), " subscribers")
 }
 
 func (l *lobby) getLastInfos() map[string]string {
@@ -53,6 +53,9 @@ func (l *lobby) find(id string) (g *game, ok bool) {
 func (l *lobby) update(g *game) {
 	l.m.Lock()
 	defer l.m.Unlock()
+	if g.started {
+		return
+	}
 	l.infos[g.id] = g.info()
 	l.notifyAll()
 }

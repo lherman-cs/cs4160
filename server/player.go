@@ -99,6 +99,8 @@ func (h *human) handle(msg map[string]string) {
 	case "game-leave":
 		reason := msg["reason"]
 		e = &eventLeave{&event{from: h}, reason}
+	case "game-start":
+		e = &eventStart{&event{from: h}}
 	default:
 		panic("invalid command")
 	}

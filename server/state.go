@@ -12,6 +12,8 @@ type bet struct {
 }
 
 type state struct {
+	started    bool
+	finished   bool
 	lastBet    bet
 	players    []*human
 	turn       int
@@ -28,6 +30,7 @@ func (s *state) encode() *respState {
 
 	return &respState{
 		Players:  players,
+		Started:  strconv.FormatBool(s.started),
 		Turn:     strconv.Itoa(s.turn),
 		Round:    strconv.Itoa(s.round),
 		NumDices: strconv.Itoa(s.numDices),

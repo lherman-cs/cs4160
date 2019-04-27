@@ -64,43 +64,48 @@ func (g *game) join(conn io.ReadWriter) error {
 }
 
 // info gives the game's detail in the following format:
-// <name>,<num_players>
+// <name>,<num_players>,<started>
 func (g *game) info() string {
-	return g.name + "," + strconv.Itoa(len(g.players))
+	players := strconv.Itoa(len(g.players))
+	return g.name + "," + players
+}
+
+func (g *game) broadcast(v interface{}) {
+	dones := make([]<-chan error, 0, len(g.players))
+	for _, p := range g.players {
+		dones = append(dones, send(p, v))
+	}
+
+	timeout := 10 * time.Second
+	var err error
+	for i, p := range g.players {
+		select {
+		case err = <-dones[i]:
+		case <-time.After(timeout):
+			err = fmt.Errorf("%s doesn't receive in %d seconds", p.name, timeout)
+		}
+
+		if err != nil {
+			// TODO! Remove player from the game
+		}
+	}
 }
 
 func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
+	defer g.log.Info("game has been closed")
 	defer close(done)
-
-	broadcast := func() {
-		currentState := g.encode()
-
-		dones := make([]<-chan error, 0, len(g.players))
-		for _, p := range g.players {
-			dones = append(dones, send(p, currentState))
-		}
-
-		timeout := 10 * time.Second
-		var err error
-		for i, p := range g.players {
-			select {
-			case err = <-dones[i]:
-			case <-time.After(timeout):
-				err = fmt.Errorf("%s doesn't receive in %d seconds", p.name, timeout)
-			}
-
-			if err != nil {
-				// TODO! Remove player from the game
-			}
-		}
-	}
 
 	for {
 		e := <-mailbox
 		changed := g.handle(e)
 
-		if changed {
-			broadcast() // update players with current state
+		if !changed {
+			continue
+		}
+
+		g.broadcast(g.state.encode()) // update players with current state
+		if g.finished {
+			break
 		}
 	}
 }
@@ -124,6 +129,8 @@ func (g *game) handle(e eventer) (changed bool) {
 		g.handleLeave(v)
 	case *eventJoin:
 		g.handleJoin(v)
+	case *eventStart:
+		g.handleStart(v)
 	default:
 		panic("invalid command")
 	}
@@ -153,7 +160,7 @@ func (g *game) handleLeave(e *eventLeave) {
 	g.log.Info(e.From().name, " leaving because ", e.reason)
 
 	if len(g.players) == 0 {
-		g.log.Info("Nobody is in the room. Closing...")
+		g.finished = true
 		mainLobby.close(g)
 		return
 	}
@@ -164,9 +171,8 @@ func (g *game) handleJoin(e *eventJoin) {
 	defer func() {
 		if err := recover(); err != nil {
 			reason := err.(string)
-			g.log.Info(reason)
 			e.errChan <- errors.New(reason)
-			return
+			panic(reason) // delegates to root handler for logging, etc
 		}
 		e.errChan <- nil
 	}()
@@ -174,6 +180,11 @@ func (g *game) handleJoin(e *eventJoin) {
 	if len(g.players) >= maxPlayers {
 		panic("game is already full")
 	}
+
+	if g.started {
+		panic("game has started")
+	}
+
 	from := e.From()
 	var err error
 	timeout := 2 * time.Second
@@ -190,4 +201,11 @@ func (g *game) handleJoin(e *eventJoin) {
 	g.players = append(g.players, from)
 	g.log.Info(from.name, " joined")
 	mainLobby.update(g)
+}
+
+func (g *game) handleStart(e *eventStart) {
+	g.started = true
+	resp := respStart{}
+	g.broadcast(&resp)
+	mainLobby.close(g)
 }
