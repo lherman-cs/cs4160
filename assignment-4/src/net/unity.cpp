@@ -1,4 +1,5 @@
 #include "encoder.cpp"
 #include "game.cpp"
 #include "player.cpp"
+#include "state.cpp"
 #include "tcp.cpp"

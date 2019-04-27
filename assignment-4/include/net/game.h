@@ -70,6 +70,4 @@ class NetGameScreen : public Screen {
   void onCallLiar(std::shared_ptr<Player> caller);
   void removeLosers();
   // State state{Ongoing};
-
-  void updateState(const std::unordered_map<std::string, std::string>&);
 };

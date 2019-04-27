@@ -22,7 +22,7 @@ void decode(const std::string &msg,
 }
 
 // parses a comma-seperated string into array of strings
-const std::vector<std::string> tostr(const std::string &in) {
+std::vector<std::string> tostr(const std::string &in) {
   std::stringstream ss(in);
   std::vector<std::string> result;
 

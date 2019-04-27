@@ -48,22 +48,3 @@ NetGameScreen::NetGameScreen(int difficulty)
 }
 
 NetGameScreen::~NetGameScreen() {}
-
-// called when we recieved a state from the server
-void NetGameScreen::updateState(
-    const std::unordered_map<std::string, std::string>& update) {
-  // players
-  auto p = tostr(update.at("players"));
-  for (int i = 0; i < NUMPLAYERS; i++) {
-    players[i]->name = p[i];
-  }
-
-  // turn
-  turn = std::stoi(update.at("turn"));
-
-  // round
-  round = std::stoi(update.at("round"));
-
-  // num_dices
-  diceOnTable = std::stoi(update.at("num_dices"));
-}
