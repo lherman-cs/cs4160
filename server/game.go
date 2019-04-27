@@ -147,7 +147,7 @@ func (g *game) handleLeave(e *eventLeave) {
 	}
 
 	g.players = append(g.players[:idx], g.players[idx+1:]...)
-	g.log.Info("Leaving because ", e.reason)
+	g.log.Info(e.From().name, " leaving because ", e.reason)
 	mainLobby.update(g)
 }
 
