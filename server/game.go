@@ -141,6 +141,8 @@ func (g *game) handle(e eventer) (changed bool) {
 func (g *game) handleBet(e *eventBet) {
 	g.lastBet.quantity = e.quantity
 	g.lastBet.face = e.face
+	g.turn = (g.turn + 1) % len(g.players)
+	g.round++
 }
 
 func (g *game) handleLeave(e *eventLeave) {
