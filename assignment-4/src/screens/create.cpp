@@ -16,11 +16,17 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
     auto resp = std::make_shared<net::message>();
 
     auto requesting = [=]() {
+      // if write fails, just return, dont keep looping. Probably give some
+      //   feedback to the user
+      if (gameSession->isOffline()) return true;
       auto done = gameSession->write(*req);
       return done;
     };
 
     auto confirming = [=]() {
+      // if read fails, just return, dont keep looping.
+      // Probably give some user feedbacks.
+      if (gameSession->isOffline()) return true;
       auto done = gameSession->read(*resp);
       if (!done) return false;
 
