@@ -3,7 +3,6 @@ package main
 import (
 	"io"
 
-	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -59,14 +58,11 @@ func create(conn io.ReadWriter, msg map[string]string) {
 		panic("name is missing")
 	}
 
-	id, err := uuid.NewRandom()
+	room, err := newGame(name)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	room := newGame(name)
-	rooms.Store(id.String(), room)
-	mainLobby.notifyAll()
 	room.join(conn)
 }
 
@@ -78,12 +74,11 @@ func join(conn io.ReadWriter, msg map[string]string) {
 		panic("id is missing")
 	}
 
-	value, ok := rooms.Load(id)
+	room, ok := mainLobby.find(id)
 	if !ok {
 		panic("room doesn't exist")
 	}
 
-	room := value.(*game)
 	err := room.join(conn)
 	if err != nil {
 		panic(err.Error())
@@ -93,7 +88,7 @@ func join(conn io.ReadWriter, msg map[string]string) {
 func subscribe(conn io.ReadWriter, msg map[string]string) {
 	respChan := make(chan map[string]string)
 	mainLobby.subscribe(respChan)
-	err := newEncoder(conn).encode(mainLobby.getLastResp())
+	err := newEncoder(conn).encode(mainLobby.getLastInfos())
 	if err != nil {
 		panic(err.Error())
 	}

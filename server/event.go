@@ -24,3 +24,8 @@ type eventLeave struct {
 	*event
 	reason string
 }
+
+type eventJoin struct {
+	*event
+	errChan chan<- error
+}

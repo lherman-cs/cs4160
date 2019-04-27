@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"io"
 	"strconv"
-	"strings"
-	"sync"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,43 +16,48 @@ const (
 
 type game struct {
 	state
+	id      string
 	name    string
 	mailbox chan<- eventer
 	done    <-chan struct{}
 	log     *logrus.Entry
-	m       sync.Mutex
 }
 
-func newGame(name string) *game {
+func newGame(name string) (*game, error) {
 	mailbox := make(chan eventer, 64)
 	done := make(chan struct{})
 	log := logrus.WithFields(logrus.Fields{
 		"room": name,
+		"file": "game.go",
 	})
+
+	id, err := uuid.NewRandom()
+	if err != nil {
+		return nil, err
+	}
+
 	game := game{
+		id:      id.String(),
 		name:    name,
 		mailbox: mailbox,
 		done:    done,
 		log:     log,
 	}
 	go game.loop(mailbox, done)
-
-	return &game
+	mainLobby.add(&game)
+	return &game, nil
 }
 
 func (g *game) join(conn io.ReadWriter) error {
-	g.m.Lock()
-	if len(g.players) == maxPlayers {
-		g.m.Unlock()
-		return fmt.Errorf("game is already full")
+	h := newHuman(g, conn)
+	errChan := make(chan error)
+	e := &eventJoin{&event{h}, errChan}
+	g.mailbox <- e
+	err := <-errChan
+	if err != nil {
+		return err
 	}
 
-	h := newHuman(g, conn)
-	g.players = append(g.players, h)
-	g.log.Info(h.name, " joined")
-	newEncoder(conn).encode(map[string]string{})
-	g.m.Unlock()
-	mainLobby.notifyAll()
 	h.loop()
 	return nil
 }
@@ -61,22 +65,7 @@ func (g *game) join(conn io.ReadWriter) error {
 // info gives the game's detail in the following format:
 // <name>,<num_players>
 func (g *game) info() string {
-	g.m.Lock()
-	defer g.m.Unlock()
 	return g.name + "," + strconv.Itoa(len(g.players))
-}
-
-// joinedPlayers get names who have joined
-func (g *game) joinedPlayers() []string {
-	g.m.Lock()
-	defer g.m.Unlock()
-
-	players := make([]string, 0, len(g.players))
-	for _, p := range g.players {
-		players = append(players, p.name)
-	}
-
-	return players
 }
 
 func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
@@ -127,9 +116,11 @@ func (g *game) handle(e eventer) (changed bool) {
 
 	switch v := e.(type) {
 	case *eventBet:
-		g.bet(v)
+		g.handleBet(v)
 	case *eventLeave:
-		g.leave(v)
+		g.handleLeave(v)
+	case *eventJoin:
+		g.handleJoin(v)
 	default:
 		panic("invalid command")
 	}
@@ -137,12 +128,12 @@ func (g *game) handle(e eventer) (changed bool) {
 	return true
 }
 
-func (g *game) bet(e *eventBet) {
+func (g *game) handleBet(e *eventBet) {
 	g.lastBet.quantity = e.quantity
 	g.lastBet.face = e.face
 }
 
-func (g *game) leave(e *eventLeave) {
+func (g *game) handleLeave(e *eventLeave) {
 	idx := -1
 	for i, p := range g.players {
 		if p == e.From() {
@@ -156,35 +147,19 @@ func (g *game) leave(e *eventLeave) {
 	}
 
 	g.players = append(g.players[:idx], g.players[idx+1:]...)
-	mainLobby.notifyAll()
+	g.log.Info("Leaving because ", e.reason)
+	mainLobby.update(g)
 }
 
-type status uint8
-
-type bet struct {
-	quantity int
-	face     int
-}
-
-type state struct {
-	lastBet    bet
-	players    []*human
-	turn       int
-	round      int
-	numDices   int
-	calledLiar bool // to protect multiple people call liar at the same turn
-}
-
-func (s *state) encode() map[string]string {
-	players := make([]string, 0, len(s.players))
-	for _, p := range s.players {
-		players = append(players, p.name)
+func (g *game) handleJoin(e *eventJoin) {
+	if len(g.players) >= maxPlayers {
+		e.errChan <- fmt.Errorf("game is already full")
+		return
 	}
-
-	return map[string]string{
-		"players":   strings.Join(players, ","),
-		"turn":      strconv.Itoa(s.turn),
-		"round":     strconv.Itoa(s.round),
-		"num_dices": strconv.Itoa(s.numDices),
-	}
+	from := e.From()
+	g.players = append(g.players, from)
+	g.log.Info(from.name, " joined")
+	newEncoder(from).encode(map[string]string{})
+	mainLobby.update(g)
+	e.errChan <- nil
 }

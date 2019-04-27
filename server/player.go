@@ -20,6 +20,7 @@ func newHuman(g *game, conn io.ReadWriter) *human {
 	log := logrus.WithFields(logrus.Fields{
 		"player": name,
 		"room":   g.name,
+		"file":   "player.go",
 	})
 	h := human{g: g, ReadWriter: conn, name: name, log: log}
 	return &h
