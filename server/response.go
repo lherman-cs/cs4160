@@ -6,9 +6,9 @@ type respJoin struct {
 }
 
 type respState struct {
-	Type     string `msg:"type" default:"state"`
-	Players  string `msg:"players"`
-	Turn     string `msg:"turn"`
-	Round    string `msg:"round"`
-	NumDices string `msg:"num_dices"`
+	Type     string   `msg:"type" default:"state"`
+	Players  []string `msg:"players"`
+	Turn     string   `msg:"turn"`
+	Round    string   `msg:"round"`
+	NumDices string   `msg:"num_dices"`
 }

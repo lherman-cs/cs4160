@@ -2,7 +2,6 @@ package main
 
 import (
 	"strconv"
-	"strings"
 )
 
 type status uint8
@@ -28,7 +27,7 @@ func (s *state) encode() *respState {
 	}
 
 	return &respState{
-		Players:  strings.Join(players, ","),
+		Players:  players,
 		Turn:     strconv.Itoa(s.turn),
 		Round:    strconv.Itoa(s.round),
 		NumDices: strconv.Itoa(s.numDices),
