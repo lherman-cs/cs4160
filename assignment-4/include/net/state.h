@@ -1,7 +1,10 @@
+#pragma once
 #include <unordered_map>
 #include <vector>
+#include "net/player.h"
 #include "screens/game/bet.h"
 #include "screens/game/const.h"
+#include "screens/game/human.h"
 #include "screens/game/player.h"
 
 // for holding game state

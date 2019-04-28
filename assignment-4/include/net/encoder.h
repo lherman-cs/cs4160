@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 static const char MSGSEP = '\t';
 static const char MSGEQ = ':';

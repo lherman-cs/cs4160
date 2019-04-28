@@ -27,3 +27,7 @@ NetGameScreen::NetGameScreen(int difficulty) {
 }
 
 NetGameScreen::~NetGameScreen() {}
+
+void NetGameScreen::onKeyDown(const Uint8* const keystate) { (void)keystate; }
+void NetGameScreen::draw() const {}
+void NetGameScreen::update(Uint32 ticks) {}
