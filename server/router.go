@@ -63,7 +63,8 @@ func create(conn io.ReadWriter, msg map[string]string) {
 		panic(err.Error())
 	}
 
-	room.join(conn)
+	h := newHuman(room, conn)
+	room.join(h)
 }
 
 // requires:
@@ -79,7 +80,8 @@ func join(conn io.ReadWriter, msg map[string]string) {
 		panic("room doesn't exist")
 	}
 
-	err := room.join(conn)
+	h := newHuman(room, conn)
+	err := room.join(h)
 	if err != nil {
 		panic(err.Error())
 	}

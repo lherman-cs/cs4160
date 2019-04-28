@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"io"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -53,17 +52,16 @@ func newGame(l *lobby, name string) (*game, error) {
 	return &game, nil
 }
 
-func (g *game) join(conn io.ReadWriter) error {
-	h := newHuman(g, conn)
+func (g *game) join(p Entity) error {
 	errChan := make(chan error)
-	e := &eventJoin{&event{h}, errChan}
+	e := &eventJoin{&event{p}, errChan}
 	g.mailbox <- e
 	err := <-errChan
 	if err != nil {
 		return err
 	}
 
-	h.Loop()
+	p.Loop()
 	return nil
 }
 
@@ -225,10 +223,15 @@ func (g *game) handleJoin(e *eventJoin) {
 	}
 
 	from := e.From()
+
+	// find a valid id here
+	id := len(g.players)
+	from.SetID(id)
+
 	var err error
 	timeout := 2 * time.Second
 	select {
-	case err = <-send(from, &respJoin{Index: len(g.players)}):
+	case err = <-send(from, &respJoin{Index: id}):
 	case <-time.After(timeout):
 		err = fmt.Errorf("%s failed to receive in %d seconds", from.Name(), timeout)
 	}

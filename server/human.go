@@ -10,7 +10,6 @@ import (
 type human struct {
 	io.ReadWriter
 	*Player
-	log *logrus.Entry
 }
 
 func newHuman(g *game, conn io.ReadWriter) *human {
@@ -18,12 +17,11 @@ func newHuman(g *game, conn io.ReadWriter) *human {
 	log := logrus.WithFields(logrus.Fields{
 		"player": name,
 		"room":   g.name,
-		"file":   "player.go",
+		"file":   "human.go",
 	})
 	h := human{
 		ReadWriter: conn,
-		Player:     &Player{g, name, make([]int, 5)},
-		log:        log,
+		Player:     &Player{g, -1, name, make([]int, 5), log},
 	}
 	return &h
 }

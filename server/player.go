@@ -2,6 +2,8 @@ package main
 
 import (
 	"io"
+
+	"github.com/sirupsen/logrus"
 )
 
 // Entity an abstraction that represents entity in the game
@@ -12,14 +14,22 @@ type Entity interface {
 	Dice() []int
 	// Remove 1 die from the entity
 	LoseDie()
+	SetID(id int)
 }
 
 // Player is a concrete base type that should be composed of.
 // Player implements sofe of Entity methods
 type Player struct {
 	g    *game
+	id   int
 	name string
 	dice []int
+	log  *logrus.Entry
+}
+
+// SetID sets player's id
+func (p *Player) SetID(id int) {
+	p.id = id
 }
 
 // Name is a getter
