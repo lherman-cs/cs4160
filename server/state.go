@@ -11,6 +11,7 @@ type state struct {
 	started    bool
 	finished   bool
 	lastBet    bet
+	lastPlayer Entity
 	players    []Entity
 	turn       int
 	round      int
@@ -26,7 +27,6 @@ func (s *state) encode() *respState {
 
 	return &respState{
 		Players:      players,
-		Started:      s.started,
 		Turn:         s.turn,
 		Round:        s.round,
 		NumDices:     s.numDices,

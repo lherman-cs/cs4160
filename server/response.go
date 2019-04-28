@@ -7,7 +7,6 @@ type respJoin struct {
 
 type respState struct {
 	Type         string   `msg:"type" default:"state"`
-	Started      bool     `msg:"started"` // true or false
 	Players      []string `msg:"players"`
 	Turn         int      `msg:"turn"`
 	Round        int      `msg:"round"`
@@ -27,6 +26,10 @@ type respRoll struct {
 	Two   []string `msg:"2"`
 	Three []string `msg:"3"`
 	Four  []string `msg:"4"`
+}
+
+type respFinish struct {
+	Type string `msg:"type" default:"finish"`
 }
 
 type respError struct {

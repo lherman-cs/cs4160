@@ -107,10 +107,11 @@ func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
 			continue
 		}
 
-		g.broadcast(g.state.encode()) // update players with current state
 		if g.finished {
+			g.broadcast(&respFinish{})
 			break
 		}
+		g.broadcast(g.state.encode()) // update players with current state
 	}
 }
 
@@ -171,6 +172,12 @@ func (g *game) handleBet(e *eventBet) {
 	g.lastBet.quantity = e.quantity
 	g.lastBet.face = e.face
 	g.turn = (g.turn + 1) % len(g.players)
+	for {
+		g.turn = (g.turn + 1) % len(g.players)
+		if len(g.players[g.turn].Dice()) != 0 {
+			break
+		}
+	}
 	g.round++
 	g.calledLiar = false
 }
@@ -249,7 +256,25 @@ func (g *game) handleCall(e *eventCall) {
 		panic("somebody has called liar in last turn")
 	}
 
-	// TODO! Decide who'll lose a dice here
+	sums := make([]int, 6)
+	for _, p := range g.players {
+		dice := p.Dice()
+		for _, die := range dice {
+			sums[die]++
+		}
+	}
+
+	if sums[g.lastBet.face] < g.lastBet.quantity {
+		g.lastPlayer.LoseDie()
+	} else {
+		e.From().LoseDie()
+	}
+
 	g.roll()
+	g.lastBet = bet{quantity: 0, face: 1}
+	g.numDices--
 	g.calledLiar = true
+	if g.numDices == 0 {
+		g.finished = true
+	}
 }

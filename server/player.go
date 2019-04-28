@@ -10,6 +10,8 @@ type Entity interface {
 	Loop()
 	Name() string
 	Dice() []int
+	// Remove 1 die from the entity
+	LoseDie()
 }
 
 // Player is a concrete base type that should be composed of.
@@ -29,4 +31,9 @@ func (p *Player) Name() string {
 // so that it can be read and written
 func (p *Player) Dice() []int {
 	return p.dice
+}
+
+// LoseDie removes a die from dice
+func (p *Player) LoseDie() {
+	p.dice = p.dice[:len(p.dice)-1]
 }
