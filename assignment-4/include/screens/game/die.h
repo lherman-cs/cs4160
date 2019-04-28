@@ -36,11 +36,4 @@ class Die : public Drawable {
   Vector2f position = Vector2f(0, 0);
 };
 
-std::vector<Image*> Die::unhighlightedDice(
-    Global::get().imageFactory.getImages("screens/game/dice"));
-std::vector<Image*> Die::highlightedDice(
-    Global::get().imageFactory.getImages("screens/game/highlighted-dice"));
-Sprite Die::hide("screens/game/hidden-dice");
-Sprite Die::gone("screens/game/invisible-dice");
-
 #pragma GCC diagnostic pop

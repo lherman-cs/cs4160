@@ -1,6 +1,13 @@
 #include "screens/game/die.h"
 #include <algorithm>
 
+std::vector<Image*> Die::unhighlightedDice(
+    Global::get().imageFactory.getImages("screens/game/dice"));
+std::vector<Image*> Die::highlightedDice(
+    Global::get().imageFactory.getImages("screens/game/highlighted-dice"));
+Sprite Die::hide("screens/game/hidden-dice");
+Sprite Die::gone("screens/game/invisible-dice");
+
 Die::Die() {}
 
 Die::Die(const Vector2f& pos, State s, int v)

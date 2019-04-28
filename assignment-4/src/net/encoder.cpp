@@ -22,7 +22,7 @@ void decode(const std::string &msg,
 }
 
 // parses a comma-seperated string into array of strings
-std::vector<std::string> tostr(const std::string &in) {
+const std::vector<std::string> tostr(const std::string &in) {
   std::stringstream ss(in);
   std::vector<std::string> result;
 
@@ -31,6 +31,7 @@ std::vector<std::string> tostr(const std::string &in) {
     getline(ss, substr, ',');
     result.push_back(substr);
   }
+  return result;
 }
 
 // parses a comma-seperated string into array on ints
@@ -43,4 +44,6 @@ const std::vector<int> toint(const std::string &in) {
     getline(ss, substr, ',');
     result.push_back(std::stoi(substr));
   }
+
+  return result;
 }
