@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <cmath>
 
-Dice::Dice(const Vector2f& position, double theta, long unsigned int numDice,
-           int g)
+Dice::Dice(const Vector2f& position, double theta, unsigned int numDice, int g)
     : dice(numDice), gap(g) {
   roll();
   positionDie(position, theta);

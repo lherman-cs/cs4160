@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include "global/global.h"        // for navigatior and others
-#include "net/tcp.h"              // for networking
-#include "screens/game/player.h"  // for holding player
-#include "screens/screen.h"       // for inheritance
-#include "util/ioMod.h"           // for drawing text to screen
-#include "util/world.h"           // for drawing background
+#include "global/global.h"   // navigatior and others
+#include "net/state.h"       // holding game state
+#include "net/tcp.h"         // networking
+#include "screens/screen.h"  // inheritance
+#include "util/ioMod.h"      // drawing text to screen
+#include "util/world.h"      // drawing background
 
 class Player;
 class Bet;
@@ -49,14 +49,10 @@ class NetGameScreen : public Screen {
   const std::string id;
 
   // Game Data
-  // for UI and interaction
-  //   enum State { Ongoing, CallingLiar, Finish, TurnTransition };
+  enum Status { Initalizing, Ongoing, CallingLiar, Finish, TurnTransition };
   int index;
-  int turn{0};
-  int round{1};
-  std::vector<std::shared_ptr<Player>> players{};
-  int diceOnTable{25};
-  std::shared_ptr<Bet> bet;
+  State gameData;
+  Status state{Initalizing};
 
   // Drawing
   IoMod menuWriter{60};
@@ -69,5 +65,4 @@ class NetGameScreen : public Screen {
   void onDone();
   void onCallLiar(std::shared_ptr<Player> caller);
   void removeLosers();
-  // State state{Ongoing};
 };

@@ -12,6 +12,9 @@ class NetGameScreen;
 
 class Dice : public Drawable {
  public:
+  Dice(const Vector2f& position, double theta, unsigned int numDice = 5,
+       int g = 50);
+
   // Draw dice to screen
   void draw() const;
 
@@ -22,9 +25,6 @@ class Dice : public Drawable {
   void hide();
 
  protected:
-  Dice(const Vector2f& position, double theta, long unsigned int numDice = 5,
-       int g = 50);
-
   // Set all dice to show face
   void show();
 
