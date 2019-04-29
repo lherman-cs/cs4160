@@ -68,7 +68,14 @@ func (g *game) join(p Entity) error {
 // info gives the game's detail in the following format:
 // <name>,<num_players>,<started>
 func (g *game) info() string {
-	players := strconv.Itoa(len(g.players))
+	count := 0
+	for _, p := range g.players {
+		if _, ok := p.(*human); ok {
+			count++
+		}
+	}
+
+	players := strconv.Itoa(count)
 	return g.name + "," + players
 }
 
@@ -181,6 +188,19 @@ func (g *game) handleBet(e *eventBet) {
 }
 
 func (g *game) handleLeave(e *eventLeave) {
+	humanCount := 0
+	for _, p := range g.players {
+		_, ok := p.(*human)
+		if ok {
+			humanCount++
+		}
+	}
+	if humanCount == 1 {
+		g.finished = true
+		g.l.close(g)
+		return
+	}
+
 	idx := -1
 	for i, p := range g.players {
 		if p == e.From() {
@@ -193,14 +213,15 @@ func (g *game) handleLeave(e *eventLeave) {
 		return
 	}
 
-	g.players = append(g.players[:idx], g.players[idx+1:]...)
 	g.log.Info(e.From().Name(), " leaving because ", e.reason)
-
-	if len(g.players) == 0 {
-		g.finished = true
-		g.l.close(g)
-		return
+	p := g.players[idx].(*human)
+	bot := newBotFromHuman(p)
+	g.players[idx] = bot
+	g.log.Info("replacing ", p.Name(), " with a bot")
+	if g.started {
+		go bot.Loop()
 	}
+
 	g.l.update(g)
 }
 
@@ -226,6 +247,12 @@ func (g *game) handleJoin(e *eventJoin) {
 
 	// find a valid id here
 	id := len(g.players)
+	for i, p := range g.players {
+		if _, ok := p.(*bot); ok {
+			id = i
+			break
+		}
+	}
 	from.SetID(id)
 
 	var err error
@@ -240,12 +267,32 @@ func (g *game) handleJoin(e *eventJoin) {
 		panic(err.Error())
 	}
 
-	g.players = append(g.players, from)
 	g.log.Info(from.Name(), " joined")
-	g.l.update(g)
+	if id < len(g.players) {
+		g.players[id] = from
+	} else {
+		g.players = append(g.players, from)
+		g.l.update(g)
+	}
 }
 
 func (g *game) handleStart(e *eventStart) {
+	// fill up players with bot and start existing bots
+	for _, p := range g.players {
+		b, ok := p.(*bot)
+		if !ok {
+			continue
+		}
+		go b.Loop()
+	}
+
+	need := maxPlayers - len(g.players)
+	for i := 0; i < need; i++ {
+		b := newRandomBot(g)
+		go b.Loop()
+		g.players = append(g.players, b)
+	}
+
 	g.started = true
 	g.calledLiar = true // set this true, so that nobody can call liar
 	resp := respStart{}
