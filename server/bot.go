@@ -103,7 +103,7 @@ func (b *bot) maybeCall(numDice, lastQuantity, lastFace int64) bool {
 
 	// probability with what we have and absolute 1% chance to always call
 	if rand.Intn(quantity) < match || rand.Intn(100) < 1 || quantity == int(numDice) {
-		b.g.mailbox <- &eventCall{&event{b}}
+		b.g.mailbox <- &eventCall{newEvent(b)}
 		return true
 	}
 	return false
@@ -119,5 +119,5 @@ func (b *bot) bet(numDice, lastQuantity, lastFace int64) {
 		face++
 	}
 
-	b.g.mailbox <- &eventBet{&event{b}, quantity, face}
+	b.g.mailbox <- &eventBet{newEvent(b), quantity, face}
 }

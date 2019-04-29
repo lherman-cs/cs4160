@@ -1,6 +1,8 @@
 package main
 
-type status uint8
+import (
+	"time"
+)
 
 type bet struct {
 	quantity int
@@ -8,15 +10,16 @@ type bet struct {
 }
 
 type state struct {
-	started    bool
-	finished   bool
-	lastBet    bet
-	lastPlayer Entity
-	players    []Entity
-	turn       int
-	round      int
-	numDices   int
-	calledLiar bool // to protect multiple people call liar at the same turn
+	lastTimestamp time.Time
+	started       bool
+	finished      bool
+	lastBet       bet
+	lastPlayer    Entity
+	players       []Entity
+	turn          int
+	round         int
+	numDices      int
+	calledLiar    bool // to protect multiple people call liar at the same turn
 }
 
 func (s *state) encode() *respState {

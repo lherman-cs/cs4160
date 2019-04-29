@@ -58,7 +58,7 @@ loop:
 		case msg := <-receiver:
 			err, ok := msg["error"]
 			if ok {
-				h.g.mailbox <- &eventLeave{&event{from: h}, err}
+				h.g.mailbox <- &eventLeave{newEvent(h), err}
 				break loop
 			}
 			h.handle(msg)
@@ -100,14 +100,14 @@ func (h *human) handle(msg map[string]string) {
 			panic("face is not an integer")
 		}
 
-		e = &eventBet{&event{from: h}, quantity, face}
+		e = &eventBet{newEvent(h), quantity, face}
 	case "game-leave":
 		reason := msg["reason"]
-		e = &eventLeave{&event{from: h}, reason}
+		e = &eventLeave{newEvent(h), reason}
 	case "game-start":
-		e = &eventStart{&event{from: h}}
+		e = &eventStart{newEvent(h)}
 	case "game-call":
-		e = &eventCall{&event{from: h}}
+		e = &eventCall{newEvent(h)}
 	default:
 		panic("invalid command")
 	}

@@ -55,7 +55,7 @@ func newGame(l *lobby, name string) (*game, error) {
 
 func (g *game) join(p Entity) error {
 	errChan := make(chan error)
-	e := &eventJoin{&event{p}, errChan}
+	e := &eventJoin{newEvent(p), errChan}
 	g.mailbox <- e
 	err := <-errChan
 	if err != nil {
@@ -105,9 +105,18 @@ func (g *game) broadcast(v interface{}) {
 func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
 	defer g.log.Info("game has been closed")
 	defer close(done)
+	g.lastTimestamp = time.Now()
 
 	for {
 		e := <-mailbox
+		if g.started && e.Timestamp().Before(g.lastTimestamp) {
+			from := e.From()
+			info := fmt.Sprintf("%s(%d)", from.Name(), from.GetID())
+			entry := g.log.WithField("from", info)
+			entry.Errorf("discarding %s: %+v\n", reflect.TypeOf(e), e)
+			send(from, g.state.encode())
+			continue
+		}
 		changed := g.handle(e)
 
 		if !changed {
@@ -119,6 +128,7 @@ func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
 			break
 		}
 		g.broadcast(g.state.encode()) // update players with current state
+		g.lastTimestamp = time.Now()
 	}
 }
 
@@ -126,7 +136,7 @@ func (g *game) handle(e eventer) (changed bool) {
 	before := g.state
 	defer func() {
 		if err := recover(); err != nil {
-			reason := err.(string)
+			reason := fmt.Sprint(err)
 			from := e.From()
 			g.log.WithField("player", from.Name()).Error(reason)
 			send(from, respError{Reason: reason})
@@ -313,6 +323,10 @@ func (g *game) handleCall(e *eventCall) {
 		panic("somebody has called liar in last turn")
 	}
 
+	if e.From() == g.lastPlayer {
+		panic("you can't call liar on yourself")
+	}
+
 	g.broadcast(&respCall{})
 
 	sums := make([]int, 6)
@@ -349,5 +363,6 @@ func (g *game) handleCall(e *eventCall) {
 	g.calledLiar = true
 	if g.players[g.turn] == e.From() {
 		g.incrementTurn()
+		g.round++
 	}
 }
