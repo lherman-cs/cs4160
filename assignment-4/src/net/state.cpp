@@ -7,10 +7,10 @@ State::State(const int& index) {
   for (int i = 0; i < NUMPLAYERS; i++) {
     if (i == index)
       players.emplace_back(std::make_shared<Human>(
-          this, Dice(dicePos[i].first, dicePos[i].second), ""));
+          this, Dice(dicePos[i].first, dicePos[i].second), " "));
     else
       players.emplace_back(std::make_shared<NetworkedPlayer>(
-          this, Dice(dicePos[i].first, dicePos[i].second), ""));
+          this, Dice(dicePos[i].first, dicePos[i].second), " "));
   }
 }
 
@@ -43,7 +43,7 @@ void State::setPlayers(const std::vector<std::string>& p) {
 void State::updateState(
     const std::unordered_map<std::string, std::string>& update) {
   // players
-  setPlayers(tostr(update.at("players")));
+  setPlayers(toVecStr(update.at("players")));
 
   // turn
   turn = std::stoi(update.at("turn"));

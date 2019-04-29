@@ -41,14 +41,15 @@ class NetGameScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
+  enum Status { Initializing, Ongoing, OnCall, OnFinish, OnRoll };
+
   // Networking
   std::shared_ptr<TCP> session;
 
   // Game Data
-  enum Status { Initalizing, Ongoing, CallingLiar, Finish, TurnTransition };
   int index;
   State gameData{};
-  Status state{Initalizing};
+  Status state{Status::Initializing};
 
   // Drawing
   IoMod menuWriter{60};

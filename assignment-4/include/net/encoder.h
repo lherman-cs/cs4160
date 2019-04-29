@@ -12,6 +12,6 @@ std::stringstream encode(
 void decode(const std::string &msg,
             std::unordered_map<std::string, std::string> &table);
 
-const std::vector<std::string> tostr(const std::string &in);
+const std::vector<std::string> toVecStr(const std::string &in);
 
-const std::vector<int> toint(const std::string &in);
+const std::vector<int> toVecInt(const std::string &in);

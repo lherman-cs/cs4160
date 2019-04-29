@@ -51,6 +51,12 @@ inline std::shared_ptr<message> gameStart() {
   (*req)["command"] = "game-start";
   return req;
 }
+
+inline std::shared_ptr<message> gameCall() {
+  auto req = std::make_shared<message>();
+  (*req)["command"] = "game-call";
+  return req;
+}
 }  // namespace net
 
 class TCP {
