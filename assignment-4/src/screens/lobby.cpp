@@ -31,18 +31,18 @@ void LobbyScreen::onKeyDown(const Uint8* const keystate) {
       // if write fails, just return, dont keep looping. Probably give some
       //   feedback to the user
       if (gameSession->isOffline()) return true;
-      auto done = gameSession->write(*req);
+      bool done = gameSession->write(*req);
       return done;
     };
 
     auto confirming = [=]() {
-      // if write fails, just return, dont keep looping. Probably give some
+      // if read fails, just return, dont keep looping. Probably give some
       //   feedback to the user
       if (gameSession->isOffline()) {
         joining = false;
         return true;
       }
-      auto done = gameSession->read(*resp);
+      bool done = gameSession->read(*resp);
       if (!done) return false;
 
       if (resp->find("error") != resp->end()) {

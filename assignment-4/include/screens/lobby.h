@@ -4,6 +4,8 @@
 #include "screen.h"
 #include "util/world.h"
 
+// Screen for user to choose which room to enter given a list of room names
+
 class LobbyScreen : public Screen {
  public:
   LobbyScreen();
