@@ -146,8 +146,9 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
     // Compares to last bet
     if (sums[state.bet->getLast().face] < state.bet->getLast().quantity) {
       // The better lied (the caller was right)
-      auto playerId = state.turn - 1;
-      if (playerId == -1) playerId = state.players.size() - 1;
+      int pId = (state.turn - 1) % NUMPLAYERS;
+      if (pId == -1) pId = state.players.size() - 1;
+      unsigned int playerId = pId;
       state.players[playerId]->dice.remove();
     } else {
       // The better told the truth (the caller was wrong)
@@ -176,7 +177,7 @@ void GameScreen::onCallLiar(std::shared_ptr<Player> caller) {
 }
 
 void GameScreen::removeLosers() {
-  int id = 0;
+  unsigned int id = 0;
   auto it = state.players.begin();
   while (it != state.players.end()) {
     if ((*it)->dice.getDice().size() == 0) {

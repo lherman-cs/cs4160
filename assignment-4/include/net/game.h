@@ -47,7 +47,7 @@ class NetGameScreen : public Screen {
   std::shared_ptr<TCP> session;
 
   // Game Data
-  int index;
+  unsigned int index;
   State gameData{};
   Status state{Status::Initializing};
 

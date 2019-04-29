@@ -24,9 +24,9 @@ class State {
   void setPlayers(const std::vector<std::string>&);
 
   std::shared_ptr<Bet> bet{std::make_shared<Bet>(this)};
-  int turn{0};
-  int round{0};
-  int numDice{25};
+  unsigned int turn{0};
+  unsigned int round{0};
+  unsigned int numDice{25};
   std::vector<std::shared_ptr<Player>> players{};
 
  private:

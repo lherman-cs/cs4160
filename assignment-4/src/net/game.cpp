@@ -61,6 +61,7 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
 void NetGameScreen::draw() const {
   background.draw();
   for (const auto& player : gameData.players) player->draw();
+  gameData.bet->draw();
 
   if (state == Status::Initializing) {
     // draw loading bar
@@ -84,12 +85,16 @@ void NetGameScreen::update(Uint32 ticks) {
 
   std::string type = msg["type"];
   if (type == "roll") {
-    // Set dice
+    // Set dice to be values recieved from the server
     state = Status::OnRoll;
     for (unsigned int i = 0; i < gameData.players.size(); i++) {
       auto id = std::to_string(i);
       auto faces = toVecInt(msg[id]);
       gameData.players[i]->dice.set(faces);
+    }
+    // Set the dice to be hidden (unless it yours)
+    for (unsigned int i = 0; i < gameData.players.size(); i++) {
+      if (i != index) gameData.players[i]->dice.hide();
     }
   } else if (type == "state") {
     // Set state
@@ -98,6 +103,10 @@ void NetGameScreen::update(Uint32 ticks) {
   } else if (type == "call") {
     // update internal state so that we can render a loading bar
     state = Status::OnCall;
+    // show all the dice on the table
+    for (const auto& player : gameData.players) {
+      player->dice.show();
+    }
   } else if (type == "finish") {
     state = Status::OnFinish;
     return;

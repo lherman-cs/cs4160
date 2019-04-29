@@ -47,6 +47,7 @@ void Dice::remove() {
 const std::vector<Die>& Dice::getDice() const { return dice; }
 
 void Dice::set(const std::vector<int>& faces) {
+  show();
   auto it = dice.begin();
   for (size_t i = 0; i < faces.size(); i++) {
     dice[i].set(faces[i]);

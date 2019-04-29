@@ -41,4 +41,6 @@ class GameScreen : public Screen {
   void onDone();
   void onCallLiar(std::shared_ptr<Player> caller);
   void removeLosers();
+
+  static const unsigned int NUMPLAYERS = 5;
 };
