@@ -9,7 +9,8 @@
 
 // for holding game state
 class State {
- public:
+ protected:
+  friend NetGameScreen;
   State(const GameScreen* const g, const int&);
   void updateState(const std::unordered_map<std::string, std::string>&);
   void setPlayers(const std::vector<std::string>&);
