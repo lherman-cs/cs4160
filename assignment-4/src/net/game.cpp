@@ -61,7 +61,7 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
   if (done) {
     std::cout << "ENTER BET" << std::endl;
     auto& promise = Global::get().promise.add();
-    auto bet = gameData.bet->getCurr();
+    auto bet = gameData.bet->getLast();
     auto msg = net::gameBet(bet.quantity, bet.face - 1);
     promise.then([=]() { return session->write(*msg); });
   }
@@ -88,6 +88,20 @@ void NetGameScreen::draw() const {
     return;
   }
 
+  if (state == Status::Ongoing) {
+    auto player = gameData.players[gameData.turn];
+    // if the player is a networked player/bot
+    if (player->type == 1) {
+      gameData.bet->setSelectable(false);
+      // If bot, renders a loading text saying that the bot is thinking.
+      auto loadingText = player->name + " is thinking...";
+      loadingWriter.writeText(loadingText, 550, 720, secondaryColor);
+    } else {
+      gameData.bet->setSelectable(true);
+      // Otherwise, notify the human that it is their turn
+      loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
+    }
+  }
 }
 
 void NetGameScreen::update(Uint32 ticks) {
@@ -106,9 +120,9 @@ void NetGameScreen::update(Uint32 ticks) {
 
   std::string type = msg["type"];
   if (type == "roll") {
-    // Set dice to be values recieved from the server
     state = Status::OnRoll;
     std::cout << "Got rolling dice message" << std::endl;
+    // Set dice to be values recieved from the server
     for (unsigned int i = 0; i < gameData.players.size(); i++) {
       auto id = std::to_string(i);
       auto faces = toVecInt(msg[id]);
