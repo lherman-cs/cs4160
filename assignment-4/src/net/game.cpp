@@ -29,95 +29,58 @@ NetGameScreen::NetGameScreen(std::shared_ptr<TCP> session, int index,
 
 NetGameScreen::~NetGameScreen() {}
 
-void NetGameScreen::onKeyDown(const Uint8* const keystate) { (void)keystate; }
+void NetGameScreen::onKeyDown(const Uint8* const keystate) {
+  (void)keystate;
+  if (state == Status::Initalizing) return;
+}
 
-void NetGameScreen::draw() const {}
+void NetGameScreen::draw() const {
+  if (state == Status::Initalizing) {
+    // draw loading bar
+  }
+}
 
 void NetGameScreen::update(Uint32 ticks) {
   (void)ticks;
-  // capture offline
+  // do nothing when offline
   if (session->isOffline()) return;
-  if (state == Initalizing) {
-    // Create appropriate data structures
 
-    auto& promise = Global::get().promise.add();
-    auto resp = std::make_shared<net::message>();
+  // Create appropriate data structures
+  net::message msg;
+  bool ready = session->read(msg);
+  if (!ready) return;
 
-    // Get dice
-
-    auto getDice = [=]() {
-      if (session->isOffline()) {
-        // joining = false;
-        return true;
-      }
-      bool done = session->read(*resp);
-      if (!done) return false;
-
-      if (resp->find("error") != resp->end() ||
-          resp->find("roll") != resp->end()) {
-        // joining = false;
-        return true;
-      }
-
-      auto& navigator = Global::get().navigator;
-      navigator.pop();
-      // navigator.push<RoomScreen>(session, 0, false);
-      return true;
-    };
-
-    promise.then(getDice);
-
-    // for (auto player : gameData->players) {
-    //   player->
-    // }
-
-    // Get state
-
-    auto getState = [=]() {
-      if (session->isOffline()) {
-        // joining = false;
-        return true;
-      }
-      bool done = session->read(*resp);
-      if (!done) return false;
-
-      if (resp->find("error") != resp->end()) {
-        // joining = false;
-        return true;
-      }
-
-      auto& navigator = Global::get().navigator;
-      navigator.pop();
-      // navigator.push<RoomScreen>(session, 0, false);
-      return true;
-    };
-
-    promise.then(getState);
-
-    // Check if done
-    state = Ongoing;
-    // need to pass index from the join call
-    gameData = index;
+  auto type = msg["type"];
+  if (type == "roll") {
+    // Set dice
+    for (int i = 0; i < gameData.players.size(); i++) {
+      auto faces = toint(msg[std::to_string(i)]);
+      gameData.players[i]->dice.set(faces);
+    }
+  } else if (type == "state") {
+    // Set state
+    gameData.updateState(msg);
+  } else {
     return;
   }
 
-  // Handle player going offline
-  if (session->isOffline()) {
-    auto loading = Global::get().widget.create<Loading>("You're offline");
-    auto redirecting = Global::get().widget.create<Loading>("Going back");
-    auto goBack = []() {
-      Global::get().navigator.pop();
-      return true;
-    };
+  // // Handle player going offline
+  // if (session->isOffline()) {
+  //   auto loading = Global::get().widget.create<Loading>("You're offline");
+  //   auto redirecting = Global::get().widget.create<Loading>("Going back");
+  //   auto goBack = []() {
+  //     Global::get().navigator.pop();
+  //     return true;
+  //   };
 
-    auto& promise = Global::get().promise.add();
-    promise.then(loading->show())
-        .sleep(2000)
-        .then(loading->dismiss())
-        .then(redirecting->show())
-        .sleep(500)
-        .then(goBack)
-        .sleep(500)
-        .then(redirecting->dismiss());
-  }
+  //   auto& promise = Global::get().promise.add();
+  //   promise.then(loading->show())
+  //       .sleep(2000)
+  //       .then(loading->dismiss())
+  //       .then(redirecting->show())
+  //       .sleep(500)
+  //       .then(goBack)
+  //       .sleep(500)
+  //       .then(redirecting->dismiss());
+  // }
 }

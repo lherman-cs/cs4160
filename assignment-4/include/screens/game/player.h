@@ -48,6 +48,7 @@ class Player : public Drawable {
   const State *state;
 
   friend class GameScreen;
+  friend class NetGameScreen;
 };
 
 #pragma GCC diagnostic pop
