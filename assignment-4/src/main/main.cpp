@@ -12,9 +12,10 @@ int main(int, char* []) {
     engine.play();
   } catch (const string& msg) {
     std::cout << msg << std::endl;
-  } catch (...) {
-    std::cout << "Oops, someone threw an exception!" << std::endl;
   }
+  // catch (...) {
+  //   std::cout << "Oops, someone threw an exception!" << std::endl;
+  // }
 
   return 0;
 }

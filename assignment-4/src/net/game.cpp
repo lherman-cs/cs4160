@@ -87,6 +87,7 @@ void NetGameScreen::draw() const {
     // draw loading bar
     return;
   }
+
 }
 
 void NetGameScreen::update(Uint32 ticks) {
