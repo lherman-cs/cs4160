@@ -147,6 +147,12 @@ func (d *decoder) decode(v interface{}) error {
 		switch valueKind {
 		case reflect.String:
 			valueField.SetString(rawValue)
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			v, err := strconv.ParseInt(rawValue, 10, 64)
+			if err != nil {
+				return err
+			}
+			valueField.SetInt(v)
 		default:
 			return fmt.Errorf("decode doesn't support non string struct fields")
 		}
