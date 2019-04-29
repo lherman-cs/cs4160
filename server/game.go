@@ -277,6 +277,9 @@ func (g *game) handleJoin(e *eventJoin) {
 }
 
 func (g *game) handleStart(e *eventStart) {
+	if g.started {
+		panic("game has started")
+	}
 	// fill up players with bot and start existing bots
 	for _, p := range g.players {
 		b, ok := p.(*bot)

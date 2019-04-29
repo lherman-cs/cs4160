@@ -46,10 +46,16 @@ func (b *bot) Loop() {
 
 	for {
 		msg := make(map[string]string)
-		newDecoder(b).decode(msg)
+		if err := newDecoder(b).decode(msg); err != nil {
+			break
+		}
 		b.log.Debug("received ", msg)
 
 		t := msg["type"]
+		if t == "finish" {
+			break
+		}
+
 		if t != "state" {
 			continue
 		}
@@ -75,6 +81,8 @@ func (b *bot) Loop() {
 		time.Sleep(time.Duration(delay) * time.Second)
 		b.bet(numDice, lastQuantity, lastFace)
 	}
+
+	b.log.Info("exiting...")
 }
 
 func (b *bot) maybeCall(numDice, lastQuantity, lastFace int64) bool {
