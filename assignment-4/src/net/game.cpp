@@ -21,9 +21,10 @@ using namespace std::placeholders;
 //  responds to 'B' bet, 'L' call liar, and 'H' help
 //              ← → ↑ ↓ for selection of face and quantity
 
-NetGameScreen::NetGameScreen(int index, int difficulty) : index(index) {
+NetGameScreen::NetGameScreen(std::shared_ptr<TCP> session, int index,
+                             int difficulty)
+    : session(session), index(index) {
   (void)difficulty;
-  auto gameSession = std::make_shared<TCP>();
 }
 
 NetGameScreen::~NetGameScreen() {}
@@ -33,6 +34,7 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) { (void)keystate; }
 void NetGameScreen::draw() const {}
 
 void NetGameScreen::update(Uint32 ticks) {
+  (void)ticks;
   // capture offline
   if (session->isOffline()) return;
   if (state == Initalizing) {

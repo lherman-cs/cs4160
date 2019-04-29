@@ -21,18 +21,16 @@ class RoomScreen : public Screen {
  private:
   // Networking
   std::shared_ptr<TCP> session;
-  const std::string id;
+  // const std::string id;
   bool isOwner;
   std::vector<std::string> names;
 
   // Game Data
   int difficulty;
-  int bots;
   int index;
 
   // Drawing
   IoMod menuWriter{70};
-  Navigator& navigator{Global::get().navigator};
   const World lobbyBackground{"screens/lobby/background"};   // TODO
   const World enterNotification{"screens/lobby/enterable"};  // TODO
 

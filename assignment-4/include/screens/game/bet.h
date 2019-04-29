@@ -29,17 +29,25 @@ class Bet : public Drawable {
   void reset();
 
  private:
+  // Generic Data
+  const State* state;
+  static const int numFaces{6};
+
+  // Drawing Data
   Vector2f position;
   bool dieSelected{false};
+
+  // Bet Data
+  Value last{};
+  Value current{};
+  Die die{Vector2f(950, 50), Die::State::visible, current.face - 1};
+
+  // Drawing
   SDL_Color normalColor{52, 44, 42, 255};
   SDL_Color hoverColor{255, 255, 0, 255};
   SDL_Color* textColor = &hoverColor;
-  Value last;
-  Value current;
-  const int numFaces{6};
-  const State* state;
   IoMod menuWriter{60};
-  Die die{Vector2f(950, 50), Die::State::visible, current.face - 1};
 
+  // Validate bet
   bool validate();
 };

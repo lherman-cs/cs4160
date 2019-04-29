@@ -45,6 +45,12 @@ inline std::shared_ptr<message> subscribe() {
   (*req)["command"] = "subscribe";
   return req;
 }
+
+inline std::shared_ptr<message> gameStart() {
+  auto req = std::make_shared<message>();
+  (*req)["command"] = "game-start";
+  return req;
+}
 }  // namespace net
 
 class TCP {
@@ -66,8 +72,8 @@ class TCP {
   bool offline = false;
   std::string error = "";
   const int timeout = 100;  // in miliseconds
-  std::stringstream in;
-  std::string out;
+  std::stringstream in{};
+  std::string out{};
   const char *outPtr = nullptr;
   size_t outSize = 0;
 };

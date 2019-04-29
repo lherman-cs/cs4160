@@ -103,6 +103,7 @@ void LobbyScreen::draw() const {
 }
 
 void LobbyScreen::update(Uint32 ticks) {
+  (void)ticks;
   if (session.isOffline()) return;
   if (joining) return;
 

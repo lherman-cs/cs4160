@@ -23,7 +23,7 @@ class State {
   void updateState(const std::unordered_map<std::string, std::string>&);
   void setPlayers(const std::vector<std::string>&);
 
-  std::shared_ptr<Bet> bet;
+  std::shared_ptr<Bet> bet{std::make_shared<Bet>(this)};
   int turn{0};
   int round{0};
   int numDice{25};

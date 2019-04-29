@@ -34,7 +34,7 @@
 
 class NetGameScreen : public Screen {
  public:
-  NetGameScreen(int index, int difficulty);
+  NetGameScreen(std::shared_ptr<TCP> session, int index, int difficulty);
   ~NetGameScreen();
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
@@ -43,12 +43,11 @@ class NetGameScreen : public Screen {
  private:
   // Networking
   std::shared_ptr<TCP> session;
-  const std::string id;
 
   // Game Data
   enum Status { Initalizing, Ongoing, CallingLiar, Finish, TurnTransition };
   int index;
-  State gameData;
+  State gameData{};
   Status state{Initalizing};
 
   // Drawing

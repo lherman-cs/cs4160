@@ -1,16 +1,17 @@
 #include "screens/room.h"
+#include <sstream>
 #include "net/game.h"
 #include "net/tcp.h"
 #include "widget/loading.h"
 
 RoomScreen::RoomScreen(std::shared_ptr<TCP> session, int difficulty,
                        bool isOwner, int index)
-    : session(session), difficulty(difficulty), isOwner(isOwner), index(index) {
-  names.emplace_back(isOwner ? "You" : "You (Not Owner)");
-  for (int i = 1; i < 5; i++) {
-    names.emplace_back("Bot " + std::to_string(i));
-  }
-}
+    : session(session),
+      isOwner(isOwner),
+      names(),
+      difficulty(difficulty),
+      index(index) {}
+
 RoomScreen::~RoomScreen() {}
 
 void RoomScreen::onKeyDown(const Uint8* const keystate) {
@@ -18,14 +19,10 @@ void RoomScreen::onKeyDown(const Uint8* const keystate) {
   if (isOwner && keystate[SDL_SCANCODE_RETURN]) {
     auto loading = Global::get().widget.create<Loading>("Loading...");
     auto& promise = Global::get().promise.add();
-    Global::get().mixer.transition.play();
+    auto msg = net::gameStart();
     promise.then(loading->show())
-        .sleep(1000)
-        .then(loading->dismiss())
-        .then([&]() -> bool {
-          navigator.push<NetGameScreen>(index, difficulty);
-          return true;
-        });
+        .then([=]() { return session->write(*msg); })
+        .then(loading->dismiss());
   }
 }
 
@@ -34,9 +31,42 @@ void RoomScreen::draw() const {
   // if owner, display enter (an asset)
   if (isOwner) enterNotification.draw();
   // player list
-  for (int i = 0; i < names.size(); i++) {
+  for (unsigned int i = 0; i < names.size(); i++) {
     menuWriter.writeText(names[i], xstart, ystart + i * ystep, normalColor);
   }
 }
 
-void RoomScreen::update(Uint32 ticks) { (void)ticks; }
+void RoomScreen::update(Uint32 ticks) {
+  (void)ticks;
+
+  // do nothing when it's offline
+  if (session->isOffline()) return;
+
+  net::message msg;
+  bool ready = session->read(msg);
+  if (!ready) return;
+
+  auto type = msg["type"];
+  if (type == "state") {
+    auto players = msg["players"];
+    std::replace(players.begin(), players.end(), ',', ' ');
+    names.clear();
+
+    std::stringstream iss(players);
+    std::string player;
+    while (iss >> player) names.emplace_back(player);
+
+  } else if (type == "start") {
+    auto loading = Global::get().widget.create<Loading>("Loading...");
+    auto& promise = Global::get().promise.add();
+    Global::get().mixer.transition.play();
+    promise.then(loading->show())
+        .sleep(1000)
+        .then(loading->dismiss())
+        .then([=]() {
+          auto& navigator = Global::get().navigator;
+          navigator.push<NetGameScreen>(session, index, difficulty);
+          return true;
+        });
+  }
+}

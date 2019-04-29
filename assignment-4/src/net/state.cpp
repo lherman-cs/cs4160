@@ -2,7 +2,7 @@
 #include "net/encoder.h"
 #include "screens/game/dice.h"
 
-State::State(const int& index) : bet(std::make_shared<Bet>(this)) {
+State::State(const int& index) {
   // initialize players
   for (int i = 0; i < NUMPLAYERS; i++) {
     if (i == index)
@@ -34,7 +34,7 @@ State::State() {
 }
 
 void State::setPlayers(const std::vector<std::string>& p) {
-  for (int i = 0; i < p.size(); i++) {
+  for (unsigned int i = 0; i < p.size(); i++) {
     players[i]->name = p[i];
   }
 }
