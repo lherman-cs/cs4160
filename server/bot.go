@@ -1,31 +1,33 @@
 package main
 
 import (
-	"bytes"
 	"github.com/Pallinder/go-randomdata"
 	"github.com/sirupsen/logrus"
 	"io"
 	"math/rand"
+	"net"
 	"strconv"
 	"time"
 )
 
 type bot struct {
-	io.ReadWriter
+	io.Reader
+	io.Writer
 	*Player
 }
 
 func newBot(g *game, id int, name string, dice []int) *bot {
-	var buff bytes.Buffer
 	log := logrus.WithFields(logrus.Fields{
 		"player": name,
 		"room":   g.name,
 		"file":   "bot.go",
 	})
 
+	client, server := net.Pipe()
 	return &bot{
-		ReadWriter: &buff,
-		Player:     &Player{g, id, name, dice, log},
+		Reader: client,
+		Writer: server,
+		Player: &Player{g, id, name, dice, log},
 	}
 }
 
@@ -45,6 +47,7 @@ func (b *bot) Loop() {
 	for {
 		msg := make(map[string]string)
 		newDecoder(b).decode(msg)
+		b.log.Debug("received ", msg)
 
 		t := msg["type"]
 		if t != "state" {
