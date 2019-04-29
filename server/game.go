@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -80,6 +81,7 @@ func (g *game) info() string {
 }
 
 func (g *game) broadcast(v interface{}) {
+	g.log.Infof("broadcast %s: %+v\n", reflect.TypeOf(v), v)
 	dones := make([]<-chan error, 0, len(g.players))
 	for _, p := range g.players {
 		dones = append(dones, send(p, v))
@@ -134,6 +136,10 @@ func (g *game) handle(e eventer) (changed bool) {
 		}
 	}()
 
+	from := e.From()
+	info := fmt.Sprintf("%s(%d)", from.Name(), from.GetID())
+	entry := g.log.WithField("from", info)
+	entry.Infof("handle %s: %+v\n", reflect.TypeOf(e), e)
 	switch v := e.(type) {
 	case *eventBet:
 		g.handleBet(v)
@@ -176,14 +182,9 @@ func (g *game) roll() {
 func (g *game) handleBet(e *eventBet) {
 	g.lastBet.quantity = e.quantity
 	g.lastBet.face = e.face
-	g.turn = (g.turn + 1) % len(g.players)
-	for {
-		g.turn = (g.turn + 1) % len(g.players)
-		if len(g.players[g.turn].Dice()) != 0 {
-			break
-		}
-	}
+	g.incrementTurn()
 	g.round++
+	g.lastPlayer = e.From()
 	g.calledLiar = false
 }
 
@@ -229,7 +230,7 @@ func (g *game) handleLeave(e *eventLeave) {
 func (g *game) handleJoin(e *eventJoin) {
 	defer func() {
 		if err := recover(); err != nil {
-			reason := err.(string)
+			reason := fmt.Sprint(err)
 			e.errChan <- errors.New(reason)
 			panic(reason) // delegates to root handler for logging, etc
 		}
@@ -293,13 +294,13 @@ func (g *game) handleStart(e *eventStart) {
 	need := maxPlayers - len(g.players)
 	for i := 0; i < need; i++ {
 		b := newRandomBot(g)
+		b.SetID(len(g.players))
 		go b.Loop()
 		g.players = append(g.players, b)
 	}
 
 	g.started = true
 	g.calledLiar = true // set this true, so that nobody can call liar
-	g.lastBet.face = 1
 	g.numDices = len(g.players) * 5
 	resp := respStart{}
 	g.broadcast(&resp)
@@ -331,10 +332,22 @@ func (g *game) handleCall(e *eventCall) {
 	// TODO! probably add some delays between on call and roll
 
 	g.roll()
-	g.lastBet = bet{quantity: 0, face: 1}
+
+	actives := 0
+	for _, p := range g.players {
+		if len(p.Dice()) > 0 {
+			actives++
+		}
+	}
+	if actives <= 1 {
+		g.finished = true
+		return
+	}
+
+	g.lastBet = bet{quantity: 0, face: 0}
 	g.numDices--
 	g.calledLiar = true
-	if g.numDices == 0 {
-		g.finished = true
+	if g.players[g.turn] == e.From() {
+		g.incrementTurn()
 	}
 }

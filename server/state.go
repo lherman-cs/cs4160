@@ -34,3 +34,12 @@ func (s *state) encode() *respState {
 		LastFace:     s.lastBet.face,
 	}
 }
+
+func (s *state) incrementTurn() {
+	for {
+		s.turn = (s.turn + 1) % len(s.players)
+		if len(s.players[s.turn].Dice()) != 0 {
+			break
+		}
+	}
+}

@@ -41,15 +41,14 @@ func newBotFromHuman(h *human) *bot {
 }
 
 func (b *bot) Loop() {
-	maxDelay := 10 // seconds
-	minDelay := 3
+	maxDelay := 1 // seconds
+	minDelay := 1
 
 	for {
 		msg := make(map[string]string)
 		if err := newDecoder(b).decode(msg); err != nil {
 			break
 		}
-		b.log.Debug("received ", msg)
 
 		t := msg["type"]
 		if t == "finish" {
@@ -102,9 +101,9 @@ func (b *bot) maybeCall(numDice, lastQuantity, lastFace int64) bool {
 		return false
 	}
 
-	// probability with what we have and absolute 15% chance to always call
-	if rand.Intn(quantity) < match || rand.Intn(100) < 15 || quantity == int(numDice) {
-		b.g.mailbox <- eventCall{&event{b}}
+	// probability with what we have and absolute 1% chance to always call
+	if rand.Intn(quantity) < match || rand.Intn(100) < 1 || quantity == int(numDice) {
+		b.g.mailbox <- &eventCall{&event{b}}
 		return true
 	}
 	return false
@@ -120,5 +119,5 @@ func (b *bot) bet(numDice, lastQuantity, lastFace int64) {
 		face++
 	}
 
-	b.g.mailbox <- eventBet{&event{b}, quantity, face}
+	b.g.mailbox <- &eventBet{&event{b}, quantity, face}
 }

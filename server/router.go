@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 
 	log "github.com/sirupsen/logrus"
@@ -20,7 +21,7 @@ var routes = map[string]handlerFunc{
 
 func routerRecover(conn io.ReadWriter) {
 	if err := recover(); err != nil {
-		reason := err.(string)
+		reason := fmt.Sprint(err)
 		resp := map[string]string{"error": reason}
 		routerLogger.Error(reason)
 		newEncoder(conn).encode(resp)

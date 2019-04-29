@@ -14,6 +14,7 @@ type Entity interface {
 	Dice() []int
 	// Remove 1 die from the entity
 	LoseDie()
+	GetID() int
 	SetID(id int)
 }
 
@@ -25,6 +26,11 @@ type Player struct {
 	name string
 	dice []int
 	log  *logrus.Entry
+}
+
+// GetID gets player's id
+func (p *Player) GetID() int {
+	return p.id
 }
 
 // SetID sets player's id

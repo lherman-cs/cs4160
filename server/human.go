@@ -56,7 +56,6 @@ loop:
 	for {
 		select {
 		case msg := <-receiver:
-			h.log.Debug("received ", msg)
 			err, ok := msg["error"]
 			if ok {
 				h.g.mailbox <- &eventLeave{&event{from: h}, err}
