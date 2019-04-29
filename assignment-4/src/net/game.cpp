@@ -25,15 +25,16 @@ NetGameScreen::NetGameScreen(std::shared_ptr<TCP> session, int index,
                              int difficulty)
     : session(session), index(index), gameData(index) {
   (void)difficulty;
+  std::cout << "Net Game Class init" << std::endl;
 }
 
 NetGameScreen::~NetGameScreen() {}
 
 void NetGameScreen::onKeyDown(const Uint8* const keystate) {
   (void)keystate;
-  if (state == Status::Initializing) return;
-
-  auto turn = gameData.turn;
+  if (state == Status::Initializing || state == Status::OnCall ||
+      state == Status::OnRoll)
+    return;
 
   if (keystate[SDL_SCANCODE_L]) {
     // Notify server
@@ -42,6 +43,7 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
     promise.then([=]() { return session->write(*msg); });
   }
 
+  auto turn = gameData.turn;
   // Dont allow user input when it's not their turn (except for call liar)
   if (turn != index) return;
 
@@ -55,7 +57,7 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
     return;
   }
 
-  if (state == Status::OnCall || state == Status::OnRoll) return;
+  gameData.players[index]->decide(keystate, gameData.bet);
 }
 
 void NetGameScreen::draw() const {
@@ -87,6 +89,7 @@ void NetGameScreen::update(Uint32 ticks) {
   if (type == "roll") {
     // Set dice to be values recieved from the server
     state = Status::OnRoll;
+    std::cout << "Got rolling dice message" << std::endl;
     for (unsigned int i = 0; i < gameData.players.size(); i++) {
       auto id = std::to_string(i);
       auto faces = toVecInt(msg[id]);
@@ -98,9 +101,11 @@ void NetGameScreen::update(Uint32 ticks) {
     }
   } else if (type == "state") {
     // Set state
+    std::cout << "Got state message" << std::endl;
     state = Status::Ongoing;
     gameData.updateState(msg);
   } else if (type == "call") {
+    std::cout << "Got call message" << std::endl;
     // update internal state so that we can render a loading bar
     state = Status::OnCall;
     // show all the dice on the table
@@ -108,6 +113,7 @@ void NetGameScreen::update(Uint32 ticks) {
       player->dice.show();
     }
   } else if (type == "finish") {
+    std::cout << "Got finish message" << std::endl;
     state = Status::OnFinish;
     return;
   }

@@ -41,6 +41,7 @@ void RoomScreen::update(Uint32 ticks) {
 
   // do nothing when it's offline
   if (session->isOffline()) return;
+  if (starting) return;
 
   net::message msg;
   bool ready = session->read(msg);
@@ -57,6 +58,7 @@ void RoomScreen::update(Uint32 ticks) {
     while (iss >> player) names.emplace_back(player);
 
   } else if (type == "start") {
+    starting = true;
     auto loading = Global::get().widget.create<Loading>("Loading...");
     auto& promise = Global::get().promise.add();
     Global::get().mixer.transition.play();

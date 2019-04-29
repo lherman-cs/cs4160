@@ -28,7 +28,12 @@ class Bet : public Drawable {
   Value getLast() const;
   void reset();
 
+ protected:
+  void set(const Value&);
+
  private:
+  friend State;
+
   // Generic Data
   const State* state;
   static const int numFaces{6};

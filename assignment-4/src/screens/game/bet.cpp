@@ -106,3 +106,9 @@ void Bet::reset() {
   current = last;
   increment(Quantity);
 }
+
+void Bet::set(const Value& v) {
+  last = v;
+  current = v;
+  validate();
+}

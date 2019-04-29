@@ -29,6 +29,9 @@ class RoomScreen : public Screen {
   int difficulty;
   int index;
 
+  // State
+  bool starting = false;
+
   // Drawing
   IoMod menuWriter{70};
   const World lobbyBackground{"screens/lobby/background"};   // TODO

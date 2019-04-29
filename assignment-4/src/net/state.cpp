@@ -53,4 +53,9 @@ void State::updateState(
 
   // num_dices
   numDice = std::stoi(update.at("num_dices"));
+
+  // bet
+  int quantity = std::stoi(update.at("last_quantity"));
+  int face = std::stoi(update.at("last_face"));
+  bet->set(Bet::Value{quantity, face});
 }
