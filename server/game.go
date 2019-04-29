@@ -300,6 +300,7 @@ func (g *game) handleStart(e *eventStart) {
 	g.started = true
 	g.calledLiar = true // set this true, so that nobody can call liar
 	g.lastBet.face = 1
+	g.numDices = len(g.players) * 5
 	resp := respStart{}
 	g.broadcast(&resp)
 	g.roll()
