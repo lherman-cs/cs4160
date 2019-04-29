@@ -59,17 +59,29 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
 
   bool done = gameData.players[index]->decide(keystate, gameData.bet);
   if (done) {
+    std::cout << "ENTER BET" << std::endl;
     auto& promise = Global::get().promise.add();
     auto bet = gameData.bet->getCurr();
-    auto msg = net::gameBet(bet.quantity, bet.face);
+    auto msg = net::gameBet(bet.quantity, bet.face - 1);
     promise.then([=]() { return session->write(*msg); });
   }
 }
 
 void NetGameScreen::draw() const {
   background.draw();
+  // Draw player's dice
   for (const auto& player : gameData.players) player->draw();
+
+  // Draw current bet
   gameData.bet->draw();
+
+  // Draw round/turn number
+  int ystart = 705;
+  int xstart = 50;
+  int xstep = 110;
+
+  menuWriter.writeText(std::to_string(gameData.round), xstart + xstep, ystart,
+                       secondaryColor);
 
   if (state == Status::Initializing) {
     // draw loading bar

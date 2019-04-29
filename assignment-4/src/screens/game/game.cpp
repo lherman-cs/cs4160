@@ -96,8 +96,10 @@ void GameScreen::draw() const {
   // Draw bet
   state.bet->draw();
 
-  // Draw round/turn number
+  // Draw players and dice on table
+  for (const auto player : state.players) player->draw();
 
+  // Draw round/turn number
   int ystart = 705;
   int xstart = 50;
   int xstep = 110;
@@ -105,7 +107,6 @@ void GameScreen::draw() const {
   menuWriter.writeText(std::to_string(state.round), xstart + xstep, ystart,
                        secondaryColor);
 
-  for (const auto player : state.players) player->draw();
   if (status == Status::TurnTransition) return;
 
   if (status == Status::Ongoing) {
