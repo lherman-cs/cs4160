@@ -306,6 +306,8 @@ func (g *game) handleCall(e *eventCall) {
 		panic("somebody has called liar in last turn")
 	}
 
+	g.broadcast(&respCall{})
+
 	sums := make([]int, 6)
 	for _, p := range g.players {
 		dice := p.Dice()
@@ -319,6 +321,8 @@ func (g *game) handleCall(e *eventCall) {
 	} else {
 		e.From().LoseDie()
 	}
+
+	// TODO! probably add some delays between on call and roll
 
 	g.roll()
 	g.lastBet = bet{quantity: 0, face: 1}

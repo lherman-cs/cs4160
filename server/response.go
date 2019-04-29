@@ -32,6 +32,10 @@ type respFinish struct {
 	Type string `msg:"type" default:"finish"`
 }
 
+type respCall struct {
+	Type string `msg:"type" default:"call"`
+}
+
 type respError struct {
 	Type   string `msg:"type" default:"error"`
 	Reason string `msg:"reason"`
