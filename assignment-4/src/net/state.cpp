@@ -3,7 +3,6 @@
 #include "screens/game/dice.h"
 
 State::State(const int& index) : bet(std::make_shared<Bet>(this)) {
-  int NUMPLAYERS = 5;
   // initialize players
   for (int i = 0; i < NUMPLAYERS; i++) {
     if (i == index)
@@ -12,6 +11,25 @@ State::State(const int& index) : bet(std::make_shared<Bet>(this)) {
     else
       players.emplace_back(std::make_shared<NetworkedPlayer>(
           this, Dice(dicePos[i].first, dicePos[i].second), ""));
+  }
+}
+
+State::State() {
+#ifdef DEBUG
+  // if we are in debug mode, we have bots play against eachother
+  int start = 0;
+#else
+  // otherwise, have an interactive game (human playing against bots)
+  int start = 1;
+  auto human = std::make_shared<Human>(
+      this, Dice(dicePos[0].first, dicePos[0].second), "Human");
+  this->players.emplace_back(human);
+#endif
+
+  for (int id = start; id < NUMPLAYERS; id++) {
+    auto bot = std::make_shared<Bot>(
+        this, Dice(dicePos[id].first, dicePos[id].second), id);
+    this->players.emplace_back(bot);
   }
 }
 

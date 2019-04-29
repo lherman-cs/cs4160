@@ -48,7 +48,7 @@ class NetGameScreen : public Screen {
   // Game Data
   enum Status { Initalizing, Ongoing, CallingLiar, Finish, TurnTransition };
   int index;
-  std::shared_ptr<State> gameData;
+  State gameData;
   Status state{Initalizing};
 
   // Drawing
