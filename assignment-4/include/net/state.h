@@ -9,9 +9,12 @@
 
 // for holding game state
 class State {
+ public:
+  inline int getNumDice() const { return numDice; }
+
  protected:
   friend NetGameScreen;
-  State(const GameScreen* const g, const int&);
+  State(const int&);
   void updateState(const std::unordered_map<std::string, std::string>&);
   void setPlayers(const std::vector<std::string>&);
 

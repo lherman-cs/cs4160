@@ -5,14 +5,15 @@
 #include "bet.h"
 #include "core/interface.h"
 #include "dice.h"
-#include "game.h"
+#include "net/state.h"
 
 /* ignore effc++ since faces is just going to be used */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Weffc++"
 
-class GameScreen;
+class State;
 class Bet;
+
 class Player : public Drawable {
  public:
   virtual ~Player();
@@ -41,10 +42,10 @@ class Player : public Drawable {
   }
 
  protected:
-  Player(const GameScreen *const game, Dice dice, const std::string &name,
+  Player(const State *const state, Dice dice, const std::string &name,
          uint type);
-  const GameScreen *const game;
   Dice dice;
+  const State *state;
 
   friend class GameScreen;
 };

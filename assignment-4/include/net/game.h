@@ -27,9 +27,6 @@
 #include "util/ioMod.h"      // drawing text to screen
 #include "util/world.h"      // drawing background
 
-class Player;
-class Bet;
-
 // game screen
 //  accepts type and quantity (of dice for betting)
 //  responds to 'B' bet, 'L' call liar, and 'H' help

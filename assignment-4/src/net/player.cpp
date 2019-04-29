@@ -1,7 +1,6 @@
 #include "net/player.h"
 
-NetworkedPlayer::NetworkedPlayer(const GameScreen* const game, Dice d,
-                                 std::string name)
-    : Player(game, d, name, 0) {}
+NetworkedPlayer::NetworkedPlayer(const State* const s, Dice d, std::string name)
+    : Player(s, d, name, 0) {}
 
 NetworkedPlayer::~NetworkedPlayer() {}

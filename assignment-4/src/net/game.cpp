@@ -45,7 +45,7 @@ void NetGameScreen::update(Uint32 ticks) {
 
     auto getDice = [=]() {
       if (session->isOffline()) {
-        joining = false;
+        // joining = false;
         return true;
       }
       bool done = session->read(*resp);
@@ -59,33 +59,34 @@ void NetGameScreen::update(Uint32 ticks) {
 
       auto& navigator = Global::get().navigator;
       navigator.pop();
-      navigator.push<RoomScreen>(session, 0, false);
+      // navigator.push<RoomScreen>(session, 0, false);
       return true;
     };
 
     promise.then(getDice);
 
-    for (auto player : gameData->players) {
-    }
+    // for (auto player : gameData->players) {
+    //   player->
+    // }
 
     // Get state
 
     auto getState = [=]() {
       if (session->isOffline()) {
-        joining = false;
+        // joining = false;
         return true;
       }
       bool done = session->read(*resp);
       if (!done) return false;
 
       if (resp->find("error") != resp->end()) {
-        joining = false;
+        // joining = false;
         return true;
       }
 
       auto& navigator = Global::get().navigator;
       navigator.pop();
-      navigator.push<RoomScreen>(session, 0, false);
+      // navigator.push<RoomScreen>(session, 0, false);
       return true;
     };
 

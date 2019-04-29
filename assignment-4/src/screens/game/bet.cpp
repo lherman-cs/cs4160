@@ -1,8 +1,8 @@
 #include "screens/game/bet.h"
 
-Bet::Bet(const GameScreen* const g, const Vector2f& pos, const Value& l,
+Bet::Bet(const State* const s, const Vector2f& pos, const Value& l,
          const Value& c)
-    : game(g), position(pos), last(l), current(c) {}
+    : state(s), position(pos), last(l), current(c) {}
 
 void Bet::draw() const {
   menuWriter.writeText(std::to_string(current.quantity), 825, 30, *textColor);
@@ -79,8 +79,8 @@ bool Bet::validate() {
 
   if (current.quantity < last.quantity)
     current.quantity = last.quantity;
-  else if (current.quantity > game->getNumDice())
-    current.quantity = game->getNumDice();
+  else if (current.quantity > state->getNumDice())
+    current.quantity = state->getNumDice();
   else if (current.quantity <= 0)
     current.quantity = 1;
 
@@ -90,7 +90,7 @@ bool Bet::validate() {
     current.face = numFaces;
 
   if (current.quantity == last.quantity && current.face == last.face) {
-    if (current.quantity == game->getNumDice())
+    if (current.quantity == state->getNumDice())
       current.face++;
     else
       current.quantity++;

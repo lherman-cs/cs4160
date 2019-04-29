@@ -23,8 +23,8 @@ static inline int choose(int n, int k) {
   return res;
 }
 
-Bot::Bot(const GameScreen* const game, Dice d, int id)
-    : Player(game, d, "bot " + std::to_string(id), 1), elapsed(0) {
+Bot::Bot(const State* const s, Dice d, int id)
+    : Player(s, d, "bot " + std::to_string(id), 1), elapsed(0) {
   dice.hide();
 }
 
@@ -62,21 +62,7 @@ bool Bot::callLiar(const std::shared_ptr<const Bet> bet) {
   if (bet->getLast().quantity <= matching) {
     return false;
   }
-  // compute probability
-  // int ways =
-  //     choose(game->getNumDice() - matching, bet->getLast().quantity -
-  //     matching);
-  // long long possabilities = pow((int)6, game->getNumDice() - matching);
-  // possabilities = possabilities < 0 ? __LONG_LONG_MAX__ : possabilities;
-  // double probability = ways / (double)possabilities;
   double probability = 1 - (bet->getLast().quantity - matching) /
-                               (double)(game->getNumDice() - matching);
-  // std::cout << "mine: " << matching << "\tbet: " << bet->getLast().quantity
-  //           << "\ttot: " << game->getNumDice() << "\tways: " << ways
-  //           << "\tposs: " << possabilities << "\tprob: " << probability
-  //           << std::endl;
-  // std::cout << "mine: " << matching << "\tbet: " << bet->getLast().quantity
-  //           << "\ttot: " << game->getNumDice() << "\tprob: " << probability
-  //           << std::endl;
+                               (double)(state->getNumDice() - matching);
   return probability <= .75 ? true : false;
 }

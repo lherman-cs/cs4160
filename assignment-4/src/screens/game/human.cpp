@@ -1,7 +1,7 @@
 #include "screens/game/human.h"
 
-Human::Human(const GameScreen* const game, Dice d, std::string name)
-    : Player(game, d, name, 0), onFace(false) {}
+Human::Human(const State* const s, Dice d, std::string name)
+    : Player(s, d, name, 0), onFace(false) {}
 Human::~Human() {}
 
 bool Human::decide(const Uint8* const keystate, std::shared_ptr<Bet> bet) {
