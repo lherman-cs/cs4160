@@ -57,7 +57,13 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
     return;
   }
 
-  gameData.players[index]->decide(keystate, gameData.bet);
+  bool done = gameData.players[index]->decide(keystate, gameData.bet);
+  if (done) {
+    auto& promise = Global::get().promise.add();
+    auto bet = gameData.bet->getCurr();
+    auto msg = net::gameBet(bet.quantity, bet.face);
+    promise.then([=]() { return session->write(*msg); });
+  }
 }
 
 void NetGameScreen::draw() const {

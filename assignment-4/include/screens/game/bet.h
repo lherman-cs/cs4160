@@ -26,6 +26,7 @@ class Bet : public Drawable {
   Bet& increment(Type);
   Bet& decrement(Type);
   Value getLast() const;
+  Value getCurr() const;
   void reset();
 
  protected:

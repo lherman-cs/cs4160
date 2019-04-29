@@ -100,6 +100,7 @@ bool Bet::validate() {
 }
 
 Bet::Value Bet::getLast() const { return last; }
+Bet::Value Bet::getCurr() const { return current; }
 
 void Bet::reset() {
   last = {0, 1};

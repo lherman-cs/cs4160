@@ -57,6 +57,14 @@ inline std::shared_ptr<message> gameCall() {
   (*req)["command"] = "game-call";
   return req;
 }
+
+inline std::shared_ptr<message> gameBet(int quantity, int face) {
+  auto req = std::make_shared<message>();
+  (*req)["command"] = "game-bet";
+  (*req)["quantity"] = std::to_string(quantity);
+  (*req)["face"] = std::to_string(face);
+  return req;
+}
 }  // namespace net
 
 class TCP {
@@ -77,7 +85,7 @@ class TCP {
   struct pollfd fd;
   bool offline = false;
   std::string error = "";
-  const int timeout = 100;  // in miliseconds
+  const int timeout = 10;  // in miliseconds
   std::stringstream in{};
   std::string out{};
   const char *outPtr = nullptr;

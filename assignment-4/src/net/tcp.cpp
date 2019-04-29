@@ -91,6 +91,12 @@ bool TCP::read(net::message &table) {
   if (!splitted) return false;
 
   decode(in.str(), table);
+#ifdef DEBUG
+  for (const auto &it : table) {
+    std::cout << it.first << ": " << it.second << std::endl;
+  }
+  std::cout << std::endl;
+#endif
   in.str("");
   return true;
 }
