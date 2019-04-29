@@ -217,9 +217,10 @@ func (g *game) handleLeave(e *eventLeave) {
 	p := g.players[idx].(*human)
 	bot := newBotFromHuman(p)
 	g.players[idx] = bot
-	g.log.Info("replacing ", p.Name(), " with a bot")
 	if g.started {
 		go bot.Loop()
+		newEncoder(bot).encode(g.state.encode())
+		panic(p.Name() + " exited. replacing with a bot")
 	}
 
 	g.l.update(g)
