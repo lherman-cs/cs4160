@@ -21,7 +21,7 @@ using namespace std::placeholders;
 //  responds to 'B' bet, 'L' call liar, and 'H' help
 //              ← → ↑ ↓ for selection of face and quantity
 
-NetGameScreen::NetGameScreen(int difficulty) {
+NetGameScreen::NetGameScreen(int index, int difficulty) : index(index) {
   (void)difficulty;
   auto gameSession = std::make_shared<TCP>();
 }
@@ -94,6 +94,8 @@ void NetGameScreen::update(Uint32 ticks) {
 
     // Check if done
     state = Ongoing;
+    // need to pass index from the join call
+    gameData = index;
     return;
   }
 

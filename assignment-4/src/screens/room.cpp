@@ -1,11 +1,11 @@
 #include "screens/room.h"
+#include "net/game.h"
 #include "net/tcp.h"
-#include "screens/game/game.h"
 #include "widget/loading.h"
 
 RoomScreen::RoomScreen(std::shared_ptr<TCP> session, int difficulty,
-                       bool isOwner)
-    : session(session), difficulty(difficulty), isOwner(isOwner) {
+                       bool isOwner, int index)
+    : session(session), difficulty(difficulty), isOwner(isOwner), index(index) {
   names.emplace_back(isOwner ? "You" : "You (Not Owner)");
   for (int i = 1; i < 5; i++) {
     names.emplace_back("Bot " + std::to_string(i));
@@ -23,7 +23,7 @@ void RoomScreen::onKeyDown(const Uint8* const keystate) {
         .sleep(1000)
         .then(loading->dismiss())
         .then([&]() -> bool {
-          navigator.push<GameScreen>(difficulty);
+          navigator.push<NetGameScreen>(index, difficulty);
           return true;
         });
   }

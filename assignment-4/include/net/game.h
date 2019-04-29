@@ -34,7 +34,7 @@
 
 class NetGameScreen : public Screen {
  public:
-  NetGameScreen(int difficulty);
+  NetGameScreen(int index, int difficulty);
   ~NetGameScreen();
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;

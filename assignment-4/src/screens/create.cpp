@@ -1,4 +1,6 @@
 #include "screens/create.h"
+#include <assert.h>
+#include <string>
 #include "net/tcp.h"
 #include "screens/room.h"
 #include "widget/loading.h"
@@ -33,8 +35,13 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
       if (resp->find("error") != resp->end()) {
         return true;
       }
+      assert(resp->find("type") != resp->end());
+      std::string type = (*(resp->find("type"))).second;
+      assert(type == "join");
+      std::string indexString = (*(resp->find("index"))).second;
+      int index = std::stoi(indexString);
 
-      navigator.push<RoomScreen>(gameSession, difficulty, true);
+      navigator.push<RoomScreen>(gameSession, difficulty, true, index);
       return true;
     };
 

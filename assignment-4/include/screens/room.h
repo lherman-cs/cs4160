@@ -12,7 +12,8 @@
 class RoomScreen : public Screen {
  public:
   virtual ~RoomScreen();
-  RoomScreen(std::shared_ptr<TCP> session, int difficulty, bool isOwner);
+  RoomScreen(std::shared_ptr<TCP> session, int difficulty, bool isOwner,
+             int index);
   virtual void onKeyDown(const Uint8* const keystate);
   virtual void draw() const;
   virtual void update(Uint32 ticks);
@@ -27,6 +28,7 @@ class RoomScreen : public Screen {
   // Game Data
   int difficulty;
   int bots;
+  int index;
 
   // Drawing
   IoMod menuWriter{70};

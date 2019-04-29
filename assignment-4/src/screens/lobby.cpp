@@ -1,4 +1,5 @@
 #include "screens/lobby.h"
+#include <assert.h>
 #include <algorithm>
 #include "screens/room.h"
 
@@ -49,10 +50,15 @@ void LobbyScreen::onKeyDown(const Uint8* const keystate) {
         joining = false;
         return true;
       }
+      assert(resp->find("type") != resp->end());
+      std::string type = (*(resp->find("type"))).second;
+      assert(type == "join");
+      std::string indexString = (*(resp->find("index"))).second;
+      int index = std::stoi(indexString);
 
       auto& navigator = Global::get().navigator;
       navigator.pop();
-      navigator.push<RoomScreen>(gameSession, 0, false);
+      navigator.push<RoomScreen>(gameSession, 0, false, index);
       return true;
     };
 
