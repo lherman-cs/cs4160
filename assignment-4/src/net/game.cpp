@@ -85,12 +85,9 @@ void NetGameScreen::draw() const {
   std::string round = "Turn: " + std::to_string(gameData.round);
   menuWriter.writeText(round, 10, 690, secondaryColor);
 
-  if (state == Status::Initializing) {
-    // draw loading bar
-    return;
-  }
+  if (state == Status::Initializing || state == Status::OnFinish) return;
 
-  if (state == Status::OnFinish) return;
+  if (state == Status::OnCall) callButton.draw(Vector2f(300, 300));
 
   auto last = gameData.bet->getLast();
   if (last.quantity != 0) {

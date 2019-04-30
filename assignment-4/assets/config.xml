@@ -105,6 +105,12 @@
         <file>assets/img/invisible-dice.png</file>
         <transparency>true</transparency>
       </invisible-dice>
+
+      <call-button>
+        <file>assets/img/button.png</file>
+        <transparency>true</transparency>
+      </call-button>
+
     </game>
 
     <help>
