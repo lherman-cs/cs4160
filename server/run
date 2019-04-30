@@ -5,4 +5,11 @@ image="lherman/game-server"
 
 docker build -t "$image" .
 docker stop "$name" 2> /dev/null && docker rm "$name" 2> /dev/null
-docker run --name "$name" --restart=always -d -p 8081:8081 -p 8080:8080 "$image"
+docker run \
+--name "$name" \
+--restart=always \
+-e DELAY_SHOW_DICE=2000 \
+-e DELAY_AFTER_CALL=1000 \
+-d -p 8081:8081 \
+-p 8080:8080 \
+"$image"
