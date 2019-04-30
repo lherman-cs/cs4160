@@ -94,7 +94,7 @@ void NetGameScreen::draw() const {
     auto offset = last.quantity > 9 ? 15 : 0;
     std::string quantity =
         std::to_string(gameData.bet->getLast().quantity) + "x";
-    helperWriter.writeText(quantity, 480 - offset, 401, {255, 255, 255, 255});
+    helperWriter.writeText(quantity, 470 - offset, 401, {255, 255, 255, 255});
     helperDie.draw();
   }
 
