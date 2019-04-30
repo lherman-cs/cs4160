@@ -49,7 +49,7 @@ class Bet : public Drawable {
   Die die{Vector2f(950, 50), Die::State::visible, current.face};
 
   // Drawing
-  SDL_Color normalColor{52, 44, 42, 255};
+  SDL_Color normalColor{255, 255, 255, 255};
   SDL_Color hoverColor{255, 255, 0, 255};
   SDL_Color* textColor = &hoverColor;
   IoMod menuWriter{60};

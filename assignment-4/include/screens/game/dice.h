@@ -13,7 +13,7 @@ class NetGameScreen;
 class Dice : public Drawable {
  public:
   Dice(const Vector2f& position, double theta, unsigned int numDice = 5,
-       int g = 50);
+       int g = 45);
 
   // Draw dice to screen
   void draw() const;

@@ -53,6 +53,8 @@ class NetGameScreen : public Screen {
 
   // Drawing
   IoMod menuWriter{60};
+  IoMod helperWriter{36};
+  Die helperDie{Vector2f(535, 408), Die::State::visible};
   SDL_Color secondaryColor{182, 148, 103, 255};
   IoMod loadingWriter{32};
   Navigator& navigator{Global::get().navigator};

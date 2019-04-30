@@ -78,12 +78,8 @@ void NetGameScreen::draw() const {
   gameData.bet->draw();
 
   // Draw round/turn number
-  int ystart = 705;
-  int xstart = 50;
-  int xstep = 110;
-
-  menuWriter.writeText(std::to_string(gameData.round), xstart + xstep, ystart,
-                       secondaryColor);
+  std::string round = "Turn: " + std::to_string(gameData.round);
+  menuWriter.writeText(round, 10, 690, secondaryColor);
 
   if (state == Status::Initializing) {
     // draw loading bar
@@ -91,6 +87,16 @@ void NetGameScreen::draw() const {
   }
 
   if (state == Status::OnFinish) return;
+
+  auto last = gameData.bet->getLast();
+  if (last.quantity != 0) {
+    // draw last bet
+    auto offset = last.quantity > 9 ? 15 : 0;
+    std::string quantity =
+        std::to_string(gameData.bet->getLast().quantity) + "x";
+    helperWriter.writeText(quantity, 480 - offset, 401, {255, 255, 255, 255});
+    helperDie.draw();
+  }
 
   if (state == Status::Ongoing) {
     auto player = gameData.players[gameData.turn];
@@ -182,4 +188,5 @@ void NetGameScreen::update(Uint32 ticks) {
         })
         .then(redirecting->dismiss());
   }
+  helperDie.set(gameData.bet->getLast().face);
 }
