@@ -1,6 +1,7 @@
 #include "screens/game/dice.h"
 #include <stdlib.h>
 #include <cmath>
+#include "widget/explosion.h"
 
 Dice::Dice(const Vector2f& position, double theta, unsigned int numDice, int g)
     : dice(numDice), gap(g) {
@@ -41,7 +42,11 @@ void Dice::hide() {
 }
 
 void Dice::remove() {
-  if (!dice.empty()) dice.pop_back();
+  if (dice.empty()) return;
+  const auto& die = dice[dice.size() - 1];
+  explosion = Global::get().widget.create<Explosion>(die.getPos());
+  dice.pop_back();
+  explosion->show()();
 }
 
 const std::vector<Die>& Dice::getDice() const { return dice; }

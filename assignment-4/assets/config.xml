@@ -30,7 +30,7 @@
   <net>
     <dev>
       <wasm>127.0.0.1:8080</wasm>
-      <native>192.168.0.30:8081</native>
+      <native>localhost:8081</native>
     </dev>
     <prod>
       <wasm>23.120.83.79:8080</wasm>
@@ -79,6 +79,7 @@
         <transparency>true</transparency>
         <frames>6</frames>
         <interval>0</interval>
+        <loop>-1</loop>
       </dice>
 
       <brown-dice>
@@ -104,14 +105,6 @@
         <file>assets/img/invisible-dice.png</file>
         <transparency>true</transparency>
       </invisible-dice>
-
-      <explosion>
-        <file>assets/img/explosion.png</file>
-        <transparency>true</transparency>
-        <frames>10</frames>
-        <interval>800</interval>
-      </explosion>
-
     </game>
 
     <help>
@@ -142,6 +135,7 @@
       <transparency>true</transparency>
       <frames>24</frames>
       <interval>500</interval>
+      <loop>-1</loop>
     </loading>
 
     <token>
@@ -153,6 +147,14 @@
       <file>assets/img/modal.png</file>
       <transparency>true</transparency>
     </modal>
+
+    <explosion>
+      <file>assets/img/explosion.png</file>
+      <transparency>true</transparency>
+      <frames>10</frames>
+      <interval>80</interval>
+      <loop>1</loop>
+    </explosion>
   </widget>
 
   <mixer>

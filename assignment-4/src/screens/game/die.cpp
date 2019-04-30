@@ -54,5 +54,6 @@ Die& Die::set(int v) {
 }
 
 int Die::getValue() const { return value; }
+Vector2f Die::getPos() const { return position; }
 
 int Die::getSize() { return 32; }

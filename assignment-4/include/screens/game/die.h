@@ -21,6 +21,7 @@ class Die : public Drawable {
   Die& set(const Die::State state);
   Die& set(int value);
   int getValue() const;
+  Vector2f getPos() const;
 
   static int getSize();
 

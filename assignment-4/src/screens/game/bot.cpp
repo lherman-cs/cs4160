@@ -55,7 +55,7 @@ bool Bot::decide(Uint32 ticks, std::shared_ptr<Bet> bet) {
  */
 bool Bot::callLiar(const std::shared_ptr<const Bet> bet) {
   int matching = 0;
-  for (const Die die : dice.getDice()) {
+  for (const Die& die : dice.getDice()) {
     matching += bet->getLast().face == die.getValue() ? 1 : 0;
   }
   // we are sure it is not a lie

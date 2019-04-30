@@ -17,7 +17,8 @@ class MultiSprite : public Drawable, public Updatable, public Moveable {
   std::vector<Image*> images;
 
   unsigned currentFrame;
-  unsigned numberOfFrames;
-  unsigned interval;
+  const unsigned numberOfFrames;
+  const unsigned interval;
+  int loop;
   unsigned elapsed = 0;
 };

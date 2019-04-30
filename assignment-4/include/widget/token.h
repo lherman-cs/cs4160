@@ -14,7 +14,7 @@ class Token : public Widget {
   friend class WidgetController;
   Sprite token{"widget/token"};
 
-  std::vector<Vector2f> positions{Vector2f{490, 590}, Vector2f{655, 210},
-                                  Vector2f{336, 213}, Vector2f{297, 438},
-                                  Vector2f{704, 432}};
+  std::vector<Vector2f> positions{Vector2f{505, 570}, Vector2f{316, 428},
+                                  Vector2f{351, 232}, Vector2f{647, 235},
+                                  Vector2f{682, 432}};
 };

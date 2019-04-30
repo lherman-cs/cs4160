@@ -141,6 +141,8 @@ void NetGameScreen::update(Uint32 ticks) {
     for (unsigned int i = 0; i < gameData.players.size(); i++) {
       auto id = std::to_string(i);
       auto faces = toVecInt(msg[id]);
+      auto& dice = gameData.players[i]->dice;
+      while (dice.getDice().size() > faces.size()) dice.remove();
       gameData.players[i]->dice.set(faces);
     }
     // Set the dice to be hidden (unless it yours)

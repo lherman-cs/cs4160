@@ -42,6 +42,7 @@ class Dice : public Drawable {
   friend class NetGameScreen;
   std::vector<Die> dice;
   int gap;
+  std::shared_ptr<Widget> explosion{nullptr};
 
   // have dice positioned in line starting at given position with given angle
   void positionDie(const Vector2f&, double);
