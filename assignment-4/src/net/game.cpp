@@ -62,7 +62,9 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
     std::cout << "ENTER BET" << std::endl;
     auto& promise = Global::get().promise.add();
     auto bet = gameData.bet->getLast();
-    auto msg = net::gameBet(bet.quantity, bet.face - 1);
+    std::cout << "SENDING BET!!!!!!!!!!! " << bet.quantity << ", " << bet.face
+              << std::endl;
+    auto msg = net::gameBet(bet.quantity, bet.face);
     promise.then([=]() { return session->write(*msg); });
   }
 }
@@ -106,6 +108,9 @@ void NetGameScreen::draw() const {
 
 void NetGameScreen::update(Uint32 ticks) {
   (void)ticks;
+  if (gameData.bet->getCurr().face > 5 || gameData.bet->getCurr().face < 0 ||
+      gameData.bet->getLast().face > 5 || gameData.bet->getLast().face < 0)
+    std::cout << "ERROR IN BET INDEXING!!!!!!!!!!!!!!!!!" << std::endl;
   if (session->isOffline()) {
     // TODO! Give a little bit animation here
     navigator.reset();

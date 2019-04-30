@@ -30,7 +30,7 @@
   <net>
     <dev>
       <wasm>127.0.0.1:8080</wasm>
-      <native>192.168.0.30:8081</native>
+      <native>192.168.0.33:8081</native>
     </dev>
     <prod>
       <wasm>23.120.83.79:8080</wasm>

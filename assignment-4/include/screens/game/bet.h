@@ -16,7 +16,7 @@ class Bet : public Drawable {
   };
 
   Bet(const State* const s, const Vector2f& pos = Vector2f(0, 0),
-      const Value& l = {0, 1}, const Value& c = {1, 1});
+      const Value& l = {0, 0}, const Value& c = {1, 0});
   Bet(const Bet&) = delete;
   Bet& operator=(const Bet&) = delete;
   void draw() const;
@@ -46,7 +46,7 @@ class Bet : public Drawable {
   // Bet Data
   Value last{};
   Value current{};
-  Die die{Vector2f(950, 50), Die::State::visible, current.face - 1};
+  Die die{Vector2f(950, 50), Die::State::visible, current.face};
 
   // Drawing
   SDL_Color normalColor{52, 44, 42, 255};

@@ -48,24 +48,24 @@ Bet& Bet::increment(Type t) {
   validate();
   select(t);
   // update die rendering
-  die.set(current.face - 1);
+  die.set(current.face);
   return *this;
 }
 
 Bet& Bet::decrement(Type t) {
   switch (t) {
     case Quantity:
-      current.quantity -= 1;
+      current.quantity--;
       break;
 
     case Face:
-      current.face -= 1;
+      current.face--;
       break;
   }
   validate();
   select(t);
   // update die rendering
-  die.set(current.face - 1);
+  die.set(current.face);
   return *this;
 }
 
@@ -86,8 +86,8 @@ bool Bet::validate() {
 
   if (current.face < last.face)
     current.face = last.face;
-  else if (current.face > numFaces)
-    current.face = numFaces;
+  else if (current.face > numFaces - 1)
+    current.face = numFaces - 1;
 
   if (current.quantity == last.quantity && current.face == last.face) {
     if (current.quantity == state->getNumDice())
@@ -103,7 +103,7 @@ Bet::Value Bet::getLast() const { return last; }
 Bet::Value Bet::getCurr() const { return current; }
 
 void Bet::reset() {
-  last = {0, 1};
+  last = {0, 0};
   current = last;
   increment(Quantity);
 }
