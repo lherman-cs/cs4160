@@ -1,5 +1,6 @@
 #include "screens/room.h"
 #include <sstream>
+#include <string>
 #include "net/game.h"
 #include "net/tcp.h"
 #include "widget/loading.h"
@@ -32,7 +33,7 @@ void RoomScreen::draw() const {
   if (isOwner) enterNotification.draw();
   // player list
   for (unsigned int i = 0; i < names.size(); i++) {
-    auto name = names[i];
+    auto name = names[i].substr(0, 8);
     if (i == static_cast<unsigned int>(index)) name += "(you)";
     menuWriter.writeText(name, xstart, ystart + i * ystep, normalColor);
   }
