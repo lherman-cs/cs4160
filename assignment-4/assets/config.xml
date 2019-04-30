@@ -105,6 +105,13 @@
         <transparency>true</transparency>
       </invisible-dice>
 
+      <explosion>
+        <file>assets/img/explosion.png</file>
+        <transparency>true</transparency>
+        <frames>10</frames>
+        <interval>800</interval>
+      </explosion>
+
     </game>
 
     <help>
