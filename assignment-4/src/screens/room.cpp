@@ -32,7 +32,9 @@ void RoomScreen::draw() const {
   if (isOwner) enterNotification.draw();
   // player list
   for (unsigned int i = 0; i < names.size(); i++) {
-    menuWriter.writeText(names[i], xstart, ystart + i * ystep, normalColor);
+    auto name = names[i];
+    if (i == index) name += "(you)";
+    menuWriter.writeText(name, xstart, ystart + i * ystep, normalColor);
   }
 }
 
