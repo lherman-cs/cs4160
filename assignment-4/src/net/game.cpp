@@ -102,15 +102,22 @@ void NetGameScreen::draw() const {
     helperDie.draw();
   }
 
+  // print list of players
+  unsigned int i = 1;
+  auto dy = 20;
+  auto y = 580;
+  for (const auto& p : gameData.players) {
+    auto player = std::to_string(i) + ". " + p->name;
+    auto color = gameData.turn == i - 1 ? hoverColor : normalColor;
+    listWriter.writeText(player, 20, y, color);
+    y += dy;
+    i++;
+  }
+
   if (state == Status::Ongoing) {
     auto player = gameData.players[gameData.turn];
     // if the player is a networked player/bot
-    if (player->type == 1) {
-      gameData.bet->setSelectable(false);
-      // If bot, renders a loading text saying that the bot is thinking.
-      auto loadingText = player->name + " is thinking...";
-      loadingWriter.writeText(loadingText, 550, 720, secondaryColor);
-    } else {
+    if (player->type != 1) {
       gameData.bet->setSelectable(true);
       // Otherwise, notify the human that it is their turn
       loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
