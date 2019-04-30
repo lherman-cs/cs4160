@@ -44,7 +44,8 @@ void Dice::hide() {
 void Dice::remove() {
   if (dice.empty()) return;
   const auto& die = dice[dice.size() - 1];
-  explosion = Global::get().widget.create<Explosion>(die.getPos());
+  explosion =
+      Global::get().widget.create<Explosion>(die.getPos() - Vector2f(14, 14));
   dice.pop_back();
   explosion->show()();
 }

@@ -152,7 +152,7 @@
       <file>assets/img/explosion.png</file>
       <transparency>true</transparency>
       <frames>10</frames>
-      <interval>80</interval>
+      <interval>150</interval>
       <loop>1</loop>
     </explosion>
   </widget>
