@@ -25,7 +25,7 @@ NetGameScreen::NetGameScreen(std::shared_ptr<TCP> session, int index,
                              int difficulty)
     : session(session), index(index), gameData(index) {
   (void)difficulty;
-  std::cout << "Net Game Class init" << std::endl;
+  // std::cout << "Net Game Class init" << std::endl;
 }
 
 NetGameScreen::~NetGameScreen() {}
@@ -59,11 +59,12 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
 
   bool done = gameData.players[index]->decide(keystate, gameData.bet);
   if (done) {
-    std::cout << "ENTER BET" << std::endl;
+    // std::cout << "ENTER BET" << std::endl;
     auto& promise = Global::get().promise.add();
     auto bet = gameData.bet->getLast();
-    std::cout << "SENDING BET!!!!!!!!!!! " << bet.quantity << ", " << bet.face
-              << std::endl;
+    // std::cout << "SENDING BET!!!!!!!!!!! " << bet.quantity << ", " <<
+    // bet.face
+    // << std::endl;
     auto msg = net::gameBet(bet.quantity, bet.face);
     promise.then([=]() { return session->write(*msg); });
   }
@@ -117,9 +118,6 @@ void NetGameScreen::draw() const {
 void NetGameScreen::update(Uint32 ticks) {
   (void)ticks;
   if (state == Status::OnFinish) return;
-  if (gameData.bet->getCurr().face > 5 || gameData.bet->getCurr().face < 0 ||
-      gameData.bet->getLast().face > 5 || gameData.bet->getLast().face < 0)
-    std::cout << "ERROR IN BET INDEXING!!!!!!!!!!!!!!!!!" << std::endl;
   if (session->isOffline()) {
     // TODO! Give a little bit animation here
     navigator.reset();
@@ -135,7 +133,7 @@ void NetGameScreen::update(Uint32 ticks) {
   std::string type = msg["type"];
   if (type == "roll") {
     state = Status::OnRoll;
-    std::cout << "Got rolling dice message" << std::endl;
+    // std::cout << "Got rolling dice message" << std::endl;
     // Set dice to be values recieved from the server
     for (unsigned int i = 0; i < gameData.players.size(); i++) {
       auto id = std::to_string(i);
@@ -148,19 +146,22 @@ void NetGameScreen::update(Uint32 ticks) {
     }
   } else if (type == "state") {
     // Set state
-    std::cout << "Got state message" << std::endl;
+    // std::cout << "Got state message" << std::endl;
     state = Status::Ongoing;
     gameData.updateState(msg);
   } else if (type == "call") {
-    std::cout << "Got call message" << std::endl;
+    // std::cout << "Got call message" << std::endl;
     // update internal state so that we can render a loading bar
     state = Status::OnCall;
+    auto liarNotice = Global::get().widget.create<Loading>("Liar Called");
+    auto& promise = Global::get().promise.add();
+    promise.then(liarNotice->show()).sleep(1400).then(liarNotice->dismiss());
     // show all the dice on the table
     for (const auto& player : gameData.players) {
       player->dice.show();
     }
   } else if (type == "finish") {
-    std::cout << "Got finish message" << std::endl;
+    // std::cout << "Got finish message" << std::endl;
     state = Status::OnFinish;
     auto winner = msg["winner"];
     auto loading = Global::get().widget.create<Loading>(winner + " won!", 35);

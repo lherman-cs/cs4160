@@ -7,7 +7,7 @@ Bet::Bet(const State* const s, const Vector2f& pos, const Value& l,
 void Bet::draw() const {
   menuWriter.writeText(std::to_string(current.quantity), 825, 30, *textColor);
   die.draw();
-  std::cout << current.quantity << ", " << current.face << std::endl;
+  // std::cout << current.quantity << ", " << current.face << std::endl;
 }
 
 void Bet::setSelectable(bool b) {
