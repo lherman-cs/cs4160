@@ -12,6 +12,7 @@ class Mixer {
   const Chunk keystroke;
   const Chunk transition;
   const Chunk enterBet;
+  const Chunk finish;
 
  private:
   friend class Global;

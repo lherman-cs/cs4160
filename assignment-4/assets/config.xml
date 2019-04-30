@@ -143,6 +143,7 @@
       <keystroke>assets/chunk/keystroke.ogg</keystroke>
       <transition>assets/chunk/transition.ogg</transition>
       <enter-bet>assets/chunk/enter-bet.ogg</enter-bet>
+      <finish>assets/chunk/finish.ogg</finish>
     </chunk>
   </mixer>
 </GameData>

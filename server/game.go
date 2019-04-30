@@ -124,7 +124,15 @@ func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
 		}
 
 		if g.finished {
-			g.broadcast(&respFinish{})
+			for _, e := range g.players {
+				if len(e.Dice()) == 0 {
+					continue
+				}
+
+				g.broadcast(&respFinish{Winner: e.Name()})
+				break
+			}
+
 			break
 		}
 		g.broadcast(g.state.encode()) // update players with current state

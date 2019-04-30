@@ -33,7 +33,7 @@ void RoomScreen::draw() const {
   // player list
   for (unsigned int i = 0; i < names.size(); i++) {
     auto name = names[i];
-    if (i == index) name += "(you)";
+    if (i == static_cast<unsigned int>(index)) name += "(you)";
     menuWriter.writeText(name, xstart, ystart + i * ystep, normalColor);
   }
 }

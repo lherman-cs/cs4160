@@ -12,6 +12,8 @@ class Music {
  public:
   ~Music();
   void play() const;
+  void pause() const;
+  void resume() const;
 
  private:
   friend class Mixer;

@@ -18,6 +18,9 @@ void Music::play() const {
   }
 }
 
+void Music::pause() const { Mix_PauseMusic(); }
+void Music::resume() const { Mix_ResumeMusic(); }
+
 Chunk::Chunk(const std::string path) : chunk(Mix_LoadWAV(path.c_str())) {
   if (chunk == NULL) throw("[audio/chunk] failed to initialize " + path);
 }

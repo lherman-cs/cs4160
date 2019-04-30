@@ -29,7 +29,8 @@ type respRoll struct {
 }
 
 type respFinish struct {
-	Type string `msg:"type" default:"finish"`
+	Type   string `msg:"type" default:"finish"`
+	Winner string `msg:"winner"`
 }
 
 type respCall struct {

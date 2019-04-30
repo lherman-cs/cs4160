@@ -33,7 +33,7 @@ NetGameScreen::~NetGameScreen() {}
 void NetGameScreen::onKeyDown(const Uint8* const keystate) {
   (void)keystate;
   if (state == Status::Initializing || state == Status::OnCall ||
-      state == Status::OnRoll)
+      state == Status::OnRoll || state == Status::OnFinish)
     return;
 
   if (keystate[SDL_SCANCODE_L]) {
@@ -90,6 +90,8 @@ void NetGameScreen::draw() const {
     return;
   }
 
+  if (state == Status::OnFinish) return;
+
   if (state == Status::Ongoing) {
     auto player = gameData.players[gameData.turn];
     // if the player is a networked player/bot
@@ -108,6 +110,7 @@ void NetGameScreen::draw() const {
 
 void NetGameScreen::update(Uint32 ticks) {
   (void)ticks;
+  if (state == Status::OnFinish) return;
   if (gameData.bet->getCurr().face > 5 || gameData.bet->getCurr().face < 0 ||
       gameData.bet->getLast().face > 5 || gameData.bet->getLast().face < 0)
     std::cout << "ERROR IN BET INDEXING!!!!!!!!!!!!!!!!!" << std::endl;
@@ -153,6 +156,30 @@ void NetGameScreen::update(Uint32 ticks) {
   } else if (type == "finish") {
     std::cout << "Got finish message" << std::endl;
     state = Status::OnFinish;
-    return;
+    auto winner = msg["winner"];
+    auto loading = Global::get().widget.create<Loading>(winner + " won!", 35);
+    auto redirecting = Global::get().widget.create<Loading>("Going home", 35);
+    auto goBack = []() {
+      auto& navigator = Global::get().navigator;
+      navigator.reset();
+      navigator.push<IntroScreen>();
+      return true;
+    };
+
+    auto& promise = Global::get().promise.add();
+    Global::get().mixer.background.pause();
+    Global::get().mixer.finish.play();
+    promise.then(loading->show())
+        .sleep(6000)
+        .then(loading->dismiss())
+        .then(redirecting->show())
+        .sleep(1000)
+        .then(goBack)
+        .sleep(500)
+        .then([]() {
+          Global::get().mixer.background.resume();
+          return true;
+        })
+        .then(redirecting->dismiss());
   }
 }
