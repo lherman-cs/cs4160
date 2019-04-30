@@ -1,20 +1,8 @@
 #!/bin/bash
 
-# Scenario Runner
+name="game-server"
+image="lherman/game-server"
 
-ENDPOINT="localhost 8081"
-
-nc $ENDPOINT < ./scenario/player1.txt &
-sleep 1
-id=`./task list | cut -d':' -f1`
-
-
-for i in `seq 0 10`
-do
-    ./task join "$id" &
-done
-
-sleep 1
-./task detail "$id"
-
-wait
+docker build -t "$image" .
+docker stop "$name" 2> /dev/null && docker rm "$name" 2> /dev/null
+docker run --name "$name" --restart=always -d -p 8081:8081 -p 8080:8080 "$image"
