@@ -1,8 +1,10 @@
 package main
 
 import (
+	"math/rand"
 	"net"
 	"os"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -38,6 +40,7 @@ func startTCPService() {
 
 func main() {
 	log.SetLevel(log.DebugLevel)
+	rand.Seed(time.Now().UTC().UnixNano())
 	for {
 		startTCPService()
 	}
