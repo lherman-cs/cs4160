@@ -41,7 +41,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   }
 
   if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) {
-    if (row) {
+    if (!row) {
       col = !col;
     } else {
       difficulty--;
@@ -50,7 +50,7 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   }
 
   if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) {
-    if (row) {
+    if (!row) {
       col = !col;
     } else {
       difficulty = (difficulty + 1) % 3;
