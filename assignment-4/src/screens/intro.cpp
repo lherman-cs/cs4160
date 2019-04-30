@@ -41,25 +41,19 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
   }
 
   if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_LEFT]) {
-    switch (row) {
-      case 0:
-        col = !col;
-        break;
-      case 1:
-        difficulty--;
-        if (difficulty < 0) difficulty = 2;
-        break;
+    if (row) {
+      col = !col;
+    } else {
+      difficulty--;
+      if (difficulty < 0) difficulty = 2;
     }
   }
 
   if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT]) {
-    switch (row) {
-      case 0:
-        col = !col;
-        break;
-      case 1:
-        difficulty = (difficulty + 1) % 3;
-        break;
+    if (row) {
+      col = !col;
+    } else {
+      difficulty = (difficulty + 1) % 3;
     }
   }
 }
