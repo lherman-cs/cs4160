@@ -109,7 +109,8 @@ func (g *game) loop(mailbox <-chan eventer, done chan<- struct{}) {
 
 	for {
 		e := <-mailbox
-		if g.started && e.Timestamp().Before(g.lastTimestamp) {
+		_, leaveMsg := e.(eventLeave)
+		if g.started && !leaveMsg && e.Timestamp().Before(g.lastTimestamp) {
 			from := e.From()
 			info := fmt.Sprintf("%s(%d)", from.Name(), from.GetID())
 			entry := g.log.WithField("from", info)
