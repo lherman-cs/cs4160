@@ -167,7 +167,7 @@ void NetGameScreen::update(Uint32 ticks) {
     state = Status::OnCall;
     auto liarNotice = Global::get().widget.create<Loading>("Liar Called");
     auto& promise = Global::get().promise.add();
-    promise.then(liarNotice->show()).sleep(1400).then(liarNotice->dismiss());
+    promise.then(liarNotice->show()).sleep(1000).then(liarNotice->dismiss());
     // show all the dice on the table
     for (const auto& player : gameData.players) {
       player->dice.show();

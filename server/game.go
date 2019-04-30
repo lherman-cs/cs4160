@@ -356,7 +356,7 @@ func (g *game) handleCall(e *eventCall) {
 		e.From().LoseDie()
 	}
 
-	// TODO! probably add some delays between on call and roll
+	time.Sleep(delayShowDice)
 
 	g.roll()
 
@@ -378,4 +378,5 @@ func (g *game) handleCall(e *eventCall) {
 		g.incrementTurn()
 		g.round++
 	}
+	time.Sleep(delayAfterCall)
 }

@@ -4,7 +4,7 @@ WORKDIR /go/src/app
 COPY ./go.mod ./go.sum ./
 RUN go mod download
 COPY ./ ./
-RUN GO111MODULE=on CGO_ENABLED=0 go build
+RUN GO111MODULE=on CGO_ENABLED=0 go build -tags prod
 
 FROM ubuntu:18.04
 
