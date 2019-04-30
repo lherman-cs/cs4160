@@ -1,15 +1,15 @@
 FROM golang:1.12 as builder
 
 WORKDIR /go/src/app
-COPY . .
+COPY ./go.mod ./go.sum ./
+RUN go mod download
+COPY ./ ./
 RUN GO111MODULE=on CGO_ENABLED=0 go build
 
-FROM python:alpine
+FROM ubuntu:18.04
 
-RUN apk add make automake gcc g++ subversion python3-dev git && \
-    git clone --depth=1 https://github.com/novnc/websockify.git && \
-    cd websockify && \
-    python setup.py install
+RUN apt-get update && apt-get install -y websockify \
+  && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /go/src/app/server /
 EXPOSE 8080
