@@ -331,8 +331,13 @@ func (g *game) handleCall(e *eventCall) {
 		panic("somebody has called liar in last turn")
 	}
 
-	if e.From() == g.lastPlayer {
+	from := e.From()
+	if from == g.lastPlayer {
 		panic("you can't call liar on yourself")
+	}
+
+	if len(from.Dice()) == 0 {
+		panic("you already lost. can't call liar")
 	}
 
 	g.broadcast(&respCall{})
