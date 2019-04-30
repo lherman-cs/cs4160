@@ -81,6 +81,13 @@
         <interval>0</interval>
       </dice>
 
+      <brown-dice>
+        <file>assets/img/brown_dice.png</file>
+        <transparency>true</transparency>
+        <frames>6</frames>
+        <interval>0</interval>
+      </brown-dice>
+
       <highlighted-dice>
         <file>assets/img/highlighted-dice.png</file>
         <transparency>true</transparency>
@@ -97,6 +104,7 @@
         <file>assets/img/invisible-dice.png</file>
         <transparency>true</transparency>
       </invisible-dice>
+
     </game>
 
     <help>
@@ -128,6 +136,11 @@
       <frames>24</frames>
       <interval>500</interval>
     </loading>
+
+    <token>
+      <file>assets/img/token.png</file>
+      <transparency>true</transparency>
+    </token>
 
     <modal>
       <file>assets/img/modal.png</file>

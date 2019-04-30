@@ -48,6 +48,9 @@ void State::updateState(
   // turn
   turn = std::stoi(update.at("turn"));
 
+  // token
+  token.set(turn);
+
   // round
   round = std::stoi(update.at("round"));
 

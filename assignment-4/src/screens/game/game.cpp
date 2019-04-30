@@ -99,6 +99,9 @@ void GameScreen::draw() const {
   // Draw players and dice on table
   for (const auto player : state.players) player->draw();
 
+  // Draw the token to represent player turn
+  state.token.draw();
+
   // Draw round/turn number
   int ystart = 705;
   int xstart = 50;

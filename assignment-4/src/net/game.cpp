@@ -78,6 +78,9 @@ void NetGameScreen::draw() const {
   // Draw current bet
   gameData.bet->draw();
 
+  // Draw the token to represent player turn
+  gameData.token.draw();
+
   // Draw round/turn number
   std::string round = "Turn: " + std::to_string(gameData.round);
   menuWriter.writeText(round, 10, 690, secondaryColor);

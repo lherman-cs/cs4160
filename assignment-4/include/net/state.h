@@ -7,6 +7,7 @@
 #include "screens/game/const.h"
 #include "screens/game/human.h"
 #include "screens/game/player.h"
+#include "widget/token.h"
 
 // for holding game state
 class State {
@@ -28,6 +29,7 @@ class State {
   unsigned int round{0};
   unsigned int numDice{25};
   std::vector<std::shared_ptr<Player>> players{};
+  Token token{};
 
  private:
   static const int NUMPLAYERS = 5;
