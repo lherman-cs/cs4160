@@ -8,7 +8,7 @@ class IoMod {
  public:
   IoMod(int size);
   ~IoMod();
-  void writeText(const std::string&, int, int, SDL_Color) const;
+  void writeText(const std::string&, int, int, const SDL_Color&) const;
   IoMod(const IoMod&) = delete;
   IoMod& operator=(const IoMod&) = delete;
 

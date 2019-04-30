@@ -21,7 +21,7 @@ IoMod::IoMod(int size)
 }
 
 void IoMod::writeText(const std::string& msg, int x, int y,
-                      SDL_Color textColor) const {
+                      const SDL_Color& textColor) const {
   SDL_Surface* surface = TTF_RenderText_Solid(font, msg.c_str(), textColor);
 
   SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
