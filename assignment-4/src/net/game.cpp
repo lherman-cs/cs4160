@@ -1,10 +1,5 @@
 #include "net/game.h"
-// #include <algorithm>
-// #include <functional>
 #include <iostream>
-// #include <sstream>
-// #include "global/global.h"
-// #include "screens/game/bot.h"
 #include "net/encoder.h"
 #include "net/player.h"
 #include "screens/game/dice.h"
@@ -60,12 +55,8 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
 
   bool done = gameData.players[index]->decide(keystate, gameData.bet);
   if (done) {
-    // std::cout << "ENTER BET" << std::endl;
     auto& promise = Global::get().promise.add();
     auto bet = gameData.bet->getLast();
-    // std::cout << "SENDING BET!!!!!!!!!!! " << bet.quantity << ", " <<
-    // bet.face
-    // << std::endl;
     auto msg = net::gameBet(bet.quantity, bet.face);
     promise.then([=]() { return session->write(*msg); });
   }
@@ -100,11 +91,11 @@ void NetGameScreen::draw() const {
   // print list of players
   unsigned int i = 1;
   auto dy = 20;
-  auto y = 580;
+  auto y = 600;
   for (const auto& p : gameData.players) {
     auto player = std::to_string(i) + ". " + p->name;
-    auto color = gameData.turn == i - 1 ? hoverColor : normalColor;
-    listWriter.writeText(player, 20, y, color);
+    auto color = gameData.turn == i - 1 ? secondaryColor : normalColor;
+    listWriter.writeText(player, 15, y, color);
     y += dy;
     i++;
   }
