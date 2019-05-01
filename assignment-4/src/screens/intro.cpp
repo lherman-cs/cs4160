@@ -66,20 +66,6 @@ void IntroScreen::draw() const {
                        row == 0 && col == 0 ? hoverColor : normalColor);
   menuWriter.writeText("Start", xstart + xstep, ystart,
                        row == 0 && col == 1 ? hoverColor : normalColor);
-  std::string difficultyChar;
-  switch (difficulty) {
-    case 0:
-      difficultyChar = "E";
-      break;
-    case 1:
-      difficultyChar = "M";
-      break;
-    case 2:
-      difficultyChar = "H";
-      break;
-  }
-  menuWriter.writeText(difficultyChar, xstart + xstep * 1.5, ystart + ystep,
-                       row == 1 ? hoverColor : normalColor);
 }
 
 void IntroScreen::update(Uint32 ticks) { (void)ticks; }

@@ -28,7 +28,7 @@ class IntroScreen : public Screen {
   Navigator& navigator{Global::get().navigator};
 
   // Text Positiong
-  const int ystart = 530;
+  const int ystart = 560;
   const int ystep = 120;
   const int xstart = 300;
   const int xstep = 220;
