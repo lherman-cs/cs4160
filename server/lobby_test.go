@@ -1,10 +1,10 @@
 package main
 
 import (
-	"bytes"
 	"io"
 	"net"
-	"sync/atomic"
+	"os"
+	"sync"
 	"testing"
 	"time"
 )
@@ -12,35 +12,56 @@ import (
 func BenchmarkThousandTCP(b *testing.B) {
 	n := 1000
 	endpoint := ":8081"
-	var ops uint64
 	done := make(chan struct{})
+	var wg sync.WaitGroup
 
-	go func() {
+	create := func(name string) {
+		conn, err := net.Dial("tcp", endpoint)
+		if err != nil {
+			b.Fatal(err)
+		}
+		defer conn.Close()
 
-	}()
+		req := map[string]string{
+			"command": "create",
+			"name":    name,
+		}
 
+		if err = newEncoder(conn).encode(req); err != nil {
+			b.Fatal(err)
+		}
+		close(done)
+	}
+
+	subscribe := func(wg *sync.WaitGroup) {
+		conn, err := net.Dial("tcp", endpoint)
+		if err != nil {
+			b.Fatal(err)
+		}
+		defer conn.Close()
+
+		req := map[string]string{"command": "subscribe"}
+		err = newEncoder(conn).encode(req)
+		if err != nil {
+			b.Fatal(err)
+		}
+		wg.Done()
+
+		_, err = io.Copy(os.Stdout, conn)
+		if err != nil {
+			b.Fatal(err)
+		}
+		<-done
+	}
+
+	go startTCPService()
+
+	time.Sleep(time.Second)
+	wg.Add(n)
 	for i := 0; i < n; i++ {
-		go func() {
-			conn, err := net.Dial("tcp", endpoint)
-			if err != nil {
-				b.Fatal(err)
-			}
-			defer conn.Close()
-
-			var buff bytes.Buffer
-			buff.WriteString("command:subscribe\t\n")
-			_, err = io.Copy(conn, &buff)
-			if err != nil {
-				b.Fatal(err)
-			}
-			atomic.AddUint64(&ops, 1)
-			<-done
-		}()
+		go subscribe(&wg)
 		time.Sleep(time.Millisecond)
 	}
-
-	for {
-		time.Sleep(time.Second * 3)
-		b.Log(atomic.LoadUint64(&ops), " subscribers")
-	}
+	wg.Wait()
+	create("Lukas's Room")
 }
