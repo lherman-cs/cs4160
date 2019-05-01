@@ -153,6 +153,7 @@ void NetGameScreen::update(Uint32 ticks) {
     for (const auto& player : gameData.players) player->dice.show();
   } else if (type == "finish") {
     state = Status::OnFinish;
+    gameData.token->dismiss()();
     auto winner = msg["winner"];
     auto loading = Global::get().widget.create<Loading>(winner + " won!", 35);
     auto redirecting = Global::get().widget.create<Loading>("Going home", 35);
