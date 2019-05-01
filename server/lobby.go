@@ -1,16 +1,17 @@
 package main
 
 import (
-	log "github.com/sirupsen/logrus"
 	"sync"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type lobby struct {
 	rooms       map[string]*game // <id>:<actual game reference>
 	subscribers []chan<- map[string]string
 	infos       map[string]string // <id>:<game info in string>
-	m           sync.Mutex
+	m           sync.RWMutex
 }
 
 func newLobby() *lobby {
@@ -25,8 +26,8 @@ func (l *lobby) subscribe(subscriber chan<- map[string]string) {
 }
 
 func (l *lobby) getLastInfos() map[string]string {
-	l.m.Lock()
-	defer l.m.Unlock()
+	l.m.RLock()
+	defer l.m.RUnlock()
 	copy := make(map[string]string)
 	for k, v := range l.infos {
 		copy[k] = v
@@ -44,8 +45,8 @@ func (l *lobby) add(newRoom *game) {
 }
 
 func (l *lobby) find(id string) (g *game, ok bool) {
-	l.m.Lock()
-	defer l.m.Unlock()
+	l.m.RLock()
+	defer l.m.RUnlock()
 	g, ok = l.rooms[id]
 	return
 }

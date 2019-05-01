@@ -10,7 +10,7 @@ import (
 )
 
 func BenchmarkThousandTCP(b *testing.B) {
-	n := 1000
+	n := 10000
 	endpoint := ":8081"
 	done := make(chan struct{})
 	var wg sync.WaitGroup
