@@ -172,6 +172,7 @@
       <transition>assets/chunk/transition.ogg</transition>
       <enter-bet>assets/chunk/enter-bet.ogg</enter-bet>
       <finish>assets/chunk/finish.ogg</finish>
+      <explosion>assets/chunk/explosion.ogg</explosion>
     </chunk>
   </mixer>
 </GameData>

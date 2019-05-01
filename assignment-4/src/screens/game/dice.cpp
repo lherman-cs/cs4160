@@ -48,6 +48,7 @@ void Dice::remove() {
       Global::get().widget.create<Explosion>(die.getPos() - Vector2f(14, 14));
   dice.pop_back();
   explosion->show()();
+  Global::get().mixer.explosion.play();
 }
 
 const std::vector<Die>& Dice::getDice() const { return dice; }

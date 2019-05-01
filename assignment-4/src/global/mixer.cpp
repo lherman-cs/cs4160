@@ -5,6 +5,7 @@ Mixer::Mixer(Gamedata& gamedata)
       keystroke(Chunk(gamedata.getXmlStr("mixer/chunk/keystroke"))),
       transition(Chunk(gamedata.getXmlStr("mixer/chunk/transition"))),
       enterBet(Chunk(gamedata.getXmlStr("mixer/chunk/enter-bet"))),
-      finish(Chunk(gamedata.getXmlStr("mixer/chunk/finish"))) {
+      finish(Chunk(gamedata.getXmlStr("mixer/chunk/finish"))),
+      explosion(Chunk(gamedata.getXmlStr("mixer/chunk/explosion"))) {
   std::cout << "[mixer] finished initializing" << std::endl;
 }

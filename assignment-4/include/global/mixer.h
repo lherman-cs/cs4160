@@ -13,6 +13,7 @@ class Mixer {
   const Chunk transition;
   const Chunk enterBet;
   const Chunk finish;
+  const Chunk explosion;
 
  private:
   friend class Global;
