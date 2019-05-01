@@ -8,6 +8,8 @@ docker stop "$name" 2> /dev/null && docker rm "$name" 2> /dev/null
 docker run \
 --name "$name" \
 --restart=always \
+-e DELAY_BOT_MIN=1000 \
+-e DELAY_BOT_MAX=3000 \
 -e DELAY_SHOW_DICE=3000 \
 -e DELAY_AFTER_CALL=1000 \
 -d -p 8081:8081 \
