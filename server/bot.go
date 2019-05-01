@@ -42,13 +42,6 @@ func newBotFromHuman(h *human) *bot {
 }
 
 func (b *bot) Loop() {
-	maxDelay := delayBotMax
-	minDelay := delayBotMin
-	maxDelayInt := int64(maxDelay)
-	rand := func() time.Duration {
-		return time.Duration(rand.Int63n(maxDelayInt))
-	}
-
 	for {
 		msg := make(map[string]string)
 		if err := newDecoder(b).decode(msg); err != nil {
@@ -78,11 +71,11 @@ func (b *bot) Loop() {
 			continue
 		}
 
-		delay := rand() + minDelay
-		if delay > maxDelay {
-			delay = maxDelay
+		delay := rand.Intn(delayBotMax) + delayBotMin
+		if delay > delayBotMax {
+			delay = delayBotMax
 		}
-		time.Sleep(time.Duration(delay) * time.Second)
+		time.Sleep(time.Duration(delay) * time.Millisecond)
 		b.bet(numDice, lastQuantity, lastFace)
 	}
 
