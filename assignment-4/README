@@ -22,6 +22,17 @@ Check it out on the web
   https://game.lukas-coding.us/project-4/
   * if the sound does not work, reload the page
 
+# Technology/Features
+
+  * Custom async TCP socket wrapper with poll syscall
+  * Custom Promises
+  * Custom Navigator
+  * Custom Widget Controller
+  * Custom Message Format
+  * Custom Message Passing Protocol
+  * Networked Game
+  * Interoperability Between Native and Browser (wasm)
+
 # Emscripten
 
   Used for Compiling c++ to web
