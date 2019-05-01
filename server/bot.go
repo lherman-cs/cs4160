@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/Pallinder/go-randomdata"
-	"github.com/sirupsen/logrus"
 	"io"
 	"math/rand"
 	"net"
 	"strconv"
 	"time"
+
+	"github.com/Pallinder/go-randomdata"
+	"github.com/sirupsen/logrus"
 )
 
 type bot struct {
@@ -41,8 +42,12 @@ func newBotFromHuman(h *human) *bot {
 }
 
 func (b *bot) Loop() {
-	maxDelay := 1 // seconds
-	minDelay := 1
+	maxDelay := delayBotMax
+	minDelay := delayBotMin
+	maxDelayInt := int64(maxDelay)
+	rand := func() time.Duration {
+		return time.Duration(rand.Int63n(maxDelayInt))
+	}
 
 	for {
 		msg := make(map[string]string)
@@ -73,7 +78,7 @@ func (b *bot) Loop() {
 			continue
 		}
 
-		delay := rand.Intn(maxDelay) + minDelay
+		delay := rand() + minDelay
 		if delay > maxDelay {
 			delay = maxDelay
 		}
