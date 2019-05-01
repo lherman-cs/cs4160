@@ -62,6 +62,7 @@ class NetGameScreen : public Screen {
   IoMod loadingWriter{32};
   Navigator& navigator{Global::get().navigator};
   World background{"screens/game/background"};
+  std::shared_ptr<Widget> callButton{nullptr};
 
   // Callbacks and State Management
   void onDone();

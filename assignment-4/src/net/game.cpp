@@ -22,6 +22,7 @@ NetGameScreen::NetGameScreen(std::shared_ptr<TCP> session, int index,
     : session(session), index(index), gameData(index) {
   (void)difficulty;
   // std::cout << "Net Game Class init" << std::endl;
+  callButton = Global::get().widget.create<Button>();
 }
 
 NetGameScreen::~NetGameScreen() {}
@@ -72,7 +73,7 @@ void NetGameScreen::draw() const {
   gameData.bet->draw();
 
   // Draw the token to represent player turn
-  gameData.token.draw();
+  gameData.token->draw();
 
   // Draw round/turn number
   std::string round = "Turn: " + std::to_string(gameData.round);
@@ -128,6 +129,7 @@ void NetGameScreen::update(Uint32 ticks) {
   std::string type = msg["type"];
   if (type == "roll") {
     state = Status::OnRoll;
+    callButton->dismiss()();
     // Set dice to be values recieved from the server
     for (unsigned int i = 0; i < gameData.players.size(); i++) {
       auto id = std::to_string(i);
@@ -141,19 +143,14 @@ void NetGameScreen::update(Uint32 ticks) {
       if (i != index) gameData.players[i]->dice.hide();
     }
   } else if (type == "state") {
-    // Set state
     state = Status::Ongoing;
     gameData.updateState(msg);
   } else if (type == "call") {
     state = Status::OnCall;
-    // draw the call button when appropriate
-    auto button = Global::get().widget.create<Button>();
-    auto& promise = Global::get().promise.add();
-    promise.then(button->show()).sleep(2500).then(button->dismiss());
+    // draw the call button
+    callButton->show()();
     // show all the dice on the table
-    for (const auto& player : gameData.players) {
-      player->dice.show();
-    }
+    for (const auto& player : gameData.players) player->dice.show();
   } else if (type == "finish") {
     state = Status::OnFinish;
     auto winner = msg["winner"];

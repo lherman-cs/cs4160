@@ -29,7 +29,7 @@ class State {
   unsigned int round{0};
   unsigned int numDice{25};
   std::vector<std::shared_ptr<Player>> players{};
-  Token token{};
+  std::shared_ptr<Token> token{nullptr};
 
  private:
   static const int NUMPLAYERS = 5;

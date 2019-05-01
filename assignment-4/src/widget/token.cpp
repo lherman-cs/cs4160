@@ -4,7 +4,9 @@
 
 Token::Token() { token.setPosition(positions[0]); }
 
-void Token::draw() const { token.draw(); }
+void Token::draw() const {
+  if (showing) token.draw();
+}
 
 void Token::update(Uint32 ticks) { (void)ticks; }
 

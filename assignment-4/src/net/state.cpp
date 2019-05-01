@@ -12,6 +12,8 @@ State::State(const int& index) {
       players.emplace_back(std::make_shared<NetworkedPlayer>(
           this, Dice(dicePos[i].first, dicePos[i].second), " "));
   }
+  token = Global::get().widget.create<Token>();
+  token->show()();
 }
 
 State::State() {
@@ -31,6 +33,8 @@ State::State() {
         this, Dice(dicePos[id].first, dicePos[id].second), id);
     this->players.emplace_back(bot);
   }
+  token = Global::get().widget.create<Token>();
+  token->show()();
 }
 
 void State::setPlayers(const std::vector<std::string>& p) {
@@ -49,7 +53,7 @@ void State::updateState(
   turn = std::stoi(update.at("turn"));
 
   // token
-  token.set(turn);
+  token->set(turn);
 
   // round
   round = std::stoi(update.at("round"));
