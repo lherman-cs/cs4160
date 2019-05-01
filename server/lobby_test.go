@@ -65,3 +65,35 @@ func BenchmarkThousandTCP(b *testing.B) {
 	wg.Wait()
 	create("Lukas's Room")
 }
+
+func BenchmarkProdServer(b *testing.B) {
+	n := 10000
+	done := make(chan struct{})
+	endpoint := "23.120.83.79:8081"
+	subscribe := func() {
+		conn, err := net.Dial("tcp", endpoint)
+		if err != nil {
+			b.Fatal(err)
+		}
+		defer conn.Close()
+
+		req := map[string]string{"command": "subscribe"}
+		err = newEncoder(conn).encode(req)
+		if err != nil {
+			b.Fatal(err)
+		}
+
+		_, err = io.Copy(os.Stdout, conn)
+		if err != nil {
+			b.Fatal(err)
+		}
+		<-done
+	}
+
+	for i := 0; i < n; i++ {
+		go subscribe()
+	}
+
+	time.Sleep(time.Hour)
+	close(done)
+}
