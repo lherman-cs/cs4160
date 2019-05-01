@@ -52,7 +52,7 @@ class NetGameScreen : public Screen {
   Status state{Status::Initializing};
 
   // Drawing
-  IoMod menuWriter{60};
+  IoMod menuWriter{36};
   IoMod helperWriter{36};
   IoMod listWriter{18};
   SDL_Color normalColor{255, 255, 255, 255};
@@ -62,7 +62,6 @@ class NetGameScreen : public Screen {
   IoMod loadingWriter{32};
   Navigator& navigator{Global::get().navigator};
   World background{"screens/game/background"};
-  Sprite callButton{"screens/game/call-button"};
 
   // Callbacks and State Management
   void onDone();

@@ -12,6 +12,7 @@
 #include "screens/help.h"
 #include "screens/intro.h"
 #include "util/ioMod.h"
+#include "widget/button.h"
 #include "widget/loading.h"
 
 using namespace std::placeholders;
@@ -71,6 +72,7 @@ void NetGameScreen::onKeyDown(const Uint8* const keystate) {
 }
 
 void NetGameScreen::draw() const {
+  if (state == Status::Initializing || state == Status::OnFinish) return;
   background.draw();
   // Draw player's dice
   for (const auto& player : gameData.players) player->draw();
@@ -83,15 +85,11 @@ void NetGameScreen::draw() const {
 
   // Draw round/turn number
   std::string round = "Turn: " + std::to_string(gameData.round);
-  menuWriter.writeText(round, 10, 690, secondaryColor);
+  loadingWriter.writeText(round, 15, 715, secondaryColor);
 
-  if (state == Status::Initializing || state == Status::OnFinish) return;
-
-  if (state == Status::OnCall) callButton.draw(Vector2f(300, 300));
-
+  // draw last bet
   auto last = gameData.bet->getLast();
   if (last.quantity != 0) {
-    // draw last bet
     auto offset = last.quantity > 9 ? 15 : 0;
     std::string quantity =
         std::to_string(gameData.bet->getLast().quantity) + "x";
@@ -116,8 +114,7 @@ void NetGameScreen::draw() const {
     // if the player is a networked player/bot
     if (player->type != 1) {
       gameData.bet->setSelectable(true);
-      // Otherwise, notify the human that it is their turn
-      loadingWriter.writeText("Your turn", 770, 720, secondaryColor);
+      loadingWriter.writeText("Your turn", 795, 715, secondaryColor);
     }
   }
 }
@@ -140,7 +137,6 @@ void NetGameScreen::update(Uint32 ticks) {
   std::string type = msg["type"];
   if (type == "roll") {
     state = Status::OnRoll;
-    // std::cout << "Got rolling dice message" << std::endl;
     // Set dice to be values recieved from the server
     for (unsigned int i = 0; i < gameData.players.size(); i++) {
       auto id = std::to_string(i);
@@ -155,22 +151,19 @@ void NetGameScreen::update(Uint32 ticks) {
     }
   } else if (type == "state") {
     // Set state
-    // std::cout << "Got state message" << std::endl;
     state = Status::Ongoing;
     gameData.updateState(msg);
   } else if (type == "call") {
-    // std::cout << "Got call message" << std::endl;
-    // update internal state so that we can render a loading bar
     state = Status::OnCall;
-    auto liarNotice = Global::get().widget.create<Loading>("Liar Called");
+    // draw the call button when appropriate
+    auto button = Global::get().widget.create<Button>();
     auto& promise = Global::get().promise.add();
-    promise.then(liarNotice->show()).sleep(1000).then(liarNotice->dismiss());
+    promise.then(button->show()).sleep(2500).then(button->dismiss());
     // show all the dice on the table
     for (const auto& player : gameData.players) {
       player->dice.show();
     }
   } else if (type == "finish") {
-    // std::cout << "Got finish message" << std::endl;
     state = Status::OnFinish;
     auto winner = msg["winner"];
     auto loading = Global::get().widget.create<Loading>(winner + " won!", 35);
