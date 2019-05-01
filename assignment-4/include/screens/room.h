@@ -20,9 +20,8 @@ class RoomScreen : public Screen {
 
  private:
   // Networking
-  std::shared_ptr<TCP> session;
-  // const std::string id;
   bool isOwner;
+  std::shared_ptr<TCP> session;
   std::vector<std::string> names;
 
   // Game Data
@@ -30,7 +29,8 @@ class RoomScreen : public Screen {
   int index;
 
   // State
-  bool starting = false;
+  bool starting{false};
+  bool entering{false};
 
   // Drawing
   IoMod menuWriter{70};

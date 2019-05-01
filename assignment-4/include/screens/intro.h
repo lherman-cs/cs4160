@@ -23,6 +23,9 @@ class IntroScreen : public Screen {
   bool col = 0;
   int difficulty = 0;
 
+  // State Data
+  bool entering{false};
+
   // Drawing
   IoMod menuWriter{70};
   Navigator& navigator{Global::get().navigator};

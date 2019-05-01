@@ -16,13 +16,15 @@ class CreateScreen : public Screen {
   virtual void update(Uint32 ticks);
 
  private:
-  // Room Name Input
-  std::string name{" "};
-  const uint maxChar{11};
+  // State Management
+  bool entering{false};
 
   // Game Data
   int difficulty;
 
+  // Room Name Input
+  std::string name{" "};
+  const uint maxChar{11};
   // 4-29 is A-Z for SDL input (no case)
   const uint SDL_A = 4;
   const uint SDL_Z = 29;

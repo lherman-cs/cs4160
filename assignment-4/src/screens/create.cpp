@@ -9,8 +9,9 @@ CreateScreen::CreateScreen(int difficulty) : difficulty(difficulty) {}
 CreateScreen::~CreateScreen() {}
 
 void CreateScreen::onKeyDown(const Uint8* const keystate) {
-  // Crete room
-  if (keystate[SDL_SCANCODE_RETURN]) {
+  // Create room
+  if (keystate[SDL_SCANCODE_RETURN] && !entering) {
+    entering = true;
     auto loading = Global::get().widget.create<Loading>("Loading...");
     auto& promise = Global::get().promise.add();
     auto gameSession = std::make_shared<TCP>();
@@ -41,6 +42,7 @@ void CreateScreen::onKeyDown(const Uint8* const keystate) {
       std::string indexString = (*(resp->find("index"))).second;
       int index = std::stoi(indexString);
 
+      entering = false;
       navigator.push<RoomScreen>(gameSession, difficulty, true, index);
       return true;
     };

@@ -13,8 +13,10 @@ void LobbyScreen::onKeyDown(const Uint8* const keystate) {
     return;
   }
 
-  if (keystate[SDL_SCANCODE_RETURN]) {
+  if (keystate[SDL_SCANCODE_RETURN] && !entering) {
+    entering = true;
     auto it = rooms.begin();
+    if (it == rooms.end()) return;
     auto count = 0;
     while (count != row) {
       if (it == rooms.end()) return;

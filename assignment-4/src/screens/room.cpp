@@ -7,8 +7,8 @@
 
 RoomScreen::RoomScreen(std::shared_ptr<TCP> session, int difficulty,
                        bool isOwner, int index)
-    : session(session),
-      isOwner(isOwner),
+    : isOwner(isOwner),
+      session(session),
       names(),
       difficulty(difficulty),
       index(index) {}
@@ -17,7 +17,8 @@ RoomScreen::~RoomScreen() {}
 
 void RoomScreen::onKeyDown(const Uint8* const keystate) {
   // Begin Game (only available if you are the room owner)
-  if (isOwner && keystate[SDL_SCANCODE_RETURN]) {
+  if (isOwner && keystate[SDL_SCANCODE_RETURN] && !entering) {
+    entering = true;
     auto loading = Global::get().widget.create<Loading>("Loading...");
     auto& promise = Global::get().promise.add();
     auto msg = net::gameStart();
@@ -71,6 +72,10 @@ void RoomScreen::update(Uint32 ticks) {
         .then([=]() {
           auto& navigator = Global::get().navigator;
           navigator.push<NetGameScreen>(session, index, difficulty);
+          return true;
+        })
+        .then([&]() {
+          entering = false;
           return true;
         });
   }

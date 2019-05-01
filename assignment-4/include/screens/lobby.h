@@ -30,4 +30,7 @@ class LobbyScreen : public Screen {
   const World modal{"screens/lobby/modal"};
   const SDL_Color normalColor{52, 44, 42, 255};
   const SDL_Color hoverColor{255, 255, 0, 255};
+
+  // State
+  bool entering{false};
 };

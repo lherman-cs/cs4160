@@ -16,10 +16,12 @@ IntroScreen::~IntroScreen() {}
 void IntroScreen::onKeyDown(const Uint8* const keystate) {
   // Rules Explanation Screen
   if (keystate[SDL_SCANCODE_H]) {
+    entering = false;
     navigator.push<RulesScreen>();
   }
   // Begin Game
-  if (keystate[SDL_SCANCODE_RETURN]) {
+  if (keystate[SDL_SCANCODE_RETURN] && !entering) {
+    entering = true;
     auto loading = Global::get().widget.create<Loading>("Loading...");
     auto& promise = Global::get().promise.add();
     Global::get().mixer.transition.play();
@@ -27,10 +29,13 @@ void IntroScreen::onKeyDown(const Uint8* const keystate) {
         .sleep(1000)
         .then(loading->dismiss())
         .then([&]() -> bool {
-          if (col == 0)
+          if (col == 0) {
+            entering = false;
             navigator.push<LobbyScreen>();
-          else
+          } else {
+            entering = false;
             navigator.push<CreateScreen>(difficulty);
+          }
           return true;
         });
   }
