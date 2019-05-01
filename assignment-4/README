@@ -22,17 +22,6 @@ Check it out on the web
   https://game.lukas-coding.us/project-4/
   * if the sound does not work, reload the page
 
-# Technology/Features
-
-  * Custom async TCP socket wrapper with poll syscall
-  * Custom Promises
-  * Custom Navigator
-  * Custom Widget Controller
-  * Custom Message Format
-  * Custom Message Passing Protocol
-  * Networked Game
-  * Interoperability Between Native and Browser (wasm)
-
 # Emscripten
 
   Used for Compiling c++ to web
@@ -73,6 +62,21 @@ To include assets,
   emcc --preload-file=<dir> ...
   ```
 
+## Pizzazz
+
+  The beautiful colors, reactive design, events and assets which respond to
+   everything, all come togther to make a fantastic and pizzazz filled game
+
+  * Custom async TCP socket wrapper with poll syscall
+  * Custom Promises
+  * Custom Navigator
+  * Custom Widget Controller
+  * Custom Message Format
+  * Custom Message Passing Protocol
+  * Networked Game
+  * Interoperability Between Native and Browser (wasm)
+
+
 ## Warning
 
   On compillation, our program would throw "-Wnon-virtual-dtor" warning from -Weffc++, but is manually supressed.
@@ -93,8 +97,6 @@ To include assets,
 
 ## Contriutions
 
-Lukas: 
-
   created event class
   created observable class
   created navigator class
@@ -107,9 +109,6 @@ Lukas:
   assisted in game class
   redesign xml format
   redesign ioMod class
-
-Gabrielle: 
-
   created game assets
     sprites homeade
     others using gimp
@@ -126,9 +125,6 @@ Gabrielle:
   redesign sprite class
   redesign multisprite class
   developed bet-placing logic
-
-Together: 
-
   game design
   redesign Drawable interface
 
@@ -176,3 +172,6 @@ Together:
 
   Explosion Asset
     https://opengameart.org/content/5x-special-effects-2d
+  
+  Explosion Sound Effect
+  https://opengameart.org/content/big-explosion
