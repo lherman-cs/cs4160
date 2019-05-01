@@ -1,28 +1,39 @@
 package main
 
 import (
+	"io"
 	"sync"
-	"time"
 
 	log "github.com/sirupsen/logrus"
 )
 
 type lobby struct {
 	rooms       map[string]*game // <id>:<actual game reference>
-	subscribers []chan<- map[string]string
+	subscribers map[io.Writer]chan<- map[string]string
 	infos       map[string]string // <id>:<game info in string>
 	m           sync.RWMutex
 }
 
 func newLobby() *lobby {
-	return &lobby{rooms: make(map[string]*game), infos: make(map[string]string)}
+	return &lobby{
+		rooms:       make(map[string]*game),
+		subscribers: make(map[io.Writer]chan<- map[string]string),
+		infos:       make(map[string]string)}
 }
 
-func (l *lobby) subscribe(subscriber chan<- map[string]string) {
+func (l *lobby) subscribe(subscriber io.Writer) <-chan map[string]string {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.subscribers = append(l.subscribers, subscriber)
-	log.Info("got ", len(l.subscribers), " subscribers")
+	// make sure that it's not blocking
+	c := make(chan map[string]string, 16)
+	l.subscribers[subscriber] = c
+	return c
+}
+
+func (l *lobby) unsubscribe(subscriber io.Writer) {
+	l.m.Lock()
+	defer l.m.Unlock()
+	delete(l.subscribers, subscriber)
 }
 
 func (l *lobby) getLastInfos() map[string]string {
@@ -76,13 +87,8 @@ func (l *lobby) notifyAll() {
 		copy[k] = v
 	}
 
-	filtered := make([]chan<- map[string]string, 0)
+	log.Info("broadcasting to ", len(l.subscribers), " subscribers")
 	for _, subscriber := range l.subscribers {
-		select {
-		case subscriber <- copy:
-			filtered = append(filtered, subscriber)
-		case <-time.After(time.Second * 3):
-		}
+		subscriber <- copy
 	}
-	l.subscribers = filtered
 }

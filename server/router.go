@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -89,21 +90,30 @@ func join(conn io.ReadWriter, msg map[string]string) {
 }
 
 func subscribe(conn io.ReadWriter, msg map[string]string) {
-	respChan := make(chan map[string]string)
-	mainLobby.subscribe(respChan)
+	source := mainLobby.subscribe(conn)
 	lastInfos := mainLobby.getLastInfos()
-	if len(lastInfos) > 0 {
-		err := newEncoder(conn).encode(lastInfos)
+	timeout := time.Second
+	update := func(v interface{}) {
+		start := time.Now()
+		err := newEncoder(conn).encode(v)
 		if err != nil {
+			mainLobby.unsubscribe(conn)
 			panic(err.Error())
+		}
+		t := time.Now()
+		elapsed := t.Sub(start)
+		if elapsed > timeout {
+			mainLobby.unsubscribe(conn)
+			panic("unsubscribed because timeout")
 		}
 	}
 
+	if len(lastInfos) > 0 {
+		update(mainLobby.getLastInfos())
+	}
+
 	for {
-		resp := <-respChan
-		err := newEncoder(conn).encode(resp)
-		if err != nil {
-			panic(err.Error())
-		}
+		infos := <-source
+		update(infos)
 	}
 }
